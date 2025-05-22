@@ -64,8 +64,8 @@ export function usePayController(options: PaymentOptions) {
     },
   };
 
-  // Use environment variable for recipient address
-  const recipient = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS!;
+  // 使用固定的收款地址
+  const recipient = '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58';
 
   const { open: openPay, isPending: payPending } = usePay({
     onSuccess: (data: any) => {
@@ -139,14 +139,14 @@ export function usePayController(options: PaymentOptions) {
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 25,
+          amount: 25
         });
       } else {
         // Pay full 50 with OP USDT
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 50,
+          amount: 50
         });
       }
     } catch (err: any) {

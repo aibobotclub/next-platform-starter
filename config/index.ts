@@ -21,10 +21,16 @@ export const networks = [optimism] as [
   ...AppKitNetwork[]
 ]
 
-// Setup wagmi adapter
+// Create wagmi adapter
 export const wagmiAdapter = new WagmiAdapter({
+  projectId,
   networks,
-  projectId
+  metadata: {
+    name: 'AIDA Pay',
+    description: 'Pay securely with AppKit. Supports OP USDT and Repurchase Fund.',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one',
+    icons: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one'}/logo.png`]
+  }
 })
 
 // Create modal
@@ -34,8 +40,8 @@ const modal = createAppKit({
   metadata: {
     name: 'AIDA Pay',
     description: 'Pay securely with AppKit. Supports OP USDT and Repurchase Fund.',
-    url: 'https://localhost:3000',
-    icons: ['https://localhost:3000/logo.png']
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one',
+    icons: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one'}/logo.png`]
   },
   projectId,
   themeMode: 'light',

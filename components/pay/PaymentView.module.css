@@ -1,8 +1,89 @@
 .container {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.connectButton {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.connectButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.payButton {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.payButton:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.payButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.disconnectButton {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.disconnectButton:hover {
+  background-color: var(--secondary-hover);
+}
+
+.statusSection {
+  padding: 1rem;
+  border-radius: var(--radius);
+  background-color: var(--muted);
+}
+
+.statusSection h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.successMessage {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.pendingMessage {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+.errorMessage {
+  color: var(--destructive);
+  font-weight: 500;
 }
 
 .content {
@@ -86,11 +167,6 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-}
-
-.disconnectButton {
-  width: 100%;
-  color: var(--foreground-muted);
 }
 
 .exchangeButton {

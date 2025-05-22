@@ -10,6 +10,12 @@ import { ThemeProvider } from './ThemeContext'
 const queryClient = new QueryClient()
 
 function ContextProvider({ children, cookies }: { children: ReactNode; cookies: string | null }) {
+  // 确保 wagmiAdapter 和 wagmiConfig 存在
+  if (!wagmiAdapter?.wagmiConfig) {
+    console.error('wagmiAdapter or wagmiConfig is not properly configured');
+    return null;
+  }
+
   const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies)
 
   return (

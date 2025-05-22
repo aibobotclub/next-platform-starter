@@ -1,5 +1,8 @@
-import { useDisconnect, useAppKit, useAppKitAccount  } from '@reown/appkit/react'
-import { usePay } from '@reown/appkit-pay/react';
+import { useDisconnect, useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { usePayController } from '@/hooks/usePayController';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import styles from './PaymentView.module.css';
 
 // OP链 USDT 配置，network 字段类型严格
 const optimismUSDT = {
@@ -13,44 +16,75 @@ const optimismUSDT = {
   },
 };
 
-export const PayButton = ({ amount, onSuccess, onError }: { amount: number, onSuccess: (data: any) => void, onError: (err: any) => void }) => {
-    const { disconnect } = useDisconnect();
-    const { open } = useAppKit();
-    const { address } = useAppKitAccount();
-    const { open: openPay, isPending, isSuccess, data, error } = usePay({
-      onSuccess,
-      onError,
-    });
+interface PayButtonProps {
+  amount: number;
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  onClose?: () => void;
+}
 
-    const handleDisconnect = async () => {
-      try {
-        await disconnect();
-      } catch (error) {
-        console.error("Failed to disconnect:", error);
-      }
-    };
+export function PayButton({ amount, onSuccess, onError, onClose }: PayButtonProps) {
+  const { disconnect } = useDisconnect();
+  const { open } = useAppKit();
+  const { address } = useAppKitAccount();
+  
+  const { handlePayWithWallet, isPaymentInProgress } = usePayController({
+    amount,
+    useRebuyFund: false,
+    onSuccess: (data) => {
+      console.log("Payment successful:", data);
+      toast.success("Payment successful");
+      onSuccess?.(data);
+    },
+    onError: (error) => {
+      console.error("Payment error:", error);
+      toast.error("Payment failed");
+      onError?.(error);
+    },
+  });
 
-    const handlePay = async () => {
-      await openPay({
-        paymentAsset: optimismUSDT,
-        recipient: address || '',
-        amount
-      });
-    };
+  const handleDisconnect = async () => {
+    try {
+      await disconnect();
+      toast.success("Wallet disconnected");
+    } catch (error) {
+      console.error("Failed to disconnect:", error);
+      toast.error("Failed to disconnect wallet");
+    }
+  };
+
+  const handlePay = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
+    try {
+      await handlePayWithWallet();
+    } catch (error) {
+      console.error("Failed to open payment:", error);
+      toast.error("Failed to open payment");
+    }
+  };
 
   return (
-    <div>
-      <button onClick={() => open()}>Open</button>
-      <button onClick={handleDisconnect}>Disconnect</button>
-      <button onClick={handlePay} disabled={isPending || !address}>AppKit Pay</button>
-      {isSuccess || isPending || error ? (
-        <section>
-          <h2>Payment Status</h2>
-          {isSuccess && <p>Payment successful: {JSON.stringify(data)}</p>}
-          {isPending && <p>Payment pending...</p>}
-          {error && <p>Payment error: {typeof error === 'string' ? error : JSON.stringify(error)}</p>}
-        </section>
-      ) : null}
+    <div className={styles.container}>
+      <div className={styles.buttonGroup}>
+        {!address ? (
+          <Button onClick={() => open()} className={styles.connectButton}>
+            Connect Wallet
+          </Button>
+        ) : (
+          <>
+            <Button onClick={handlePay} className={styles.payButton} disabled={isPaymentInProgress}>
+              {isPaymentInProgress ? "Processing..." : "Pay Now"}
+            </Button>
+            <Button onClick={handleDisconnect} className={styles.disconnectButton}>
+              Disconnect
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

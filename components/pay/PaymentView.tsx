@@ -1,202 +1,97 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useDisconnect, useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { usePay } from '@reown/appkit-pay/react';
+import { baseSepoliaETH } from '@reown/appkit-pay';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { Separator } from '@/components/ui/separator';
-import { usePayController } from '@/hooks/usePayController';
-import { useChainController } from '@/hooks/useChainController';
-import { useSnackbar } from '@/hooks/useSnackbar';
-import { isPayWithWalletSupported } from '@/utils/assetUtil';
+import { toast } from 'sonner';
 import styles from './PaymentView.module.css';
 
-interface Exchange {
-  id: string;
-  name: string;
-  imageUrl?: string;
+interface PaymentViewProps {
+  amount: number;
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  onClose?: () => void;
 }
 
-export function PaymentView() {
-  const { address, isConnected } = useAccount();
+export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentViewProps) {
   const { disconnect } = useDisconnect();
-  const { showError } = useSnackbar();
-  const { handlePayWithWallet, handlePayWithExchange, exchanges, isLoading } = usePayController({
-    amount: 50,
-    useRebuyFund: false,
+  const { open } = useAppKit();
+  const { address } = useAppKitAccount();
+  const { open: openPay, isPending, isSuccess, data, error } = usePay({
     onSuccess: (data) => {
-      console.log('Payment successful:', data);
+      console.log("Payment successful:", data);
+      toast.success("Payment successful");
+      onSuccess?.(data);
     },
     onError: (error) => {
-      console.error('Payment failed:', error);
-      showError('Payment failed');
-    }
+      console.error("Payment error:", error);
+      toast.error("Payment failed");
+      onError?.(error);
+    },
   });
-  const { getAllRequestedCaipNetworks } = useChainController();
-
-  const [amount, setAmount] = useState('50');
-  const [tokenSymbol, setTokenSymbol] = useState('USDT');
-  const [networkName, setNetworkName] = useState('eip155:10');
-  const [loadingExchangeId, setLoadingExchangeId] = useState<string | null>(null);
-
-  const renderPaymentHeader = () => {
-    let displayNetworkName = networkName;
-    if (networkName) {
-      const allNetworks = getAllRequestedCaipNetworks();
-      const targetNetwork = allNetworks.find(net => net.caipNetworkId === networkName);
-      if (targetNetwork) {
-        displayNetworkName = targetNetwork.name;
-      }
-    }
-
-    return (
-      <div className={styles.paymentHeader}>
-        <div className={styles.amountContainer}>
-          <span className={styles.amount}>{amount || '0.0000'}</span>
-          <div className={styles.tokenDisplay}>
-            <span className={styles.tokenSymbol}>{tokenSymbol || 'Unknown Asset'}</span>
-            {displayNetworkName && (
-              <span className={styles.networkName}> on {displayNetworkName}</span>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderPayWithWallet = () => {
-    if (!isPayWithWalletSupported(networkName)) {
-      return null;
-    }
-
-    return (
-      <div className={styles.walletSection}>
-        {isConnected ? renderConnectedView() : renderDisconnectedView()}
-        <Separator className={styles.separator}>or</Separator>
-      </div>
-    );
-  };
-
-  const renderConnectedView = () => (
-    <div className={styles.connectedView}>
-      <Button
-        onClick={handlePayWithWallet}
-        className={styles.walletButton}
-        data-testid="wallet-payment-option"
-      >
-        <div className={styles.walletButtonContent}>
-          <img
-            src="/wallet-icon.png"
-            alt="Wallet"
-            className={styles.walletIcon}
-          />
-          <span>Pay with connected wallet</span>
-        </div>
-      </Button>
-
-      <Button
-        variant="ghost"
-        onClick={handleDisconnect}
-        className={styles.disconnectButton}
-        data-testid="disconnect-button"
-      >
-        Disconnect
-      </Button>
-    </div>
-  );
-
-  const renderDisconnectedView = () => (
-    <Button
-      onClick={handlePayWithWallet}
-      className={styles.walletButton}
-      data-testid="wallet-payment-option"
-    >
-      <div className={styles.walletButtonContent}>
-        <img
-          src="/wallet-placeholder.png"
-          alt="Wallet"
-          className={styles.walletIcon}
-        />
-        <span>Pay from wallet</span>
-      </div>
-    </Button>
-  );
-
-  const renderExchangeOptions = () => {
-    if (isLoading) {
-      return (
-        <div className={styles.loadingContainer}>
-          <Spinner size="md" />
-        </div>
-      );
-    }
-
-    if (exchanges.length === 0) {
-      return (
-        <div className={styles.noExchanges}>
-          <span>No exchanges available</span>
-        </div>
-      );
-    }
-
-    return exchanges.map((exchange: Exchange) => (
-      <Button
-        key={exchange.id}
-        onClick={() => handleExchangePayment(exchange.id)}
-        className={styles.exchangeButton}
-        data-testid={`exchange-option-${exchange.id}`}
-        disabled={loadingExchangeId !== null}
-      >
-        <div className={styles.exchangeButtonContent}>
-          {loadingExchangeId === exchange.id ? (
-            <Spinner size="md" color="accent" />
-          ) : (
-            <img
-              src={exchange.imageUrl}
-              alt={exchange.name}
-              className={styles.exchangeIcon}
-            />
-          )}
-          <span>Pay with {exchange.name}</span>
-          <Spinner size="sm" className={styles.exchangeSpinner} />
-        </div>
-      </Button>
-    ));
-  };
-
-  const handleExchangePayment = async (exchangeId: string) => {
-    try {
-      setLoadingExchangeId(exchangeId);
-      const result = await handlePayWithExchange(exchangeId);
-      if (result) {
-        window.open(result.url, result.openInNewTab ? '_blank' : '_self');
-      }
-    } catch (error) {
-      console.error('Failed to pay with exchange', error);
-      showError('Failed to pay with exchange');
-    } finally {
-      setLoadingExchangeId(null);
-    }
-  };
 
   const handleDisconnect = async () => {
     try {
       await disconnect();
+      toast.success("Wallet disconnected");
     } catch (error) {
-      console.error('Failed to disconnect');
-      showError('Failed to disconnect');
+      console.error("Failed to disconnect:", error);
+      toast.error("Failed to disconnect wallet");
+    }
+  };
+
+  const handlePay = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
+    try {
+      await openPay({
+        paymentAsset: baseSepoliaETH,
+        recipient: address,
+        amount: amount
+      });
+    } catch (error) {
+      console.error("Failed to open payment:", error);
+      toast.error("Failed to open payment");
     }
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        {renderPaymentHeader()}
-        <div className={styles.paymentOptions}>
-          {renderPayWithWallet()}
-          {renderExchangeOptions()}
-        </div>
+      <div className={styles.buttonGroup}>
+        {!address ? (
+          <Button onClick={() => open()} className={styles.connectButton}>
+            Connect Wallet
+          </Button>
+        ) : (
+          <>
+            <Button onClick={handlePay} className={styles.payButton} disabled={isPending}>
+              {isPending ? "Processing..." : "Pay Now"}
+            </Button>
+            <Button onClick={handleDisconnect} className={styles.disconnectButton}>
+              Disconnect
+            </Button>
+          </>
+        )}
       </div>
+
+      {(isSuccess || isPending || error) && (
+        <div className={styles.statusSection}>
+          <h2>Payment Status</h2>
+          {isSuccess && (
+            <p className={styles.successMessage}>Payment successful: {data}</p>
+          )}
+          {isPending && (
+            <p className={styles.pendingMessage}>Payment pending: {data}</p>
+          )}
+          {error && (
+            <p className={styles.errorMessage}>Payment error: {error}</p>
+          )}
+        </div>
+      )}
     </div>
   );
 } 
