@@ -1,0 +1,213 @@
+/* 已彻底删除所有与 hero 相关的样式，全部交由 Hero.module.css 控制 */
+
+.root {
+  position: relative;
+  min-height: 100vh;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+.themeToggle {
+  position: relative;
+  z-index: 1;
+  margin-top: 2rem;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 50px;
+  padding: 0.5rem;
+}
+
+/* 其他样式保持不变 */
+.features {
+  padding: 5rem 2rem;
+  background: var(--background-secondary);
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featureCard {
+  background: var(--card-background);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  background: var(--hover-background);
+}
+
+.featureIcon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1.5rem;
+  color: var(--primary);
+}
+
+.featureCard h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.featureCard p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--background-primary);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.modalHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--text-primary);
+}
+
+.modalFooter {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.switchButton {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.switchButton:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    -webkit-text-fill-color: #1e293b;
+    color: #1e293b;
+    text-shadow: none;
+  }
+  .subtitle {
+    color: #334155;
+  }
+  .buttonGroup button {
+    color: #334155;
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid #e2e8f0;
+  }
+}
+
+.footer {
+  margin-top: 3rem;
+  z-index: 2;
+  position: relative;
+}
+
+@media (max-width: 700px) {
+  .footer {
+    margin-top: 2rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.walletButton {
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.walletButton:hover {
+  background: var(--background-hover);
+  transform: translateY(-2px);
+} 

@@ -1,0 +1,170 @@
+/* ========== 🌟 SummaryCard 样式 ========== */
+.summaryCard {
+  background: var(--card-background, #fff);
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
+  padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+  margin: 0 auto 1.5rem auto;
+  max-width: 420px;
+  width: 100%;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  transition: background 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .summaryCard {
+    padding: 1rem 0.5rem 0.7rem 0.5rem;
+    max-width: 100vw;
+  }
+}
+
+.sectionDivider {
+  height: 1px;
+  width: 100%;
+  background: var(--border-color);
+  margin: 0.5rem 0;
+  opacity: 0.4;
+  border-radius: 1rem;
+}
+
+/* ========== 🚀 SummaryItem 样式 ========== */
+.summaryItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.summaryItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== 🚀 左侧图标样式 ========== */
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.icon {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ========== 🚀 文本样式 ========== */
+.label {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.usdt {
+  background: var(--accent-gradient);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 0.5em;
+  padding: 0.2em 0.5em;
+  margin-left: 0.3em;
+  display: inline-block;
+}
+
+/* ========== 🚀 Details 按钮 ========== */
+.detailBtn {
+  background: var(--primary-gradient);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.detailBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.detailBtn:hover::before {
+  opacity: 1;
+}
+
+.detailBtn:hover {
+  background: var(--accent-gradient);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.detailBtn:active {
+  transform: scale(0.97);
+}
+
+/* ========== 🌟 浅色主题特定样式 ========== */
+[data-theme='light'] .summaryCard {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .summaryItem {
+  background: #f9fafb;
+}
+
+[data-theme='light'] .icon {
+  background: #f1f5f9;
+  color: var(--primary-color);
+}
+
+[data-theme='light'] .detailBtn {
+  background: var(--light-gradient-bg);
+  color: #fff;
+}
+
+[data-theme='light'] .detailBtn:hover {
+  background: linear-gradient(135deg, #a084ee 0%, #60a5fa 100%);
+  box-shadow: 0 8px 24px rgba(80,80,180,0.15);
+}
+
+[data-theme='dark'] .summaryCard {
+  background: #23243a;
+  border-color: #353657;
+}

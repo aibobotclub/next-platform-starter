@@ -1,0 +1,230 @@
+.section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #eaf1fb 0%, #f5faff 100%);
+  transition: background 0.3s;
+}
+
+[data-theme='dark'] .section {
+  background: linear-gradient(135deg, #18181b 0%, #23272f 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--text-primary);
+  color: var(--text-primary);
+  transition: color 0.3s;
+}
+
+[data-theme='dark'] .title {
+  -webkit-text-fill-color: #fff;
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background: rgba(255,255,255,0.75);
+  border-radius: 1.5rem;
+  padding: 2.2rem 2rem;
+  backdrop-filter: blur(18px);
+  border: 1.5px solid #e3eaf5;
+  box-shadow: 0 8px 32px 0 rgba(80,120,200,0.10);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s cubic-bezier(0.4,0,0.2,1), background 0.3s, color 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .card {
+  background: rgba(36,37,42,0.92);
+  border: 1.5px solid #353a4a;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.22);
+  color: #fff;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px 0 rgba(80,120,200,0.18);
+  background: rgba(255,255,255,0.92);
+}
+
+[data-theme='dark'] .card:hover {
+  box-shadow: 0 16px 40px 0 rgba(99,102,241,0.22);
+  background: rgba(36,37,42,0.98);
+  border-color: #6366f1;
+}
+
+.icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1.2rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+[data-theme='dark'] .icon {
+  color: #818cf8;
+}
+
+.card:hover .icon {
+  color: #6366f1;
+  transform: scale(1.15) rotate(-8deg);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.cardDesc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: color 0.3s;
+}
+
+[data-theme='dark'] .cardDesc {
+  color: #a8a8a8;
+}
+
+@media (min-width: 768px) {
+  .cards {
+    flex-direction: row;
+  }
+  .card {
+    flex: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+  }
+  .title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .card {
+    max-width: 95vw;
+    margin: 0 auto 0.08rem auto;
+    padding: 1rem 0.5rem;
+    border-radius: 1rem;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.18), 0 1.5px 8px 0 rgba(36,37,54,0.10);
+  }
+  .icon {
+    margin: 0 auto 1rem auto;
+  }
+  .cardTitle, .cardDesc {
+    text-align: center;
+  }
+  .cards {
+    gap: 0.08rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 2.5rem 0;
+  }
+
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .cards {
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 1rem;
+    margin: 0;
+    width: 100%;
+  }
+
+  .icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cardDesc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 3rem 0;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+} 

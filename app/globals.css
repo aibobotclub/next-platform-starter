@@ -1,0 +1,251 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 全局主题变量 */
+:root {
+  /* 基础颜色变量 */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 10% 3.9%;
+  --radius: 0.5rem;
+
+  /* 亮色主题变量 */
+  --background-primary: #ffffff;
+  --background-secondary: #f8fafc;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --card-background: #ffffff;
+  --card-border: #e2e8f0;
+  --hover-background: #f1f5f9;
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  --gradient-secondary: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  --section-light-bg: #f0f6ff;
+  --card-light-bg: #ffffff;
+  --text-light: #1e293b;
+  --text-dark: #64748b;
+  --section-light-gradient: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+  --gradient-text: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='dark'] {
+  /* 暗色主题变量 */
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+
+  /* 暗色主题自定义变量 */
+  --background-primary: #18181b;
+  --background-secondary: #23272f;
+  --text-primary: #ffffff;
+  --text-secondary: #a8a8a8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --hover-background: rgba(255, 255, 255, 0.08);
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  --gradient-secondary: linear-gradient(135deg, #23272f 0%, #18181b 100%);
+  --section-dark-bg: #18181b;
+  --card-dark-bg: #23272f;
+  --text-light: #ffffff;
+  --text-dark: #a8a8a8;
+  --section-dark-gradient: linear-gradient(to bottom, #23272f 0%, #18181b 100%);
+  --gradient-text: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  body {
+    @apply bg-background text-foreground;
+    max-width: 100vw;
+    overflow-x: hidden;
+    background: var(--background-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+}
+
+/* WalletConnect/AppKit 弹窗顶部白色条深色主题适配 */
+[data-theme='dark'] .wcm-modal,
+[data-theme='dark'] .walletconnect-modal {
+  background: #18181b !important;
+  color: #fff !important;
+}
+
+[data-theme='dark'] .wcm-search-bar,
+[data-theme='dark'] .walletconnect-modal__search,
+[data-theme='dark'] .walletconnect-modal input[type="text"],
+[data-theme='dark'] input[type="text"].wcm-search-bar__input,
+[data-theme='dark'] .wcm-modal input[type="text"] {
+  background: #23272f !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+[data-theme='dark'] .wcm-search-bar__input::placeholder,
+[data-theme='dark'] .walletconnect-modal__search input::placeholder {
+  color: #a8a8a8 !important;
+  opacity: 1 !important;
+}
+
+/* ========== 按钮基础样式 ========== */
+.button-primary {
+  background: var(--gradient-primary);
+  color: var(--text-light);
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1.08rem;
+  padding: 0.85em 2em;
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s, transform 0.18s;
+  cursor: pointer;
+  outline: none;
+}
+.button-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px 0 rgba(99,102,241,0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+.button-primary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.button-primary:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ========== 暗色主题下按钮高对比度 ========== */
+[data-theme='dark'] .button-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.18);
+}
+[data-theme='dark'] .button-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px 0 rgba(99,102,241,0.28);
+  filter: brightness(1.08) drop-shadow(0 0 8px #6366f1aa);
+}
+[data-theme='dark'] .button-primary:disabled {
+  background: #23272f;
+  color: #a8a8a8;
+  box-shadow: none;
+}
+
+/* ========== 文字差异化 ========== */
+body, .text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+[data-theme='dark'] body, [data-theme='dark'] .text-primary {
+  color: #fff;
+}
+[data-theme='dark'] .text-secondary {
+  color: #a8a8a8;
+}
+
+/* ========== 响应式字体和按钮 ========== */
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+  .button-primary {
+    font-size: 1rem;
+    padding: 0.75em 1.2em;
+    border-radius: 0.65rem;
+  }
+}
+@media (max-width: 400px) {
+  html {
+    font-size: 14px;
+  }
+  .button-primary {
+    font-size: 0.98rem;
+    padding: 0.7em 0.8em;
+    border-radius: 0.55rem;
+  }
+}
+
+/* ========== 输入框等其他元素可类比处理 ========== */
+
+/* 强制所有 modal 居中，包括 AppKit/WalletConnect/第三方弹窗 */
+[class*="modal"], [class*="Modal"], [class*="dialog"], [class*="Dialog"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: rgba(0,0,0,0.5) !important;
+  backdrop-filter: blur(4px) !important;
+  padding: 0 !important;
+}

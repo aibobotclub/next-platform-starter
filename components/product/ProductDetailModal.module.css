@@ -1,0 +1,122 @@
+/* ========== 🌟 Overlay 样式 ========== */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ========== 🌟 Modal 样式 ========== */
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ========== 🌟 弹出动画 ========== */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== 🌟 关闭按钮 ========== */
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.closeButton:hover {
+  color: #1a1a1a;
+}
+
+/* ========== 🌟 产品名称 ========== */
+.productName {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.productPrice {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.productDesc {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* ========== 🌟 支付按钮 ========== */
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payButton {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.connectButton {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+}
+
+/* ========== 🌑 Dark Mode 样式 ========== */
+[data-theme='dark'] .modal {
+  background: rgba(36, 37, 54, 0.98);
+  border: 2px solid #3b3f5c;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+[data-theme='dark'] .payBtn {
+  background: var(--gradient-primary);
+}
+
+[data-theme='dark'] .payBtn:hover {
+  background: var(--gradient-accent);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}

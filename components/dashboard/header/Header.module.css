@@ -1,0 +1,74 @@
+/* ========== 🌟 Header 样式 ========== */
+.header {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 1.2rem 2rem;
+  background: var(--card-background);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  border-radius: 0 0 1.2rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  transition: all var(--transition-normal);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ========== 🌟 Logo 样式 ========== */
+.logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--primary-color);
+  letter-spacing: 0.1em;
+  font-family: 'Inter', sans-serif;
+  transition: all var(--transition-normal);
+}
+
+.logo:hover {
+  color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+/* ========== 🌟 右侧按钮组 ========== */
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* ========== 🌟 Connect Wallet 样式 ========== */
+.walletBtnWrap {
+  display: flex;
+  align-items: center;
+}
+
+.walletBtnWrap button {
+  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-radius: 1.2rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.walletBtnWrap button:hover {
+  background: var(--gradient-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(33, 106, 195, 0.3);
+}
+
+.walletBtnWrap button:active {
+  transform: scale(0.98);
+}

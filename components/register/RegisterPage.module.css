@@ -1,0 +1,269 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card-background);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.connectWallet {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--card-background-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.connectWallet h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.connectWallet p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.info {
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-background-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+}
+
+.info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.benefits li {
+  padding: 1rem;
+  background: var(--card-background);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.benefits li:hover {
+  background: var(--card-background-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.actionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2.5rem 0 2rem 0;
+  gap: 1.5rem;
+}
+
+.bigConnectButton {
+  width: 100%;
+  max-width: 340px;
+  height: 56px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 32px;
+  background: linear-gradient(90deg, #6a8dff 0%, #a084ee 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px 0 rgba(106, 141, 255, 0.15);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  border: none;
+  cursor: pointer;
+}
+
+.bigConnectButton:hover {
+  background: linear-gradient(90deg, #a084ee 0%, #6a8dff 100%);
+  box-shadow: 0 6px 32px 0 rgba(106, 141, 255, 0.22);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .main {
+    padding: 1.5rem;
+  }
+
+  .content {
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .benefits {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-top: 60px;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .content {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .connectWallet {
+    padding: 1.5rem;
+  }
+
+  .connectWallet h2 {
+    font-size: 1.3rem;
+  }
+
+  .info {
+    padding: 1.5rem;
+  }
+
+  .info h3 {
+    font-size: 1.3rem;
+  }
+
+  .actionArea {
+    margin: 2rem 0 1.5rem 0;
+    gap: 1rem;
+  }
+
+  .bigConnectButton {
+    max-width: 100%;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 0.75rem;
+  }
+
+  .content {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .connectWallet {
+    padding: 1rem;
+  }
+
+  .connectWallet h2 {
+    font-size: 1.2rem;
+  }
+
+  .info {
+    padding: 1rem;
+  }
+
+  .info h3 {
+    font-size: 1.2rem;
+  }
+
+  .benefits li {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .actionArea {
+    margin: 1.5rem 0 1rem 0;
+    gap: 0.75rem;
+  }
+
+  .bigConnectButton {
+    max-width: 100%;
+    height: 40px;
+    font-size: 1rem;
+  }
+} 

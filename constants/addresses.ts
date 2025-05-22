@@ -1,0 +1,1 @@
+export const AIDA_REFERRAL_ADDRESS = process.env.NEXT_PUBLIC_AIDA_REFERRAL_ADDRESS as `0x${string}`; 

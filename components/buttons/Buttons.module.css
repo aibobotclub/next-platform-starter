@@ -1,0 +1,232 @@
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.getStartButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 340px;
+  margin: 2.5rem auto 0 auto;
+  background: linear-gradient(90deg, #23283a 0%, #4f8cff 100%);
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  padding: 1.1rem 0;
+  border-radius: 1.2rem;
+  border: none;
+  box-shadow: 0 4px 24px rgba(79,140,255,0.18);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+.getStartButton:hover:not(:disabled) {
+  background: linear-gradient(90deg, #4f8cff 0%, #23283a 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(79,140,255,0.22);
+}
+.getStartButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 主题适配 */
+[data-theme='dark'] .getStartButton {
+  background: #6366f1;
+  color: #fff;
+}
+[data-theme='dark'] .getStartButton:hover {
+  background: #818cf8;
+  color: #fff;
+}
+[data-theme='light'] .getStartButton {
+  background: linear-gradient(90deg, #eef2ff 0%, #6366f1 100%);
+  color: #3730a3;
+  border: 2px solid #6366f1;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.10);
+}
+[data-theme='light'] .getStartButton:hover:not(:disabled) {
+  background: linear-gradient(90deg, #6366f1 0%, #eef2ff 100%);
+  color: #fff;
+}
+
+.walletConnectButton {
+  display: flex;
+  align-items: center;
+}
+
+.connectedWallet {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--background-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.walletInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.walletAddress {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.dashboardButton {
+  background: linear-gradient(90deg, #4f8cff 0%, #6f6fff 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 12px rgba(79,140,255,0.12);
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  border: none;
+  margin-top: 1.5rem;
+}
+.dashboardButton:hover:not(:disabled) {
+  background: linear-gradient(90deg, #6f6fff 0%, #4f8cff 100%);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.18);
+}
+
+.connectWalletButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  min-width: 160px;
+  background: linear-gradient(90deg, #4f8cff 0%, #6f6fff 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 12px rgba(79,140,255,0.12);
+}
+.connectWalletButton:hover:not(:disabled) {
+  background: linear-gradient(90deg, #6f6fff 0%, #4f8cff 100%);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.18);
+}
+.connectWalletButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+.connectWalletButton.loading {
+  position: relative;
+  color: transparent;
+}
+.connectWalletButton.loading::after {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--text-primary);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.connectWalletButton.connected {
+  background: #23283a !important;
+  color: #4f8cff !important;
+}
+[data-theme='dark'] .connectWalletButton {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+[data-theme='dark'] .connectWalletButton:hover {
+  background: #6366f1;
+  color: #fff;
+}
+[data-theme='dark'] .connectWalletButton.connected {
+  background: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #fff !important;
+}
+[data-theme='dark'] .connectWalletButton.connected:hover {
+  background: #818cf8 !important;
+  color: #fff !important;
+}
+[data-theme='light'] .connectWalletButton {
+  background: #eef2ff;
+  border-color: #6366f1;
+  color: #3730a3;
+}
+[data-theme='light'] .connectWalletButton:hover {
+  background: #6366f1;
+  color: #fff;
+}
+[data-theme='light'] .connectWalletButton.connected {
+  background: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #fff !important;
+}
+[data-theme='light'] .connectWalletButton.connected:hover {
+  background: #818cf8 !important;
+  color: #fff !important;
+}
+@media (max-width: 768px) {
+  .connectWalletButton {
+    width: 100%;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  .getStartButton {
+    font-size: 1.05rem;
+    padding: 0.85rem 0;
+    max-width: 95vw;
+    border-radius: 0.9rem;
+  }
+}
+
+.getStartContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.getStartTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground, #222);
+  text-shadow: 0 2px 8px rgba(79,140,255,0.08);
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.01em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dashboardButton {
+    background: linear-gradient(90deg, #23283a 0%, #4f8cff 100%);
+    color: #fff;
+  }
+  .getStartTitle {
+    color: #f3f6fa;
+  }
+} 

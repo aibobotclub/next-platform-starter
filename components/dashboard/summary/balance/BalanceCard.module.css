@@ -1,0 +1,60 @@
+.balanceCard {
+  background: var(--card-background);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+.value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: monospace;
+}
+.actionBtn {
+  background: linear-gradient(90deg, #6a8dff 0%, #a084ee 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.actionBtn:hover {
+  background: linear-gradient(90deg, #a084ee 0%, #6a8dff 100%);
+}
+
+@media (max-width: 768px) {
+  .balanceCard {
+    padding: 0.7rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.98rem;
+  }
+  .row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .label {
+    font-size: 0.92rem;
+  }
+  .value {
+    font-size: 1.05rem;
+  }
+  .actionBtn {
+    width: 100%;
+    font-size: 0.98rem;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+  }
+} 

@@ -1,0 +1,65 @@
+.statCard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  background: var(--card-background, #fff);
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.2rem;
+  justify-content: space-between;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  box-sizing: border-box;
+}
+
+.statItem {
+  flex: 1 1 120px;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-primary, #1e293b);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.statItem b {
+  font-size: 1.5rem;
+  color: var(--primary-color, #216ac3);
+  margin-top: 0.2em;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 600px) {
+  .statCard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.4rem 0.1rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.5rem;
+  }
+  .statItem {
+    min-width: 70px;
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    flex: 1 1 33%;
+    padding: 0.2rem 0.1rem;
+  }
+  .statItem b {
+    font-size: 0.95rem;
+  }
+}
+
+[data-theme='dark'] .statCard {
+  background: var(--card-dark-bg, #23243a);
+  border-color: #353657;
+}
+[data-theme='dark'] .statItem {
+  color: #fff;
+}
+[data-theme='dark'] .statItem b {
+  color: #60a5fa;
+}
