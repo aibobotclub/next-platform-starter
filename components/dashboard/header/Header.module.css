@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
-  padding: 1.2rem 2rem;
+  padding: 0;
   background: var(--card-background);
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
@@ -11,10 +11,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  position: static;
+  top: unset;
+  left: unset;
+  transform: unset;
   z-index: 1000;
   transition: all var(--transition-normal);
   border-bottom: 1px solid var(--border-color);

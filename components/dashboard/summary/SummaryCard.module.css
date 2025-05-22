@@ -4,9 +4,9 @@
   border-radius: 1.2rem;
   box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
   padding: 1.5rem 1.5rem 1.2rem 1.5rem;
-  margin: 0 auto 1.5rem auto;
-  max-width: 420px;
-  width: 100%;
+  margin: 0 auto !important;
+  max-width: 420px !important;
+  width: 100% !important;
   border: 1.5px solid var(--border-color, #e5e7eb);
   transition: background 0.3s;
   display: flex;

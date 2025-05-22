@@ -20,8 +20,8 @@
   transition: all var(--transition-normal);
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  max-width: 420px !important;
   width: 100% !important;
-  margin: 0 auto !important;
 }
 
 .profileCard:hover {
@@ -230,6 +230,7 @@
   top: unset !important;
   z-index: auto !important;
   width: 100% !important;
+  max-width: 420px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -237,6 +238,7 @@
 /* 移动端自适应宽度和内边距 */
 @media (max-width: 480px) {
   .profileCard {
+    max-width: 96vw !important;
     padding: 0.8rem !important;
     border-radius: 0.8rem !important;
     gap: 0.6rem !important;

@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { toast } from "sonner";
 import styles from "./DashboardHome.module.css";
 import { useUserStore } from "@/stores/useUserStore";
-import UserProfileCard from "./UserProfileCard/UserProfileCard";
+import UserProfileCard from "../UserProfileCard/UserProfileCard";
 import { Card } from "@/components/ui/card";
 import SummaryCard from "./summary/SummaryCard";
 import DetailDrawer from './summary/DetailDrawer/DetailDrawer';

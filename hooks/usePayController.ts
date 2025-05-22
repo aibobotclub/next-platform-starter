@@ -39,6 +39,7 @@ interface CurrentPayment {
 interface PaymentOptions {
   amount: number;
   useRebuyFund?: boolean;
+  rebuyAmount?: number;
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
 }
@@ -59,13 +60,13 @@ export function usePayController(options: PaymentOptions) {
     asset: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
     metadata: {
       symbol: 'USDT',
-      decimals: 18,
+      decimals: 6,
       name: 'Tether USD',
     },
   };
 
   // 使用固定的收款地址
-  const recipient = '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58';
+  const recipient = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
 
   const { open: openPay, isPending: payPending } = usePay({
     onSuccess: (data: any) => {
@@ -82,6 +83,8 @@ export function usePayController(options: PaymentOptions) {
       if (options.onError) options.onError(err);
     },
   });
+
+  const decimals = defaultAsset.metadata.decimals;
 
   // Repurchase fund payment method
   const payWithRebuyFund = useCallback(async (rebuyAmount: number) => {
@@ -133,20 +136,21 @@ export function usePayController(options: PaymentOptions) {
       setPaymentId(crypto.randomUUID());
 
       if (options.useRebuyFund) {
-        // First pay 25 with repurchase fund
-        await payWithRebuyFund(25);
-        // Then pay 25 with OP USDT
+        // 动态传入复投金金额
+        const rebuyAmount = options.rebuyAmount || 25;
+        await payWithRebuyFund(rebuyAmount);
+        // 动态传入钱包支付金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 25
+          amount: options.amount - rebuyAmount
         });
       } else {
-        // Pay full 50 with OP USDT
+        // 动态传入总金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 50
+          amount: options.amount
         });
       }
     } catch (err: any) {

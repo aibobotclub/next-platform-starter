@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [isConnected, isRegistered, isLoading, router]);
 
   if (!isConnected || isLoading || !isRegistered) {
-    return <div className="h-screen flex items-center justify-center text-xl">正在校验身份...</div>;
+    return <div className="h-screen flex items-center justify-center text-xl">Checking...</div>;
   }
 
   return (
@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         style={{
           minHeight: '80vh',
           width: '100%',
-          maxWidth: 600,
+          maxWidth: 420,
           margin: '0 auto',
           padding: '2rem 1rem',
           boxSizing: 'border-box',

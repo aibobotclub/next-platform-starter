@@ -1,41 +1,66 @@
 /* ========== 🌟 Product Grid 样式 ========== */
 .productGrid {
-  background: var(--card-background);
+  max-width: 420px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  left: unset !important;
+  transform: unset !important;
+  position: relative !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+  display: grid !important;
+  gap: 1.2rem !important;
+  grid-template-columns: 1fr !important;
+  background: var(--card-background) !important;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  margin: 1.2rem auto;
-  padding: 1.2rem;
-  display: grid;
-  gap: 1.2rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 1000px;
-  width: 95%;
-  justify-content: center;
-  align-items: stretch;
-  position: relative;
-  overflow: hidden;
-  transition: all var(--transition-normal);
   border: 2px solid var(--border-color);
+  overflow: visible;
+  z-index: auto !important;
 }
 
 @media (max-width: 768px) {
   .productGrid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
-    width: 92%;
-    margin: 1rem auto;
+    grid-template-columns: 1fr !important;
+    max-width: 420px !important;
+    width: 98vw !important;
+    gap: 1.2rem !important;
+    padding: 1rem 0.5rem !important;
+    margin: 0.5rem auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .productCard {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    position: static !important;
+    top: unset !important;
+    left: unset !important;
+    z-index: auto !important;
   }
 }
 
 /* ========== 🌟 Product Card 样式 ========== */
 .productCard {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto 0 auto !important;
+  border-radius: 1rem !important;
+  background: var(--bg-tertiary) !important;
+  position: static !important;
+  top: unset !important;
+  left: unset !important;
+  z-index: auto !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  background: var(--bg-tertiary);
-  border-radius: 1rem;
   padding: 1.5rem;
   height: 100%;
   min-height: 280px;
@@ -139,4 +164,25 @@
 
 [data-theme='light'] .comingSoonBtn:hover {
   background: #d1d5db;
+}
+
+/* ========== 🌟 暗色主题支持 ========== */
+[data-theme='dark'] .productCard {
+  background: #23263a !important;
+  border: 1.5px solid #353a5a !important;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.18) !important;
+}
+
+[data-theme='dark'] .productGrid {
+  background: #18181b !important;
+}
+
+[data-theme='dark'] .productName {
+  color: #fff !important;
+}
+[data-theme='dark'] .productPrice {
+  color: #a5b4fc !important;
+}
+[data-theme='dark'] .productDesc {
+  color: #bfc3e0 !important;
 }

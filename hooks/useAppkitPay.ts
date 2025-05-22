@@ -9,11 +9,12 @@ import { supabase } from '@/lib/supabase';
 export interface UseAppkitPayOptions {
   amount: number;
   useRebuyFund?: boolean;
+  rebuyAmount?: number;
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
 }
 
-export function useAppkitPay({ amount, useRebuyFund = false, onSuccess, onError }: UseAppkitPayOptions) {
+export function useAppkitPay({ amount, useRebuyFund = false, rebuyAmount: rebuyAmountParam, onSuccess, onError }: UseAppkitPayOptions) {
   const { address, isConnected } = useAccount();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -26,7 +27,7 @@ export function useAppkitPay({ amount, useRebuyFund = false, onSuccess, onError 
     asset: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
     metadata: {
       symbol: 'USDT',
-      decimals: 18,
+      decimals: 6,
       icon: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
       name: 'Tether USD',
     },
@@ -90,20 +91,21 @@ export function useAppkitPay({ amount, useRebuyFund = false, onSuccess, onError 
     setIsPending(true);
     try {
       if (useRebuyFund) {
-        // 先用复投金支付25
-        await payWithRebuyFund(25);
-        // 再用OP USDT支付25
+        // 动态传入复投金金额
+        const rebuyAmount = rebuyAmountParam || 25;
+        await payWithRebuyFund(rebuyAmount);
+        // 动态传入钱包支付金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 25,
+          amount: amount - rebuyAmount,
         });
       } else {
-        // 全部用OP USDT支付50
+        // 动态传入总金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
-          amount: 50,
+          amount: amount,
         });
       }
     } catch (err: any) {
