@@ -3,13 +3,14 @@
   background: var(--card-background);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  margin-top: 1.2rem;
-  margin-bottom: 1.2rem; /* 增加与 SummaryCard 的间距 */
+  margin: 1.2rem auto;
   padding: 1.2rem;
   display: grid;
   gap: 1.2rem;
-  grid-template-columns: repeat(2, 1fr); /* 修正为两列布局 */
-  justify-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 1000px;
+  width: 95%;
+  justify-content: center;
   align-items: stretch;
   position: relative;
   overflow: hidden;
@@ -17,10 +18,12 @@
   border: 2px solid var(--border-color);
 }
 
-@media (max-width: 420px) {
+@media (max-width: 768px) {
   .productGrid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    max-width: 420px;
+    width: 92%;
+    margin: 1rem auto;
   }
 }
 
@@ -33,7 +36,9 @@
   text-align: center;
   background: var(--bg-tertiary);
   border-radius: 1rem;
-  padding: 1.2rem;
+  padding: 1.5rem;
+  height: 100%;
+  min-height: 280px;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -50,6 +55,69 @@
   transform: translateY(-2px) scale(0.98);
 }
 
+/* ========== 🌟 Product 名称和描述 ========== */
+.productName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.productPrice {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.productDesc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* ========== 🌟 Buy Now 按钮样式 ========== */
+.buyBtn {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(110, 53, 202, 0.2);
+  margin-top: auto;
+}
+
+.buyBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9f7aea, #7c3aed);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+}
+
+/* ========== 🚀 Coming Soon 样式 ========== */
+.comingSoonBtn {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 1rem;
+  background: #4b5563;
+  color: #9ca3af;
+  font-weight: 600;
+  border: 1px solid #4b5563;
+  cursor: not-allowed;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-top: auto;
+}
+
 /* ========== 🌟 浅色主题支持 ========== */
 [data-theme='light'] .productCard {
   background: #ffffff;
@@ -63,92 +131,6 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* ========== 🌟 Product 名称和描述 ========== */
-.productName {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.productPrice {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
-}
-
-.productDesc {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-  min-height: 3rem;
-}
-
-/* ========== 🌟 Buy Now 按钮样式 ========== */
-.buyBtn {
-  width: 100%;
-  padding: 0.8rem 0;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-  color: #ffffff;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  font-size: 1.05rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(110, 53, 202, 0.2);
-  margin-top: 0.5rem;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-}
-
-/* ========== 🌟 按钮波纹动画 ========== */
-.buyBtn::after {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: 50%;
-  left: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
-
-.buyBtn:active::after {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
-/* ========== 🌟 悬浮效果 ========== */
-.buyBtn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #9f7aea, #7c3aed);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
-}
-
-/* ========== 🚀 Coming Soon 样式 ========== */
-.comingSoonBtn {
-  width: 100%;
-  padding: 0.8rem 0;
-  border-radius: 1rem;
-  background: #4b5563;
-  color: #9ca3af;
-  font-weight: 600;
-  border: 1px solid #4b5563;
-  cursor: not-allowed;
-  font-size: 1.05rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  margin-top: 0.5rem;
-}
-
-/* ========== 🌟 浅色主题支持 ========== */
 [data-theme='light'] .comingSoonBtn {
   background: #e5e7eb;
   color: #6b7280;

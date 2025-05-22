@@ -298,12 +298,13 @@
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
   margin: 0 !important;
-  min-width: unset !important;
-  max-width: 98vw !important;
   width: 95vw !important;
+  max-width: 420px !important;
   border-radius: 18px !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
   z-index: 1102 !important;
+  background: var(--background-primary, #fff);
+  animation: modalIn 0.32s cubic-bezier(0.4,0,0.2,1);
 }
 
 .header {
@@ -335,9 +336,7 @@
 }
 
 .content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  margin-bottom: 1rem;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -836,47 +835,41 @@
   from {
     opacity: 0;
     transform: translate(-50%, -48%) scale(0.96);
-    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
   }
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 8px 32px rgba(99,102,241,0.18);
   }
 }
-.container {
-  animation: modalIn 0.32s cubic-bezier(0.4,0,0.2,1);
-  background: rgba(255,255,255,0.92);
-  border: 1.5px solid rgba(99,102,241,0.10);
-  box-shadow:
-    0 8px 32px 0 rgba(99,102,241,0.18),
-    0 1.5px 8px 0 rgba(255,255,255,0.18) inset;
-  backdrop-filter: blur(8px);
+
+/* 移动端适配 */
+@media (max-width: 480px) {
+  .container {
+    width: 92vw !important;
+    max-width: 360px !important;
+    padding: 16px !important;
+  }
+  
+  .content {
+    padding: 16px;
+  }
+  
+  .productName {
+    font-size: 20px;
+  }
+  
+  .productDescription {
+    font-size: 14px;
+  }
+  
+  .amount {
+    font-size: 28px;
+  }
 }
 
-/* 按钮高光动画 */
-.payButton {
-  position: relative;
-  overflow: hidden;
-}
-.payButton::before {
-  content: '';
-  position: absolute;
-  left: -60%;
-  top: 0;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.01) 100%);
-  transform: skewX(-20deg);
-  transition: left 0.4s cubic-bezier(0.4,0,0.2,1);
-  z-index: 1;
-  pointer-events: none;
-}
-.payButton:hover::before {
-  left: 110%;
-}
-.payButton:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+/* 深色模式 */
+[data-theme='dark'] .container {
+  background: var(--background-primary, #23263a);
+  border: 1px solid var(--border-color, #444a6d);
 }
 
