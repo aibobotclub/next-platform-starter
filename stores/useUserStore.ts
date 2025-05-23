@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { supabase } from '@/lib/supabase'
 
 interface UserState {
   isLoggedIn: boolean
@@ -16,6 +17,8 @@ interface UserState {
   setCheckRegistrationError: (error: string | null) => void
   resetState: () => void
   resetUserState: () => void
+  registerUser: (userData: any) => Promise<void>
+  checkRegistrationStatus: (userId: string) => Promise<void>
 }
 
 export const useUserStore = create<UserState>()(
@@ -49,6 +52,46 @@ export const useUserStore = create<UserState>()(
         registrationError: null,
         checkRegistrationError: null
       }),
+      registerUser: async (userData: any) => {
+        set({ isLoading: true, error: null })
+        try {
+          const { error } = await supabase
+            .from('users')
+            .insert([userData])
+
+          if (error) {
+            set({ error: error.message })
+            return
+          }
+
+          set({ isRegistered: true })
+        } catch (error: any) {
+          set({ error: error.message })
+        } finally {
+          set({ isLoading: false })
+        }
+      },
+      checkRegistrationStatus: async (userId: string) => {
+        set({ isLoading: true, error: null })
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', userId)
+            .single()
+
+          if (error) {
+            set({ error: error.message })
+            return
+          }
+
+          set({ isRegistered: !!data })
+        } catch (error: any) {
+          set({ error: error.message })
+        } finally {
+          set({ isLoading: false })
+        }
+      },
     }),
     {
       name: 'user-storage',

@@ -170,6 +170,13 @@ export type Database = {
             foreignKeyName: "fk_divstat_dividend"
             columns: ["dividend_id"]
             isOneToOne: false
+            referencedRelation: "admin_dividend_team_bonus_check_view"
+            referencedColumns: ["dividend_id"]
+          },
+          {
+            foreignKeyName: "fk_divstat_dividend"
+            columns: ["dividend_id"]
+            isOneToOne: false
             referencedRelation: "global_dividends"
             referencedColumns: ["id"]
           },
@@ -1171,6 +1178,73 @@ export type Database = {
       }
     }
     Views: {
+      admin_dividend_team_bonus_check_view: {
+        Row: {
+          created_at: string | null
+          dividend_id: string | null
+          fixable: boolean | null
+          has_team_bonus: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          dividend_id?: string | null
+          fixable?: never
+          has_team_bonus?: never
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          dividend_id?: string | null
+          fixable?: never
+          has_team_bonus?: never
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_order_dividend_check_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_order_taskgroup_consistency_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_task_anomaly_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_taskgroup_activation_integrity_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_order_dividend_check_view: {
         Row: {
           active_task_groups: number | null
@@ -1517,6 +1591,14 @@ export type Database = {
       }
       expire_pending_task_rewards: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      fix_all_missing_team_bonuses: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      fix_missing_team_bonus: {
+        Args: { dividend_id: string }
         Returns: undefined
       }
       fix_user_missing_taskgroups: {
