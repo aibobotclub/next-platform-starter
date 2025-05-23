@@ -16,8 +16,8 @@
 }
 
 .hero {
-  padding-top: 32px;
-  padding-bottom: 32px;
+  padding-top: 60px;
+  padding-bottom: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -71,7 +71,7 @@
   border-radius: 2.5rem;
   box-shadow: 0 16px 48px 0 rgba(0,0,0,0.20);
   backdrop-filter: blur(18px);
-  padding: 3.5rem 2.5rem 3.5rem 3rem;
+  padding: 4rem 2.5rem 4rem 3rem;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -177,7 +177,7 @@
   text-shadow:
     0 2px 8px #bfc9ff,
     0 1px 0 #fff,
-    0 8px 32px #23252622;
+    0 8px 22px #23252622;
   filter: none;
 }
 
@@ -252,7 +252,7 @@
   background: linear-gradient(90deg, #15d981 0%, #20c7e4 100%);
 }
 [data-theme='light'] .buttonGroup button:hover, [data-theme='light'] .buttonGroup button:focus {
-  background: linear-gradient(90deg, #1e293b 0%, #6366f1 100%);
+  background: linear-gradient(90deg, #1e293b 0%, #3336d4 100%);
   color: #fff;
 }
 [data-theme='light'] .buttonGroup button + button:hover, [data-theme='light'] .buttonGroup button + button:focus {
@@ -381,7 +381,7 @@
     box-sizing: border-box;
   }
   .heroContent {
-    padding: 0.8rem 0.5rem 1.2rem 0.5rem;
+    padding: 1.2rem 0.6rem 1.2rem 0.6rem;
     margin: 0 auto;
     border-radius: 1rem;
     box-sizing: border-box;
@@ -422,7 +422,7 @@
     max-width: 90vw;
     margin-bottom: 1.2rem;
     background: none;
-    box-shadow: 0 8px 32px #33095faa;
+    box-shadow: 0 8px 25px #220486aa;
     border-radius: 1.5rem;
     padding: 0;
   }
@@ -430,7 +430,7 @@
 
 @media (max-width: 450px) {
   .heroSection {
-    padding-top: 20px;
+    padding-top: 30px;
   }
   .buttonGroup button {
     min-width: 90px;
