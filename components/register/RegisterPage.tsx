@@ -50,8 +50,8 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
             </div>
             <div className={styles.actionArea}>
               <ConnectWallet
-                buttonText="  Connect Wallet to Register"
-                className={styles.bigConnectButton}
+                buttonText="Connect Wallet to Register"
+                className={styles.registerButton}
               />
             </div>
             <div className={styles.info}>
@@ -85,7 +85,7 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
             <div className={styles.actionArea}>
               <ConnectWallet
                 buttonText="Connect Wallet to Register"
-                className={`${styles.bigConnectButton} ${styles.largeButton}`}
+                className={styles.registerButton}
               />
               <RegisterButton isLoading={isLoading} onClick={() => setShowRegisterForm(true)} />
             </div>

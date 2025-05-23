@@ -23,3 +23,9 @@
   box-shadow: 0 6px 24px rgba(99,102,241,0.18);
   transform: translateY(-2px) scale(1.03);
 }
+
+.walletAddressButton {
+  /* 复用 registerButton 样式 */
+  composes: registerButton from './RegisterButton.module.css';
+  margin-bottom: 1.2rem;
+}
