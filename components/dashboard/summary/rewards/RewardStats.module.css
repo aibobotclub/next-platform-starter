@@ -1,1 +1,112 @@
-
+.statsDrawerRoot {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--card-background, #232946);
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+  padding: 2.2rem 1.2rem 2.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+.drawerTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 12px #6366f1aa;
+  text-align: center;
+}
+.statsGrid {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 2.2rem;
+}
+@media (max-width: 600px) {
+  .statsDrawerRoot {
+    padding: 1.2rem 0.3rem 1.5rem 0.3rem;
+    border-radius: 1rem;
+    min-width: 0;
+  }
+  .statsGrid {
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+  }
+}
+.statCard {
+  background: linear-gradient(135deg, #232946 60%, #6366f1 100%);
+  border-radius: 1.1rem;
+  box-shadow: 0 2px 12px #6366f122;
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  flex: 1 1 0;
+  transition: box-shadow 0.2s;
+}
+.statCard:hover {
+  box-shadow: 0 6px 24px #6366f1aa;
+}
+.statIcon {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.statValue {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 4px 24px #6366f1aa;
+  margin-bottom: 0.2rem;
+}
+.usdt {
+  font-size: 1rem;
+  color: #bfc9ff;
+  margin-left: 0.2rem;
+}
+.statLabel {
+  font-size: 1.02rem;
+  color: #bfc9ff;
+  font-weight: 600;
+  margin-top: 0.1rem;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+.totalSection {
+  margin-top: 1.2rem;
+  padding: 1.1rem 2.2rem;
+  background: linear-gradient(90deg, #6366f1 0%, #232946 100%);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px #6366f1aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.totalLabel {
+  font-size: 1.08rem;
+  color: #bfc9ff;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.totalValue {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 6px 32px #23294699;
+}
+.noData {
+  color: #bfc9ff;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  text-align: center;
+}

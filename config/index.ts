@@ -1,63 +1,34 @@
 'use client'
-import { useAppkitPay } from '@/hooks/useAppkitPay'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
-import { AppKitNetwork,optimism } from '@reown/appkit/networks'
-import {
-  createAppKit,
-  useAppKit,
-  useAppKitAccount,
-  useAppKitEvents,
-  useAppKitNetwork,
-  useAppKitState,
-  useAppKitTheme,
-  useDisconnect,
-  useWalletInfo
-} from '@reown/appkit/react'
+import { AppKitNetwork, base } from '@reown/appkit/networks'
+import { createAppKit } from '@reown/appkit/react'
 
-export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || 'b56e18d47c72ab683b10814fe9495694' // this is a public projectId only to use on localhost
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || 'b56e18d47c72ab683b10814fe9495694'
+const networks = [base] as [AppKitNetwork, ...AppKitNetwork[]]
 
-export const networks = [optimism] as [
-  AppKitNetwork,
-  ...AppKitNetwork[]
-]
-
-// Create wagmi adapter
-export const wagmiAdapter = new WagmiAdapter({
+const wagmiAdapter = new WagmiAdapter({
   projectId,
   networks
 })
 
-// Create modal
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   networks,
   metadata: {
     name: 'AIDA Pay',
-    description: 'Pay securely with AppKit. Supports OP USDT and Repurchase Fund.',
+    description: 'Pay securely with AppKit. Supports Base USDC.',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one',
     icons: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one'}/logo.png`]
   },
   projectId,
-  themeMode: 'light',
+  themeMode: 'dark',
   features: {
     analytics: true
   }
 })
 
-export {
-  modal,
-  useAppKit,
-  useAppKitState,
-  useAppKitTheme,
-  useAppKitEvents,
-  useAppKitAccount,
-  useWalletInfo,
-  useAppKitNetwork,
-  useDisconnect,
-  useAppkitPay
-}
+export { modal, wagmiAdapter, projectId, networks }
 
-// 保证有默认导出 config 对象
 const config = {
   modal,
   networks,

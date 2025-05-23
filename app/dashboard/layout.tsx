@@ -33,6 +33,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           maxWidth: 420,
           margin: '0 auto',
           padding: '2rem 1rem',
+          paddingTop: '72px', // Header高度
+          paddingBottom: '72px', // TabBar高度
           boxSizing: 'border-box',
         }}
       >

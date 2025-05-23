@@ -33,8 +33,11 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
   const { isConnected, address } = useAccount();
   const router = useRouter();
 
+  const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0'; // Base USDC收款地址
+
   const { pay, isPending, error } = useAppkitPay({
     amount: parseFloat(productDescription),
+    recipient: RECIPIENT,
     onSuccess: async (data) => {
       setShowPay(false);
       setShowRecipient(true);
