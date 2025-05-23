@@ -6,6 +6,7 @@ import styles from "./ProductDetailModal.module.css";
 import AddRecipient from "@/components/AddRecipient";
 import { Button } from "@/components/ui/button";
 import PaymentDialog from "@/components/pay/PaymentDialog";
+import { supabase } from '@/lib/supabase';
 
 interface Product {
   name: string;
@@ -24,6 +25,8 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   const [showRecipient, setShowRecipient] = useState(false);
   const { isConnected, address } = useAccount();
   const router = useRouter();
+  const [reinvestAmount, setReinvestAmount] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (showPay) {
@@ -31,12 +34,35 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
     }
   }, [showPay]);
 
-  const handlePayClick = () => {
+  useEffect(() => {
+    const fetchReinvestAmount = async () => {
+      if (!address) return;
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('user_balance')
+          .select('credit_balance')
+          .eq('user_address', address)
+          .single();
+        if (error) throw error;
+        setReinvestAmount(data?.credit_balance || 0);
+      } catch (err) {
+        console.error('Failed to fetch reinvest amount:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReinvestAmount();
+  }, [address]);
+
+  const handlePayClick = (useReinvest: boolean) => {
     if (!isConnected) {
       toast.error("Please connect your wallet first");
       return;
     }
     setShowPay(true);
+    // 这里可以根据useReinvest参数决定支付金额
+    // 例如：useReinvest为true时，支付25USDT，否则支付50USDT
   };
 
   const handlePaySuccess = () => {
@@ -69,13 +95,32 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
                 <div className={styles.productDesc}>{product.desc}</div>
               </div>
               <div className={styles.actionButtons}>
-                <Button
-                  className={styles.payButton}
-                  onClick={handlePayClick}
-                  disabled={!isConnected}
-                >
-                  {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
-                </Button>
+                {reinvestAmount && reinvestAmount >= 25 ? (
+                  <>
+                    <Button
+                      className={styles.payButton}
+                      onClick={() => handlePayClick(true)}
+                      disabled={!isConnected || loading}
+                    >
+                      Pay 25 USDT + 25 USDT (Reinvest)
+                    </Button>
+                    <Button
+                      className={styles.payButton}
+                      onClick={() => handlePayClick(false)}
+                      disabled={!isConnected || loading}
+                    >
+                      Pay 50 USDT
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    className={styles.payButton}
+                    onClick={() => handlePayClick(false)}
+                    disabled={!isConnected || loading}
+                  >
+                    {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
+                  </Button>
+                )}
                 {!isConnected && (
                   <Button
                     variant="outline"
@@ -101,7 +146,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
         onClose={() => setShowPay(false)}
         onSuccess={handlePaySuccess}
         productName={product.name}
-        productDescription={product.desc}
+        productDescription={product.price}
         zIndex={9999}
       />
     </>

@@ -31,33 +31,30 @@ export default function ReferralList() {
         const { data: user, error: userError } = await supabase
           .from('users')
           .select('id')
-          .eq('wallet_address', address.toLowerCase())
+          .eq('wallet_address', address)
           .single();
 
         console.log('User query result:', { user, userError });
 
-        if (userError) {
-          console.error('Error fetching user:', userError);
-          setError('Failed to fetch user data');
-          return;
-        }
-
-        if (!user) {
+        if (userError || !user || !user.id) {
           setError('User not found');
+          setLoading(false);
           return;
         }
 
-        // 2. 查询直接推荐人
+        // 2. 查询直接推荐人（parent_id = user.id）
         const { data: list, error: listError } = await supabase
           .from('user_referral_tree_view')
           .select('user_id, user_name, level')
-          .eq('parent_id', user.id);
+          .eq('parent_id', user.id)
+          // .eq('level', 1) // 如果只要直推，取消注释
 
         console.log('Referrals query result:', { list, listError });
 
         if (listError) {
           console.error('Error fetching referrals:', listError);
           setError('Failed to fetch referral data');
+          setLoading(false);
           return;
         }
 

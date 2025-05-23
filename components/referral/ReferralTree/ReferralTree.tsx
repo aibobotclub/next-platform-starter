@@ -6,122 +6,130 @@ import type { DataNode } from 'antd/es/tree';
 import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
 import styles from './ReferralTree.module.css';
+import { FaStar, FaUser } from 'react-icons/fa';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
-interface TreeNode extends Omit<DataNode, 'title'> {
-  title: React.ReactNode;
-  key: string;
-  level: number;
-  children?: TreeNode[];
-  rank: number;
-}
-
-interface ReferralNode {
+interface TreeNode {
   user_id: string;
   user_name: string;
-  parent_id: string | null;
-  parent_name: string | null;
   user_rank: number;
   level: number;
-  full_path: string;
+  children: TreeNode[];
 }
 
 export default function ReferralTree() {
   const { address } = useAccount();
-  const [treeData, setTreeData] = useState<TreeNode[]>([]);
+  const [treeData, setTreeData] = useState<TreeNode | null>(null);
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+  const [allNodes, setAllNodes] = useState<any[]>([]);
   const [rankOptions, setRankOptions] = useState<number[]>([]);
   const [selectedRank, setSelectedRank] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!address) return;
-
     (async () => {
-      try {
-        // 1. 获取当前用户信息
-        const { data: userRes, error: userError } = await supabase
-          .from('users')
-          .select('id, username')
-          .eq('wallet_address', address)
-          .single();
+      const { data: userRes, error: userErr } = await supabase
+        .from('users')
+        .select('id, username, wallet_address, user_rank, level')
+        .eq('wallet_address', address)
+        .single();
 
-        if (userError || !userRes) {
-          console.error('Error fetching user:', userError);
-          return;
-        }
-
-        // 2. 获取推荐树数据
-        const { data: nodes, error: nodesError } = await supabase
-          .from('user_referral_tree_view')
-          .select('*')
-          .ilike('full_path', `%${userRes.username}%`);
-
-        if (nodesError) {
-          console.error('Error fetching referral tree:', nodesError);
-          return;
-        }
-
-        // 3. 处理数据
-        const validNodes = (nodes ?? []).filter((node): node is ReferralNode => 
-          node.user_id !== null && 
-          node.user_name !== null && 
-          node.user_rank !== null && 
-          node.level !== null
-        );
-
-        // 4. 设置等级选项
-        const rankOptions = Array.from(
-          new Set(validNodes.map(n => n.user_rank))
-        ).sort((a, b) => a - b);
-        setRankOptions(rankOptions);
-
-        // 5. 构建树结构
-        const buildTree = (list: ReferralNode[], parentId: string | null = null): TreeNode[] =>
-          list
-            .filter((node) =>
-              node.parent_id === parentId &&
-              (selectedRank == null || node.user_rank === selectedRank)
-            )
-            .map((node) => ({
-              title: (
-                <span className={styles.nodeLabel}>
-                  {node.user_name}
-                  <span className={styles.levelTag}>Lv {node.level}</span>
-                  <span className={styles.rankTag}>Rank {node.user_rank}</span>
-                </span>
-              ),
-              key: node.user_id,
-              level: node.level,
-              rank: node.user_rank,
-              children: buildTree(list, node.user_id),
-            }));
-
-        // 6. 设置树数据
-        setTreeData(buildTree(validNodes, null));
-      } catch (error) {
-        console.error('Error in referral tree:', error);
+      const user = userRes as { id: string; username: string; wallet_address: string; user_rank: number; level: number } | null;
+      if (userErr || !user || typeof user.id !== 'string') return;
+      const userId = user.id;
+      const { data: allNodesData, error: allErr } = await supabase
+        .from('user_referral_tree_view')
+        .select('*');
+      if (allErr || !Array.isArray(allNodesData) || allNodesData.length === 0) return;
+      setAllNodes(allNodesData);
+      // rank 筛选项
+      setRankOptions(Array.from(new Set(allNodesData.map((n: any) => n.user_rank))).sort((a, b) => a - b));
+      // 构建树
+      function buildTree(parentId: string): TreeNode | null {
+        const node = allNodesData!.find((n: any) => n.user_id === parentId);
+        if (!node) return null;
+        // rank筛选：只显示selectedRank及其下级
+        if (selectedRank !== null && node.user_rank !== selectedRank && node.parent_id !== null) return null;
+        const children = allNodesData!
+          .filter((n: any) => n.parent_id === parentId)
+          .map((child: any) => buildTree(child.user_id))
+          .filter(Boolean) as TreeNode[];
+        return {
+          user_id: node.user_id || '',
+          user_name: node.user_name || '',
+          user_rank: node.user_rank || 0,
+          level: node.level || 0,
+          children,
+        };
       }
+      setTreeData(buildTree(userId));
     })();
   }, [address, selectedRank]);
 
+  const renderTree = (node: TreeNode | null) => {
+    if (!node) return null;
+    const isExpanded = expandedNodes.has(node.user_id);
+    const hasChildren = node.children.length > 0;
+    return (
+      <div className={styles.treeLevel}>
+        <div style={{ position: 'relative' }}>
+          <div
+            className={styles.treeNode}
+            onClick={() => hasChildren && toggleNode(node.user_id)}
+            style={{ cursor: hasChildren ? 'pointer' : 'default' }}
+          >
+            <div className={styles.address}>{node.user_name || node.user_id}</div>
+            <div>
+              <FaUser />
+              <span style={{marginLeft: 8, color: '#6366f1', fontWeight: 600}}>{t('Rank')} {node.user_rank}</span>
+            </div>
+            <div className={styles.volume}>{t('Level')}. {node.level}</div>
+          </div>
+          {hasChildren && <div className={styles.treeLine}></div>}
+          <AnimatePresence>
+            {isExpanded && hasChildren && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                {node.children.map(child => renderTree(child))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    );
+  };
+
+  const toggleNode = (key: string) => {
+    setExpandedNodes(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
   return (
     <div className={styles.treeContainer}>
-      <h3 className={styles.title}>My Referral Tree</h3>
+      <h3 className={styles.title}>{t('My Referral Tree')}</h3>
       <div style={{ marginBottom: 12 }}>
-        <span style={{ marginRight: 8 }}>Filter by Rank:</span>
-        <Select
-          style={{ width: 120 }}
-          value={selectedRank}
-          onChange={setSelectedRank}
-          allowClear
-          placeholder="All"
-          options={rankOptions.map(lv => ({ value: lv, label: `Rank ${lv}` }))}
-        />
+        <span style={{ marginRight: 8 }}>{t('Filter by Rank')}:</span>
+        <select
+          style={{ minWidth: 120, padding: 4, borderRadius: 6 }}
+          value={selectedRank ?? ''}
+          onChange={e => setSelectedRank(e.target.value ? Number(e.target.value) : null)}
+        >
+          <option value="">{t('All')}</option>
+          {rankOptions.map(lv => (
+            <option key={lv} value={lv}>{t('Rank')} {lv}</option>
+          ))}
+        </select>
       </div>
-      <Tree
-        showLine
-        defaultExpandAll
-        treeData={treeData}
-        className={styles.tree}
-      />
+      {treeData ? renderTree(treeData) : <div className="text-center py-8 text-gray-400">{t('No referrals found')}</div>}
     </div>
   );
 }

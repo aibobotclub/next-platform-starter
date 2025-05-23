@@ -11,96 +11,110 @@
   justify-content: center;
   padding-bottom: 72px; /* 预留tabbar */
 }
-.modal {
-  background: var(--card-background, #232946);
-  border-radius: 1.2rem;
-  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
-  padding: 2.2rem 1.2rem 2.5rem 1.2rem;
-  max-width: 420px;
-  width: 95vw;
-  margin-bottom: 72px;
+.referralModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3000;
+  background: #fff;
+  color: #222;
+  border-radius: 24px;
+  box-shadow: 0 8px 40px rgba(80, 36, 180, 0.18);
+  padding: 36px 32px 32px 32px;
+  min-width: 340px;
+  max-width: 95vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  text-align: center;
+  gap: 18px;
 }
 .title {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #fff;
-  margin-bottom: 1.2rem;
-  letter-spacing: 0.02em;
-  text-align: center;
+  color: #6366f1;
+  margin-bottom: 10px;
 }
-.closeBtn {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
-  background: none;
+.desc {
+  font-size: 1.08rem;
+  margin-bottom: 18px;
+  color: #666;
+}
+.linkBox {
+  background: #f3f4f6;
+  color: #4f46e5;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(79,70,229,0.08);
+  width: 100%;
+  max-width: 340px;
+  gap: 10px;
+}
+.copyBtn {
+  background: linear-gradient(90deg, #6366f1 0%, #a21caf 100%);
+  color: #fff;
   border: none;
-  font-size: 2rem;
-  color: #bfc9ff;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
+  margin-left: 12px;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(79,70,229,0.12);
+}
+.copyBtn:hover {
+  background: linear-gradient(90deg, #a21caf 0%, #6366f1 100%);
+  transform: scale(1.07);
+}
+.shareRow {
+  margin-top: 10px;
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+.shareBtn {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  transition: background 0.2s;
-  width: 44px;
-  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.closeBtn:hover {
-  background: #353b5b;
-  color: #fff;
-}
-.linkBox {
-  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
-  color: #fff;
-  border-radius: 1rem;
-  padding: 1.1rem 1.2rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 1.2rem;
-  word-break: break-all;
-  text-align: center;
-  box-shadow: 0 2px 12px #6366f122;
-}
-.copyBtn {
-  min-width: 120px;
-  min-height: 44px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1.08rem;
-  font-weight: 600;
-  border-radius: 0.8rem;
-  background: linear-gradient(90deg, #6366f1 0%, #232946 100%);
-  color: #fff;
+  font-size: 1.5rem;
+  background: #f3f4f6;
   border: none;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.10);
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
-  margin: 0.2rem 0;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
 }
-.copyBtn:hover {
-  background: linear-gradient(90deg, #232946 0%, #6366f1 100%);
-  color: #fff;
+.shareBtn:hover {
+  background: #ede9fe;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.18);
+  transform: scale(1.12);
 }
-@media (max-width: 600px) {
-  .modal {
-    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
-    border-radius: 1rem;
-    min-width: 0;
-    margin-bottom: 72px;
-  }
-  .title {
-    font-size: 1.2rem;
+.shareBtn.facebook { color: #1877f3; }
+.shareBtn.whatsapp { color: #25d366; }
+.shareBtn.telegram { color: #229ed9; }
+.shareBtn.twitter { color: #1da1f2; }
+@media (max-width: 480px) {
+  .referralModal {
+    min-width: 90vw;
+    padding: 24px 8px 24px 8px;
   }
   .linkBox {
+    max-width: 95vw;
     font-size: 1rem;
-    padding: 0.8rem 0.5rem;
+    padding: 10px 8px;
   }
-  .copyBtn {
-    min-width: 90px;
-    font-size: 0.98rem;
-    border-radius: 0.7rem;
+  .copyBtn, .shareBtn {
+    font-size: 1rem;
+    padding: 8px 10px;
   }
 }

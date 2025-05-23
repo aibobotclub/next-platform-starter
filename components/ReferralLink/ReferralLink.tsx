@@ -2,93 +2,66 @@
 
 import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
-import { message } from 'antd';
-import {
-  CopyOutlined,
-  UpOutlined,
-  DownOutlined,
-  LinkOutlined,
-
-} from '@ant-design/icons';
 import styles from './ReferralLink.module.css';
+import { useTranslation } from 'react-i18next';
+import { FaFacebook, FaWhatsapp, FaTelegram, FaTwitter } from 'react-icons/fa';
+
 
 interface ReferralLinkProps {
-  open: boolean;
-  onClose: () => void;
+  address: string;
+  onClose?: () => void;
 }
 
-export default function ReferralLink({ open, onClose }: ReferralLinkProps) {
-  const { address } = useAccount();
+export function ReferralLink({ address, onClose }: ReferralLinkProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-  if (!open) return null;
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://aidabot.club';
-  const baseUrl = `${origin}/register?ref=`;
-  const referralLink = address ? `${baseUrl}${address}` : '';
+  const [isVisible, setIsVisible] = useState(true);
+
+  const getReferralLink = () => `${window.location.origin}?REF=${address}`;
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(referralLink);
-      message.success('Referral link copied!');
-    } catch {
-      message.error('Failed to copy link.');
+      await navigator.clipboard.writeText(getReferralLink());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
     }
   };
 
-  const shareTo = (platform: string) => {
-    const encoded = encodeURIComponent(referralLink);
-    const text = encodeURIComponent("Join AIDA with my referral link!");
-
-    let url = '';
+  const handleShare = (platform: string) => {
+    const link = getReferralLink();
+    const text = t('referral.link.shareText');
+    let shareUrl = '';
     switch (platform) {
       case 'twitter':
-        url = `https://twitter.com/intent/tweet?url=${encoded}&text=${text}`;
-        break;
-      case 'telegram':
-        url = `https://t.me/share/url?url=${encoded}&text=${text}`;
-        break;
-      case 'whatsapp':
-        url = `https://wa.me/?text=${text}%20${encoded}`;
-        break;
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`; break;
       case 'facebook':
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encoded}`;
-        break;
+        shareUrl = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(link)}`; break;
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`; break;
+      case 'whatsapp':
+        shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + link)}`; break;
+      default: return;
     }
-    if (url) window.open(url, '_blank');
+    window.open(shareUrl, 'share', 'width=575,height=400');
   };
 
   return (
-    <div className={styles.card}>
-      {/* Header Toggle */}
-      <div className={styles.toggleHeader} onClick={() => setExpanded(!expanded)}>
-        <LinkOutlined className={styles.icon} />
-        <span className={styles.toggleText}>My Referral Link</span>
-        {expanded ? <UpOutlined /> : <DownOutlined />}
+    <div className={styles.referralModal}>
+      <button onClick={onClose} style={{position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 24, color: '#6366f1', cursor: 'pointer'}}>×</button>
+      <div className={styles.title}>My Referral Link</div>
+      <div className={styles.desc}>Share this link to invite others. When they register using your link, you will earn rewards!</div>
+      <div className={styles.linkBox}>
+        <input value={getReferralLink()} readOnly style={{border: 'none', background: 'transparent', color: '#4f46e5', fontWeight: 700, width: '70%'}} />
+        <button className={styles.copyBtn} onClick={handleCopy}>Copy</button>
       </div>
-
-      {/* Collapsible content */}
-      {expanded && (
-        <div className={styles.content}>
-          <p className={styles.description}>
-            Share this link to invite others. When they register using your link, you&apos;ll earn rewards!
-          </p>
-
-          <div className={styles.linkRow}>
-            <input type="text" value={referralLink} readOnly className={styles.input} />
-            <button className={styles.copyBtn} onClick={handleCopy}>
-              <CopyOutlined />
-            </button>
-          </div>
-
-          <div className={styles.shareRow}>
-            <span className={styles.shareLabel}>Share to:</span>
-            <button onClick={() => shareTo('twitter')} className={styles.socialBtn}>Twitter</button>
-            <button onClick={() => shareTo('telegram')} className={styles.socialBtn}>Telegram</button>
-            <button onClick={() => shareTo('whatsapp')} className={styles.socialBtn}>WhatsApp</button>
-            <button onClick={() => shareTo('facebook')} className={styles.socialBtn}>Facebook</button>
-          </div>
-        </div>
-      )}
+      <div className={styles.shareRow}>
+        <button className={`${styles.shareBtn} ${styles.facebook}`} onClick={() => handleShare('facebook')}><FaFacebook /></button>
+        <button className={`${styles.shareBtn} ${styles.whatsapp}`} onClick={() => handleShare('whatsapp')}><FaWhatsapp /></button>
+        <button className={`${styles.shareBtn} ${styles.telegram}`} onClick={() => handleShare('telegram')}><FaTelegram /></button>
+        <button className={`${styles.shareBtn} ${styles.twitter}`} onClick={() => handleShare('twitter')}><FaTwitter /></button>
+      </div>
     </div>
   );
 }

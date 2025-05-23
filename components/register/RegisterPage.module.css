@@ -265,4 +265,28 @@
     height: 40px;
     font-size: 1rem;
   }
+}
+
+.fab {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 2001;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #a21caf 100%);
+  color: #fff;
+  font-size: 2rem;
+  box-shadow: 0 4px 24px rgba(80,36,180,0.18);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.fab:hover {
+  box-shadow: 0 8px 32px rgba(80,36,180,0.28);
+  background: linear-gradient(135deg, #a21caf 0%, #6366f1 100%);
 } 

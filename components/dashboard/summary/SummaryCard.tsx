@@ -1,7 +1,6 @@
 import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
-import ReferralLink from "@/components/ReferralLink/ReferralLink";
 import { useState } from "react";
 import RewardStats from "./rewards/RewardStats";
 import DetailDrawer from "./DetailDrawer/DetailDrawer";
@@ -17,7 +16,6 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
   const rewardBalance = 25;
   const totalReward = 5200;
   const referralCount = 12;
-  const [showReferral, setShowReferral] = useState(false);
   const [showRewardDrawer, setShowRewardDrawer] = useState(false);
 
   const handleTaskDetail = () => {
@@ -52,12 +50,9 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
         icon={<FiUsers />}
         label="Referral"
         value={referralCount}
-        onDetail={() => setShowReferral(true)}
+        onDetail={() => onDetail && onDetail('referral')}
       />
     </div>
-    {showReferral && (
-      <ReferralLink open={showReferral} onClose={() => setShowReferral(false)} />
-    )}
     </>
   );
 }

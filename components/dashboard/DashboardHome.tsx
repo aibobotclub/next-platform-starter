@@ -14,7 +14,7 @@ import BalanceCard from "./summary/balance/BalanceCard";
 import TaskProgressCardContainer from './summary/tasks/TastStatsDetails';
 import ProductGrid from '../product/ProductGrid';
 import RewardStats from "./summary/rewards/RewardStats";
-import ReferralLink from "@/components/ReferralLink/ReferralLink";
+import { ReferralLink } from '@/components/ReferralLink/ReferralLink';
 
 function ReferralStats() {
   // 示例推荐统计分析
@@ -87,7 +87,7 @@ export default function DashboardHome() {
           paddingBottom: 72,
         }}>
           <div style={{maxWidth: 420, width: '95vw', marginBottom: 72}}>
-            <ReferralLink open={true} onClose={() => setShowDetail(false)} />
+            <ReferralLink address={address || ''} onClose={() => setShowDetail(false)} />
           </div>
         </div>
       ) : (
