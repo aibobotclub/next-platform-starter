@@ -13,5 +13,5 @@ export default function PaymentPage() {
     // 处理关闭逻辑
   };
 
-  return <PaymentForm product={product} onClose={handleClose} />;
+  return <PaymentForm product={product} onClose={handleClose} productName={''} productDescription={''} />;
 } 

@@ -4,17 +4,20 @@ import PaymentForm from "./PaymentForm";
 interface PaymentDialogProps {
   open: boolean;
   onClose: () => void;
-  onSuccess?: () => void; // ✅ 添加这一行
+  onSuccess?: () => void;
   productName: string;
   productDescription: string;
+  product?: any;
 }
 
 
 export default function PaymentDialog({
   open,
   onClose,
+  onSuccess,
   productName,
   productDescription,
+  product,
 }: PaymentDialogProps) {
   if (!open) return null;
 
@@ -23,9 +26,10 @@ export default function PaymentDialog({
       <div className="modal">
         <PaymentForm
           onClose={onClose}
-          onSuccess={onClose}
+          onSuccess={onSuccess}
           productName={productName}
           productDescription={productDescription}
+          product={product}
         />
       </div>
     </div>,

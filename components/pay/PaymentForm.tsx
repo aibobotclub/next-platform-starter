@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import AddRecipient from "@/components/AddRecipient";
 import { Button } from "@/components/ui/button";
 import PaymentDialog from "@/components/pay/PaymentDialog";
+import { useAppkitPay } from '@/hooks/useAppkitPay';
+import { supabase } from '@/lib/supabase';
 
 interface Product {
   name: string;
@@ -15,23 +17,60 @@ interface Product {
   type: string;
 }
 
-interface ProductDetailModalProps {
-  product: Product;
+
+
+interface PaymentFormProps {
   onClose: () => void;
+  onSuccess?: () => void;
+  productName: string;
+  productDescription: string;
+  product?: Product;
 }
 
-export default function ProductDetailModal({ product, onClose }: ProductDetailModalProps) {
+export default function PaymentForm({ onClose, onSuccess, productName, productDescription, product }: PaymentFormProps) {
   const [showPay, setShowPay] = useState(false);
   const [showRecipient, setShowRecipient] = useState(false);
   const { isConnected, address } = useAccount();
   const router = useRouter();
+
+  const { pay, isPending, error } = useAppkitPay({
+    amount: parseFloat(productDescription),
+    onSuccess: async (data) => {
+      setShowPay(false);
+      setShowRecipient(true);
+      onSuccess?.();
+
+      // 记录支付成功到数据库
+      if (address) {
+        const { error: dbError } = await supabase
+          .from('orders')
+          .insert([
+            {
+              user_address: address,
+              product_name: productName,
+              product_description: productDescription,
+              amount: parseFloat(productDescription),
+              status: 'success',
+              tx_hash: data?.txHash || 'unknown',
+            },
+          ]);
+
+        if (dbError) {
+          console.error('Failed to record payment:', dbError);
+        }
+      }
+    },
+    onError: (err) => {
+      toast.error(err);
+    },
+  });
 
   const handlePayClick = () => {
     if (!isConnected) {
       toast.error("Please connect your wallet first");
       return;
     }
-    setShowPay(true);
+    pay();
   };
 
   const handlePaySuccess = () => {
@@ -85,17 +124,16 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
           </button>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ fontSize: '24px', fontWeight: 600, color: '#1a1a1a' }}>{product.name}</div>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#2563eb' }}>{product.price}</div>
-              <div style={{ fontSize: '16px', color: '#666' }}>{product.desc}</div>
+              <div style={{ fontSize: '24px', fontWeight: 600, color: '#1a1a1a' }}>{productName}</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#2563eb' }}>{productDescription}</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <Button
                 style={{ height: '48px', fontSize: '16px', fontWeight: 600 }}
                 onClick={handlePayClick}
-                disabled={!isConnected}
+                disabled={!isConnected || isPending}
               >
-                {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
+                {isConnected ? (isPending ? 'Processing...' : 'Pay with Wallet') : 'Connect Wallet to Pay'}
               </Button>
               {!isConnected && (
                 <Button
@@ -122,8 +160,9 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
         open={showPay}
         onClose={() => setShowPay(false)}
         onSuccess={handlePaySuccess}
-        productName={product.name}
-        productDescription={product.desc}
+        productName={productName}
+        productDescription={productDescription}
+        product={product}
       />
     </>
   );
