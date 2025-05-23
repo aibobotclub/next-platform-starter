@@ -43,7 +43,7 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
         <main className={styles.main}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.title}>加入 AIDA Club</h1>
+              <h1 className={styles.title}>Join AIDA Club</h1>
               <p className={styles.subtitle}>
                 Connect your wallet and complete registration to start using
               </p>
@@ -77,7 +77,7 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
         <main className={styles.main}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.title}>加入 AIDA Club</h1>
+              <h1 className={styles.title}>Join AIDA Club</h1>
               <p className={styles.subtitle}>
                 Connect your wallet and complete registration to start using
               </p>
@@ -118,24 +118,24 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
         <main className={styles.main}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.title}>加入 AIDA Club</h1>
+              <h1 className={styles.title}>Join AIDA Club</h1>
               <p className={styles.subtitle}>
-                连接钱包并完成注册以开始使用
+                Connect your wallet and complete registration to start using
               </p>
             </div>
             <div className={styles.formContainer}>
               <div className={styles.loading}>
                 <div className={styles.spinner}></div>
-                <p>正在检查用户状态...</p>
+                <p>Checking user status...</p>
               </div>
             </div>
             <div className={styles.info}>
-              <h3>为什么要注册？</h3>
+              <h3>Why Register?</h3>
               <ul className={styles.benefits}>
-                <li>访问独家功能和内容</li>
-                <li>参与社区活动</li>
-                <li>获得奖励和福利</li>
-                <li>与其他会员交流</li>
+                <li>Access exclusive features and content</li>
+                <li>Participate in community activities</li>
+                <li>Earn rewards and benefits</li>
+                <li>Connect with other members</li>
               </ul>
             </div>
           </div>
