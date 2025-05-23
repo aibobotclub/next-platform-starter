@@ -221,7 +221,7 @@ export default function TaskPage() {
         </div>
 
         <Drawer
-          title="Task Details"
+        title="Task Details"
           placement="right"
           onClose={handleDrawerClose}
           open={drawerVisible}
