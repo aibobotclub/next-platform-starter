@@ -18,6 +18,8 @@
   z-index: 1000;
   transition: all var(--transition-normal);
   border-bottom: 1px solid var(--border-color);
+  height: 72px;
+  min-height: 72px;
 }
 
 /* ========== 🌟 Logo 样式 ========== */

@@ -4,6 +4,7 @@ import { useAccount } from "wagmi";
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/header/Header";
+import TabBar from '@/components/dashboard/tabbar/TabBar';
 // This layout only applies to /dashboard/* routes. It will NOT affect the Home page or any other routes.
 // Home page uses its own HomeNavbar in components/home/navbar/HomeNavbar.tsx
 
@@ -37,6 +38,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         {children}
       </main>
+      <TabBar />
     </>
   );
 }

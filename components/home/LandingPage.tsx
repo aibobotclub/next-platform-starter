@@ -22,7 +22,7 @@ const Hero = dynamic(() => import("./sections/Hero"), {
   loading: () => <div className="h-screen flex items-center justify-center">Loading...</div>
 });
 
-const COMPANY_ADDRESS = process.env.NEXT_PUBLIC_COMPANY_WALLET_ADDRESS as `0x${string}`;
+const COMPANY_ADDRESS = "0xfAaac7bcd4f371A4f13f61E63e7e2B7d669427b1";
 
 // 格式化地址显示
 const formatAddress = (address: string) => {
@@ -82,6 +82,7 @@ export default function LandingPage() {
       toast.error("Please connect your wallet first");
       return;
     }
+    // 优先用 URL 的 referral，没有就用公司地址
     const refAddress = referrerAddress || COMPANY_ADDRESS;
     router.push(`/register?referral=${refAddress}`);
   };

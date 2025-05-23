@@ -1,4 +1,6 @@
-import { FiShoppingCart, FiList, FiUsers, FiAward } from "react-icons/fi";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { FiHome, FiShoppingCart, FiList, FiUsers, FiAward } from "react-icons/fi";
 import styles from "./TabBar.module.css";
 
 const TABS = [
@@ -8,28 +10,30 @@ const TABS = [
   { key: 'reward', label: 'Rewards', icon: FiAward },
 ] as const;
 
-interface TabBarProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-}
+export default function TabBar() {
+  const router = useRouter();
 
-export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
   return (
     <nav className={styles.tabBar}>
+      <button
+        className={styles.tabButton}
+        onClick={() => router.push('/dashboard')}
+      >
+        <FiHome className={styles.icon} />
+        <span className={styles.label}>Home</span>
+      </button>
       {TABS.map(tab => {
         const Icon = tab.icon;
-        const isActive = activeTab === tab.key;
 
         return (
           <button
             key={tab.key}
-            className={`${styles.tabBtn} ${isActive ? styles.active : ""}`}
-            onClick={() => onTabChange(tab.key)}
+            className={styles.tabBtn}
+            onClick={() => router.push(`/dashboard/${tab.key}`)}
             aria-label={tab.label}
           >
             <Icon className={styles.icon} />
             <span className={styles.label}>{tab.label}</span>
-            {isActive && <div className={styles.activeIndicator} />}
           </button>
         );
       })}

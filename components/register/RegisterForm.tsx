@@ -35,6 +35,8 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const { isRegistered } = useUserStatus();
   const { register: registerOnChain, isLoading: isChainLoading } = useReferral();
 
+  const COMPANY_ADDRESS = "0xfAaac7bcd4f371A4f13f61E63e7e2B7d669427b1";
+
   useEffect(() => { 
     setMounted(true); 
   }, []);
@@ -56,7 +58,8 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
       return;
     }
 
-    const refWallet = referrerAddress || searchParams?.get("ref") || null;
+    // 优先级：props > url > 公司地址
+    const refWallet = referrerAddress || searchParams?.get("ref") || searchParams?.get("referral") || COMPANY_ADDRESS;
     if (refWallet && !/^0x[a-fA-F0-9]{40}$/.test(refWallet)) {
       toast.error("Invalid referral address");
       return;
