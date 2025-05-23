@@ -148,7 +148,7 @@
 }
 
 .heroTitle {
-  font-size: clamp(3.6rem, 6vw, 4.2rem);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
   font-weight: 900;
   margin-bottom: 2rem;
   background: linear-gradient(90deg, #232946 0%, #6366f1 60%, #818cf8 100%);
@@ -173,7 +173,7 @@
   -webkit-background-clip: unset;
   -webkit-text-fill-color: #232946;
   color: #232946;
-  font-size: clamp(3.6rem, 6vw, 4.2rem);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
   text-shadow:
     0 2px 8px #bfc9ff,
     0 1px 0 #fff,
@@ -184,7 +184,7 @@
 .heroTitle strong, .heroTitle b {
   color: #232946;
   font-weight: 900;
-  text-shadow: 0 2px 8px #6366f1cc, 0 1px 0 #fff;
+  text-shadow: 0 2px 6px #0d0e58cc, 0 1px 0 #fff;
 }
 
 .subtitle {
@@ -249,14 +249,14 @@
   outline: none;
 }
 .buttonGroup button + button:hover, .buttonGroup button + button:focus {
-  background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+  background: linear-gradient(90deg, #15d981 0%, #20c7e4 100%);
 }
 [data-theme='light'] .buttonGroup button:hover, [data-theme='light'] .buttonGroup button:focus {
   background: linear-gradient(90deg, #1e293b 0%, #6366f1 100%);
   color: #fff;
 }
 [data-theme='light'] .buttonGroup button + button:hover, [data-theme='light'] .buttonGroup button + button:focus {
-  background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(90deg, #fbbf24 0%, #f5900b 100%);
   color: #fff;
 }
 .buttonGroup button:active {
@@ -358,7 +358,7 @@
     margin: 0 auto 2rem auto;
     display: block;
     border-radius: 2.2rem;
-    box-shadow: 0 12px 48px #6366f1cc;
+    box-shadow: 0 12px 48px #2b0761cc;
     background: none;
     padding: 0;
   }
@@ -401,8 +401,10 @@
     font-size: 1.08rem;
     border-radius: 1.1rem;
   }
-  .heroTitle {
-    font-size: 2.8rem;
+  .heroTitle,
+  [data-theme='dark'] .heroTitle,
+  [data-theme='light'] .heroTitle {
+    font-size: 3.5rem;
     margin-bottom: 1.7rem;
     line-height: 1.15;
     letter-spacing: -0.01em;
@@ -420,7 +422,7 @@
     max-width: 90vw;
     margin-bottom: 1.2rem;
     background: none;
-    box-shadow: 0 8px 32px #6366f1aa;
+    box-shadow: 0 8px 32px #33095faa;
     border-radius: 1.5rem;
     padding: 0;
   }
@@ -428,16 +430,18 @@
 
 @media (max-width: 450px) {
   .heroSection {
-    padding-top: 25px;
+    padding-top: 20px;
   }
   .buttonGroup button {
     min-width: 90px;
-    padding: 0.5rem 0.7rem;
+    padding: 0.9rem 0.7rem;
     font-size: 0.92rem;
     border-radius: 0.8rem;
   }
-  .heroTitle {
-    font-size: 1.6rem;
+  .heroTitle,
+  [data-theme='dark'] .heroTitle,
+  [data-theme='light'] .heroTitle {
+    font-size: 2.5rem;
     margin-bottom: 1.1rem;
     line-height: 1.13;
   }
