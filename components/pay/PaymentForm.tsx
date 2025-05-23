@@ -1,119 +1,130 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAccount } from 'wagmi';
-import { Button } from '@/components/ui/button';
-import { useBalanceStore } from '@/stores/useBalanceStore';
-import { usePayController } from '@/hooks/usePayController';
-import { toast } from 'sonner';
-import styles from './PaymentView.module.css';
+import { toast } from "sonner";
+import AddRecipient from "@/components/AddRecipient";
+import { Button } from "@/components/ui/button";
+import PaymentDialog from "@/components/pay/PaymentDialog";
 
-const OPUSDT = {
-  network: 'eip155:10' as const,
-  asset: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
-  metadata: {
-    symbol: 'USDT',
-    decimals: 18,
-    icon: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
-    name: 'Tether USD',
-  },
-};
-const RECIPIENT_ADDRESS = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS!;
-
-interface PaymentFormProps {
-  onClose?: () => void;
-  onSuccess?: () => void;
-  productName?: string;
-  productDescription?: string;
+interface Product {
+  name: string;
+  price: string;
+  desc: string;
+  type: string;
 }
 
-export default function PaymentForm({ onClose, onSuccess, productName = "Premium Subscription", productDescription = "Get access to all premium features" }: PaymentFormProps) {
-  const { address } = useAccount();
-  const { balance, isLoading, error: balanceError, fetchBalance } = useBalanceStore();
-  const [useRebuy, setUseRebuy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface ProductDetailModalProps {
+  product: Product;
+  onClose: () => void;
+}
 
-  const { handlePayWithWallet, isPaymentInProgress } = usePayController({
-    amount: 50,
-    useRebuyFund: useRebuy,
-    onSuccess: (data) => {
-      toast.success("Payment successful");
-      if (onSuccess) onSuccess();
-    },
-    onError: (err) => {
-      const errorMessage = typeof err === 'string' ? err : err?.message || 'Payment failed';
-      toast.error(errorMessage);
-      setError(errorMessage);
-    }
-  });
+export default function ProductDetailModal({ product, onClose }: ProductDetailModalProps) {
+  const [showPay, setShowPay] = useState(false);
+  const [showRecipient, setShowRecipient] = useState(false);
+  const { isConnected, address } = useAccount();
+  const router = useRouter();
 
-  useEffect(() => {
-    if (address) fetchBalance(address);
-  }, [address, fetchBalance]);
-
-  const getAmount = () => {
-    if (useRebuy && balance?.credit_balance && balance.credit_balance >= 25) return 25;
-    return 50;
-  };
-
-  const hasRebuy = balance?.credit_balance && balance.credit_balance >= 25;
-
-  const handlePay = async () => {
-    setError(null);
-    if (!address) {
+  const handlePayClick = () => {
+    if (!isConnected) {
       toast.error("Please connect your wallet first");
       return;
     }
-    await handlePayWithWallet();
+    setShowPay(true);
+  };
+
+  const handlePaySuccess = () => {
+    setShowPay(false);
+    setShowRecipient(true);
+  };
+
+  const handleRecipientClose = () => {
+    setShowRecipient(false);
+    if (onClose) onClose();
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.productInfo}>
-          <h2 className={styles.productName}>{productName}</h2>
-          <p className={styles.productDescription}>{productDescription}</p>
-        </div>
-
-        {error && <div className={styles.errorMessage}>{error}</div>}
-
-        {hasRebuy && (
-          <label className={styles.rebuyLabel}>
-            <input
-              type="checkbox"
-              checked={useRebuy}
-              onChange={e => setUseRebuy(e.target.checked)}
-              className={styles.rebuyCheckbox}
-            />
-            Use Repurchase Fund (Balance: {balance?.credit_balance ?? 0} USDT)
-          </label>
-        )}
-
-        <div className={styles.priceSection}>
-          <div className={styles.priceDisplay}>
-            <span className={styles.currency}>USDT</span>
-            <span className={styles.amount}>{getAmount()}</span>
-          </div>
-        </div>
-
-        <div className={styles.buttonGroup}>
-          <Button
-            className={styles.payButton}
-            onClick={handlePay}
-            disabled={isPaymentInProgress || !address}
+    <>
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        backdropFilter: 'blur(4px)',
+        zIndex: 1000,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <div style={{
+          position: 'relative',
+          background: '#fff',
+          borderRadius: '18px',
+          width: '95vw',
+          maxWidth: '480px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+          padding: '24px',
+        }}>
+          <button
+            onClick={onClose}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              fontSize: '24px',
+              background: 'none',
+              border: 'none',
+              color: '#666',
+              cursor: 'pointer',
+            }}
           >
-            {isPaymentInProgress ? 'Processing...' : 'Pay Now'}
-          </Button>
-          {onClose && (
-            <Button
-              className={styles.closeButton}
-              onClick={onClose}
-              variant="outline"
-            >
-              Cancel
-            </Button>
+            ×
+          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ fontSize: '24px', fontWeight: 600, color: '#1a1a1a' }}>{product.name}</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#2563eb' }}>{product.price}</div>
+              <div style={{ fontSize: '16px', color: '#666' }}>{product.desc}</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Button
+                style={{ height: '48px', fontSize: '16px', fontWeight: 600 }}
+                onClick={handlePayClick}
+                disabled={!isConnected}
+              >
+                {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
+              </Button>
+              {!isConnected && (
+                <Button
+                  variant="outline"
+                  style={{ height: '48px', fontSize: '16px' }}
+                  onClick={() => router.push('/register')}
+                >
+                  Register First
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {showRecipient && (
+            <AddRecipient
+              open={showRecipient}
+              onOpenChange={setShowRecipient}
+            />
           )}
         </div>
       </div>
-    </div>
+
+      <PaymentDialog
+        open={showPay}
+        onClose={() => setShowPay(false)}
+        onSuccess={handlePaySuccess}
+        productName={product.name}
+        productDescription={product.desc}
+      />
+    </>
   );
 }
