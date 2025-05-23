@@ -1,26 +1,53 @@
 import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RewardStats from "./rewards/RewardStats";
 import DetailDrawer from "./DetailDrawer/DetailDrawer";
+import TaskHistoryDrawer from "@/components/tasks/TaskHistoryDrawer";
+import ReferralLink from "@/components/referral/ReferralLink/ReferralLink";
+import { useAccount } from "wagmi";
+import { supabase } from '@/lib/supabase';
 
 interface SummaryCardProps {
   onDetail?: (type: 'tasks' | 'balance' | 'rewards' | 'referral') => void;
 }
 
 export default function SummaryCard({ onDetail }: SummaryCardProps) {
-  // 示例数据
-  const tasksCompleted = 1;
-  const tasksTotal = 3;
-  const rewardBalance = 25;
-  const totalReward = 5200;
-  const referralCount = 12;
-  const [showRewardDrawer, setShowRewardDrawer] = useState(false);
+  // 真实数据state
+  const { address } = useAccount();
+  const [tasksCompleted, setTasksCompleted] = useState(0);
+  const [tasksTotal, setTasksTotal] = useState(0);
+  const [rewardBalance, setRewardBalance] = useState(0);
+  const [totalReward, setTotalReward] = useState(0);
+  const [referralCount, setReferralCount] = useState(0);
+  const [showTaskDrawer, setShowTaskDrawer] = useState(false);
+  const [showReferralDrawer, setShowReferralDrawer] = useState(false);
 
-  const handleTaskDetail = () => {
-    onDetail && onDetail('tasks');
-  };
+  // 数据库查询
+  useEffect(() => {
+    if (!address) return;
+    // 查询任务统计
+    supabase.from('user_task_stats').select('*').eq('wallet_address', address).single().then(res => {
+      if (res.data) {
+        setTasksCompleted(res.data.completed_tasks || 0);
+        setTasksTotal(res.data.total_tasks || 0);
+        setTotalReward(res.data.total_reward || 0);
+      }
+    });
+    // 查询余额
+    supabase.from('users').select('id').eq('wallet_address', address).single().then(userRes => {
+      if (userRes.data && userRes.data.id) {
+        supabase.from('user_balance').select('*').eq('user_id', userRes.data.id).single().then(balRes => {
+          if (balRes.data) setRewardBalance(balRes.data.reward_balance || 0);
+        });
+        // 查询推荐人数
+        supabase.from('user_referral_tree_view').select('*').eq('parent_id', userRes.data.id).then(refRes => {
+          setReferralCount(refRes.data ? refRes.data.length : 0);
+        });
+      }
+    });
+  }, [address]);
 
   return (
     <>
@@ -29,14 +56,14 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
         icon={<FiCheckCircle />}
         label="Tasks Completed"
         value={`${tasksCompleted} / ${tasksTotal}`}
-          onDetail={handleTaskDetail}
+        onDetail={() => setShowTaskDrawer(true)}
       />
       <div className={styles.sectionDivider} />
       <SummaryItem
         icon={<FiDollarSign />}
         label="Reward Balance"
         value={<span>{rewardBalance} <span className={styles.usdt}>USDT</span></span>}
-          onDetail={() => onDetail && onDetail('balance')}
+        onDetail={() => onDetail && onDetail('balance')}
       />
       <div className={styles.sectionDivider} />
       <SummaryItem
@@ -50,9 +77,18 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
         icon={<FiUsers />}
         label="Referral"
         value={referralCount}
-        onDetail={() => onDetail && onDetail('referral')}
+        onDetail={() => setShowReferralDrawer(true)}
+        buttonType="share"
       />
     </div>
+    {/* 任务统计抽屉 */}
+    <DetailDrawer open={showTaskDrawer} onClose={() => setShowTaskDrawer(false)} title="Task History & Stats">
+      <TaskHistoryDrawer />
+    </DetailDrawer>
+    {/* 推荐分享抽屉 */}
+    <DetailDrawer open={showReferralDrawer} onClose={() => setShowReferralDrawer(false)} title="My Referral Link">
+      {address && <ReferralLink address={address} />}
+    </DetailDrawer>
     </>
   );
 }

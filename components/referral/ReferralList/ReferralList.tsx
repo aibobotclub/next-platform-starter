@@ -87,13 +87,11 @@ export default function ReferralList() {
       {referrals.length === 0 ? (
         <div className={styles.empty}>You haven&apos;t referred anyone yet.</div>
       ) : (
-        <div className={styles.list}>
+        <div>
           {referrals.map((r) => (
-            <div key={r.id} className={styles.referralCard}>
-              <div className={styles.username}>{r.username}</div>
-              <div className={styles.details}>
-                <span className={styles.level}>Level: {r.level}</span>
-              </div>
+            <div key={r.id} className={styles.row}>
+              <span className={styles.label}>{r.username}</span>
+              <span className={styles.value}>Level {r.level}</span>
             </div>
           ))}
         </div>

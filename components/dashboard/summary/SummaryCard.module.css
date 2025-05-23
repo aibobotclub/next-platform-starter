@@ -168,3 +168,25 @@
   background: #23243a;
   border-color: #353657;
 }
+
+.shareBtn {
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.13);
+}
+.shareBtn:hover {
+  background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+}

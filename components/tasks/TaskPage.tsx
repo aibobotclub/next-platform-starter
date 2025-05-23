@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Tabs, Drawer, Spin } from 'antd';
+import { Layout, Typography, Tabs, Drawer, Spin, Button } from 'antd';
+import { HistoryOutlined } from '@ant-design/icons';
 import { useAccount } from 'wagmi';
 import TaskStat from './TaskStat/TaskStat';
 import TaskGroupCard from './TaskGroupCard/TaskGroupCard';
@@ -10,6 +11,7 @@ import { supabase } from '@/lib/supabase';
 import type { Database } from '@/types/supabase';
 import styles from './TaskPage.module.css';
 import TaskGroupList from './TaskGroupList';
+import TaskHistoryDrawer from './TaskHistoryDrawer';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -30,6 +32,7 @@ export default function TaskPage() {
   const [stats, setStats] = useState<TaskStats | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [historyDrawerVisible, setHistoryDrawerVisible] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -47,7 +50,7 @@ export default function TaskPage() {
         const { data: userData, error: userError } = await supabase
           .from('users')
           .select('id')
-          .eq('wallet_address', address.toLowerCase())
+          .eq('wallet_address', address)
           .single();
 
         if (userError) throw userError;
@@ -99,6 +102,9 @@ export default function TaskPage() {
     setSelectedGroupId(null);
   };
 
+  const handleHistoryDrawerOpen = () => setHistoryDrawerVisible(true);
+  const handleHistoryDrawerClose = () => setHistoryDrawerVisible(false);
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -118,8 +124,11 @@ export default function TaskPage() {
   return (
     <Layout className={styles.layout}>
       <Content className={styles.content}>
-        <div className={styles.header}>
+        <div className={styles.header} style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <Title level={2} className={styles.title}>Task Center</Title>
+          <Button icon={<HistoryOutlined />} onClick={handleHistoryDrawerOpen} type="default" size="large">
+            Task History
+          </Button>
         </div>
 
         {stats && (
@@ -152,6 +161,17 @@ export default function TaskPage() {
           {selectedGroupId && (
             <TaskDetails taskId={selectedGroupId} />
           )}
+        </Drawer>
+
+        <Drawer
+          title="Task History & Stats"
+          placement="right"
+          onClose={handleHistoryDrawerClose}
+          open={historyDrawerVisible}
+          width={700}
+          className={styles.drawer}
+        >
+          <TaskHistoryDrawer />
         </Drawer>
       </Content>
     </Layout>

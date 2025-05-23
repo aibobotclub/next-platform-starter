@@ -1,14 +1,16 @@
 import styles from "./SummaryCard.module.css";
 import React from "react";
+import { FiShare2 } from "react-icons/fi";
 
 interface SummaryItemProps {
   icon?: React.ReactNode;
   label: string;
   value: React.ReactNode;
   onDetail: () => void;
+  buttonType?: 'details' | 'share';
 }
 
-export default function SummaryItem({ icon, label, value, onDetail }: SummaryItemProps) {
+export default function SummaryItem({ icon, label, value, onDetail, buttonType = 'details' }: SummaryItemProps) {
   return (
     <div className={styles.summaryItem}>
       <div className={styles.itemLeft}>
@@ -18,9 +20,15 @@ export default function SummaryItem({ icon, label, value, onDetail }: SummaryIte
           <div className={styles.value}>{value}</div>
         </div>
       </div>
-      <button className={styles.detailBtn} onClick={onDetail}>
-        Details
-      </button>
+      {buttonType === 'share' ? (
+        <button className={styles.shareBtn} onClick={onDetail} title="Share">
+          <FiShare2 />
+        </button>
+      ) : (
+        <button className={styles.detailBtn} onClick={onDetail}>
+          Details
+        </button>
+      )}
     </div>
   );
 }
