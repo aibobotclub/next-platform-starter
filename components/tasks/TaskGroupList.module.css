@@ -1,0 +1,13 @@
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.loading {
+  text-align: center;
+  color: #6366f1;
+  font-size: 1.2rem;
+  margin-top: 48px;
+} 

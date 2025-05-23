@@ -9,6 +9,7 @@ import TaskDetails from './TaskDetails';
 import { supabase } from '@/lib/supabase';
 import type { Database } from '@/types/supabase';
 import styles from './TaskPage.module.css';
+import TaskGroupList from './TaskGroupList';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -137,87 +138,7 @@ export default function TaskPage() {
         )}
 
         <div className={styles.groupsSection}>
-          <Tabs
-            defaultActiveKey="all"
-            items={[
-              {
-                key: 'all',
-                label: 'All Tasks',
-                children: (
-                  <div className={styles.groupList}>
-                    {groups.map((group) => (
-                      <TaskGroupCard
-                        key={group.id}
-                        groupId={group.id}
-                        tasks={group.tasks.map(task => ({
-                          ...task,
-                          status: task.status ?? 'unstarted',
-                          reward: task.reward ?? 0,
-                          created_at: task.created_at ?? undefined,
-                          pending_at: (task.status === 'pending' && task.created_at) ? task.created_at : undefined,
-                        }))}
-                        globalDividendId={group.global_dividend_id}
-                        status={group.status ?? 'inactive'}
-                        onClick={() => !group.status || group.status !== 'inactive' ? handleGroupClick(group.id) : undefined}
-                      />
-                    ))}
-                  </div>
-                ),
-              },
-              {
-                key: 'completed',
-                label: 'Completed',
-                children: (
-                  <div className={styles.groupList}>
-                    {groups
-                      .filter(group => group.tasks.every(task => task.status === 'completed'))
-                      .map((group) => (
-                        <TaskGroupCard
-                          key={group.id}
-                          groupId={group.id}
-                          tasks={group.tasks.map(task => ({
-                            ...task,
-                            status: task.status ?? 'unstarted',
-                            reward: task.reward ?? 0,
-                            created_at: task.created_at ?? undefined,
-                            pending_at: (task.status === 'pending' && task.created_at) ? task.created_at : undefined,
-                          }))}
-                          globalDividendId={group.global_dividend_id}
-                          status={group.status ?? 'inactive'}
-                          onClick={() => !group.status || group.status !== 'inactive' ? handleGroupClick(group.id) : undefined}
-                        />
-                      ))}
-                  </div>
-                ),
-              },
-              {
-                key: 'pending',
-                label: 'In Progress',
-                children: (
-                  <div className={styles.groupList}>
-                    {groups
-                      .filter(group => group.tasks.some(task => task.status === 'pending'))
-                      .map((group) => (
-                        <TaskGroupCard
-                          key={group.id}
-                          groupId={group.id}
-                          tasks={group.tasks.map(task => ({
-                            ...task,
-                            status: task.status ?? 'unstarted',
-                            reward: task.reward ?? 0,
-                            created_at: task.created_at ?? undefined,
-                            pending_at: (task.status === 'pending' && task.created_at) ? task.created_at : undefined,
-                          }))}
-                          globalDividendId={group.global_dividend_id}
-                          status={group.status ?? 'inactive'}
-                          onClick={() => !group.status || group.status !== 'inactive' ? handleGroupClick(group.id) : undefined}
-                        />
-                      ))}
-                  </div>
-                ),
-              },
-            ]}
-          />
+          <TaskGroupList />
         </div>
 
         <Drawer

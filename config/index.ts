@@ -17,8 +17,8 @@ const modal = createAppKit({
   metadata: {
     name: 'AIDA Pay',
     description: 'Pay securely with AppKit. Supports Base USDC.',
-    url: process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one',
-    icons: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://aida.one'}/logo.png`]
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://aida.club',
+    icons: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://aida.club'}/logo.png`]
   },
   projectId,
   themeMode: 'dark',

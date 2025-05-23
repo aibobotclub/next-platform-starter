@@ -16,6 +16,7 @@ interface TaskGroupCardProps {
   tasks: Task[];
   globalDividendId?: string | null;
   onClick?: () => void;
+  createdAt?: string;
 }
 
 function getCountdown(pendingAt: string) {
@@ -30,7 +31,7 @@ function getCountdown(pendingAt: string) {
   return `${h}h ${m}m ${s}s`;
 }
 
-export default function TaskGroupCard({ groupId, tasks, globalDividendId, onClick, status }: TaskGroupCardProps & { status?: string }) {
+export default function TaskGroupCard({ groupId, tasks, globalDividendId, onClick, status, createdAt }: TaskGroupCardProps & { status?: string }) {
   const isInactive = status === 'inactive';
   return (
     <div
@@ -40,6 +41,7 @@ export default function TaskGroupCard({ groupId, tasks, globalDividendId, onClic
     >
       <div className={styles.header}>
         <span>Group ID: {groupId}</span>
+        {createdAt && <span className={styles.createdAt}>Created: {new Date(createdAt).toLocaleString()}</span>}
         {globalDividendId && (
           <span className={styles.dividend}>Global Dividend ID: {globalDividendId}</span>
         )}
