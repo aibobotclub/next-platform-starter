@@ -1,15 +1,16 @@
+'use client'
 import styles from './RewardCenter.module.css';
 interface Props { data: any[] }
 export default function TeamBonusRewardList({ data }: Props) {
-  if (!data || data.length === 0) return <div className={styles.empty}>暂无团队奖励</div>;
+  if (!data || data.length === 0) return <div className={styles.empty}>No team bonus rewards yet</div>;
   return (
     <div className={styles.tableWrap}>
       <table className={styles.rewardTable}>
         <thead>
           <tr>
-            <th>金额</th>
-            <th>时间</th>
-            <th>描述</th>
+            <th>Amount</th>
+            <th>Time</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>

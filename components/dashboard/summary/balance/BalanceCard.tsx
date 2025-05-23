@@ -1,54 +1,68 @@
-import styles from "./BalanceCard.module.css";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { useAccount } from "wagmi";
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { supabase } from '@/lib/supabase';
+import { Card, Spin } from 'antd';
+import styles from './BalanceCard.module.css';
 
 export default function BalanceCard() {
-  const router = useRouter();
   const { address } = useAccount();
-  const [reward, setReward] = useState<number>(0);
-  const [shopping, setShopping] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+  const [balance, setBalance] = useState<Record<string, number>>({
+    total: 0,
+    available: 0,
+    locked: 0,
+    pending: 0
+  });
 
   useEffect(() => {
     if (!address) return;
-    // 先查 users 表获取 user_id
-    supabase
-      .from("users")
-      .select("id")
-      .eq("wallet_address", address.toLowerCase())
-      .single()
-      .then(async ({ data: user, error }) => {
-        if (user && user.id) {
-          // 再查 user_balance
-          const { data: balance } = await supabase
-            .from("user_balance")
-            .select("reward_balance, credit_balance")
-            .eq("user_id", user.id)
-            .single();
-          if (balance) {
-            setReward(balance.reward_balance ?? 0);
-            setShopping(balance.credit_balance ?? 0);
+    setLoading(true);
+    supabase.from('users').select('id').eq('wallet_address', address).single().then(userRes => {
+      if (userRes.data && userRes.data.id) {
+        const userId = userRes.data.id;
+        supabase.from('user_balance').select('*').eq('user_id', userId).then(res => {
+          if (res.data && res.data.length > 0) {
+            const data = res.data[0];
+            setBalance({
+              total: (data.total_credit || 0) + (data.total_rewards || 0),
+              available: data.credit_balance || 0,
+              locked: data.reward_balance || 0,
+              pending: 0
+            });
           }
-        }
-      });
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    });
   }, [address]);
 
   return (
-    <div className={styles.balanceCard}>
-      <div className={styles.row}>
-        <div>
-          <div className={styles.label}>Reward Balance</div>
-          <div className={styles.value}>{reward} USDT</div>
+    <Card className={styles.balanceCard}>
+      <div className={styles.header}>Balance Overview</div>
+      {loading ? (
+        <Spin />
+      ) : (
+        <div className={styles.stats}>
+          <div className={styles.statItem}>
+            <div className={styles.label}>Total Balance</div>
+            <div className={styles.value}>{balance.total.toFixed(2)} <span className={styles.unit}>USDT</span></div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.label}>Available Balance</div>
+            <div className={styles.value}>{balance.available.toFixed(2)} <span className={styles.unit}>USDT</span></div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.label}>Locked Balance</div>
+            <div className={styles.value}>{balance.locked.toFixed(2)} <span className={styles.unit}>USDT</span></div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.label}>Pending Balance</div>
+            <div className={styles.value}>{balance.pending.toFixed(2)} <span className={styles.unit}>USDT</span></div>
+          </div>
         </div>
-        <button className={styles.actionBtn} onClick={() => router.push("/order")}>Subscribe/Order</button>
-      </div>
-      <div className={styles.row}>
-        <div>
-          <div className={styles.label}>Shopping Balance</div>
-          <div className={styles.value}>{shopping} USDT</div>
-        </div>
-      </div>
-    </div>
+      )}
+    </Card>
   );
 } 

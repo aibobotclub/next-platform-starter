@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
@@ -8,9 +10,9 @@ import GlobalDividendRewardList from './GlobalDividendRewardList';
 import TeamBonusRewardList from './TeamBonusRewardList';
 
 const rewardTypes = [
-  { key: 'task', label: '任务奖励', type: 'task' },
-  { key: 'global_dividend', label: '全球分红奖励', type: 'global_dividend' },
-  { key: 'team_bonus', label: '团队奖励', type: 'team_bonus' },
+  { key: 'task', label: 'task reward', type: 'task' },
+  { key: 'global_dividend', label: 'global dividend reward', type: 'global_dividend' },
+  { key: 'team_bonus', label: 'team bonus reward', type: 'team_bonus' },
 ];
 
 export default function RewardCenter() {
@@ -49,7 +51,7 @@ export default function RewardCenter() {
 
   return (
     <Card className={styles.rewardCard}>
-      <div className={styles.header}>奖励中心</div>
+      <div className={styles.header}>Reward Center</div>
       <div className={styles.statRow}>
         {rewardTypes.map(rt => (
           <div className={styles.statItem} key={rt.key}>
@@ -65,17 +67,17 @@ export default function RewardCenter() {
           items={[
             {
               key: 'task',
-              label: '任务奖励',
+              label: 'task reward',
               children: loading ? <Spin /> : <TaskRewardList data={rewardData['task'] || []} />,
             },
             {
               key: 'global_dividend',
-              label: '全球分红奖励',
+              label: 'global dividend reward',
               children: loading ? <Spin /> : <GlobalDividendRewardList data={rewardData['global_dividend'] || []} />,
             },
             {
               key: 'team_bonus',
-              label: '团队奖励',
+              label: 'team bonus reward',
               children: loading ? <Spin /> : <TeamBonusRewardList data={rewardData['team_bonus'] || []} />,
             },
           ]}

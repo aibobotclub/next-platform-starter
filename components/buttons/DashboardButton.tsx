@@ -34,7 +34,7 @@ export default function DashboardButton({
           'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
-          wallet_address: address.toLowerCase()
+          wallet_address: address
         }),
       });
       const data = await response.json();

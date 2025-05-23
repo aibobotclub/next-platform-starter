@@ -55,11 +55,11 @@
 [data-theme='dark'] {
   /* 暗色主题变量 */
   --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
+  --foreground: 0 0% 100%;
+  --card: 240 10% 8%;
+  --card-foreground: 0 0% 100%;
+  --popover: 240 10% 8%;
+  --popover-foreground: 0 0% 100%;
   --primary: 262.1 83.3% 57.8%;
   --primary-foreground: 210 20% 98%;
   --secondary: 240 3.7% 15.9%;
@@ -70,29 +70,29 @@
   --accent-foreground: 0 0% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
+  --border: rgba(192,192,255,0.22); /* 银色透明 */
   --input: 240 3.7% 15.9%;
   --ring: 240 4.9% 83.9%;
 
   /* 暗色主题自定义变量 */
-  --background-primary: #18181b;
-  --background-secondary: #23272f;
-  --text-primary: #ffffff;
-  --text-secondary: #a8a8a8;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --card-background: rgba(255, 255, 255, 0.05);
-  --card-border: rgba(255, 255, 255, 0.1);
+  --background-primary: linear-gradient(135deg, #23243a 0%, #18181b 100%); /* 深灰渐变墨兰光感 */
+  --background-secondary: #23243a;
+  --text-primary: #fff;
+  --text-secondary: #bfc6d1;
+  --border-color: rgba(192,192,255,0.22); /* 银色透明 */
+  --card-background: rgba(30,32,48,0.98); /* 更深的卡片背景 */
+  --card-border: rgba(192,192,255,0.22); /* 银色透明 */
   --hover-background: rgba(255, 255, 255, 0.08);
   --gradient-primary: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-  --gradient-secondary: linear-gradient(135deg, #23272f 0%, #18181b 100%);
+  --gradient-secondary: linear-gradient(135deg, #23243a 0%, #18181b 100%);
   --section-dark-bg: #18181b;
-  --card-dark-bg: #23272f;
-  --text-light: #ffffff;
-  --text-dark: #a8a8a8;
-  --section-dark-gradient: linear-gradient(to bottom, #23272f 0%, #18181b 100%);
-  --gradient-text: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  --card-dark-bg: #23243a;
+  --text-light: #fff;
+  --text-dark: #bfc6d1;
+  --section-dark-gradient: linear-gradient(to bottom, #23243a 0%, #18181b 100%);
+  --gradient-text: linear-gradient(135deg, #ffffff 0%, #bfc6d1 100%);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.28), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
 }
 
 @layer base {

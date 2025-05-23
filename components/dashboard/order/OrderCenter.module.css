@@ -1,0 +1,108 @@
+/* 订单中心主卡片 */
+.orderCard {
+  background: var(--card-background, #fff);
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  transition: background 0.3s;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary, #232946);
+  text-align: center;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.orderTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: transparent;
+}
+.orderTable th, .orderTable td {
+  padding: 0.6em 0.4em;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  text-align: left;
+}
+.orderTable th {
+  color: var(--primary-color, #6366f1);
+  font-weight: 700;
+  background: var(--bg-tertiary, #f3f4fa);
+}
+.orderTable td {
+  color: var(--text-primary, #232946);
+}
+.statusTag {
+  display: inline-block;
+  padding: 0.2em 0.9em;
+  border-radius: 0.7em;
+  font-size: 0.98em;
+  font-weight: 600;
+  background: #e0e7ff;
+  color: #4338ca;
+}
+.statusPaid { background: #d1fae5; color: #059669; }
+.statusPending { background: #fef9c3; color: #b45309; }
+.statusFailed { background: #fee2e2; color: #dc2626; }
+.statusRefunded { background: #e0e7ff; color: #6366f1; }
+
+.empty {
+  text-align: center;
+  color: var(--text-secondary, #888);
+  padding: 1.5em 0;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .orderCard {
+    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+    max-width: 100vw;
+    border-radius: 0.7rem;
+  }
+  .header {
+    font-size: 1.1rem;
+  }
+  .orderTable th, .orderTable td {
+    font-size: 0.92rem;
+    padding: 0.4em 0.2em;
+  }
+}
+@media (max-width: 400px) {
+  .header {
+    font-size: 0.98rem;
+  }
+  .orderTable th, .orderTable td {
+    font-size: 0.85rem;
+    padding: 0.25em 0.1em;
+  }
+}
+[data-theme='dark'] .orderCard {
+  background: #23243a;
+  border-color: #353657;
+}
+[data-theme='dark'] .orderTable th {
+  background: #23243a;
+  color: #a5b4fc;
+}
+[data-theme='dark'] .orderTable td {
+  color: #fff;
+}
+[data-theme='dark'] .statusTag {
+  background: #353657;
+  color: #a5b4fc;
+}
+[data-theme='dark'] .statusPaid { background: #134e4a; color: #34d399; }
+[data-theme='dark'] .statusPending { background: #fbbf24; color: #b45309; }
+[data-theme='dark'] .statusFailed { background: #7f1d1d; color: #fca5a5; }
+[data-theme='dark'] .statusRefunded { background: #23243a; color: #a5b4fc; }
+[data-theme='dark'] .empty { color: #888; } 

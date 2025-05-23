@@ -1,3 +1,4 @@
+'use client'
 import styles from "./RewardStats.module.css";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -22,7 +23,7 @@ export default function RewardStats() {
     supabase
       .from("users")
       .select("id")
-      .eq("wallet_address", address.toLowerCase())
+      .eq("wallet_address", address)
       .single()
       .then(async ({ data: user }) => {
         if (!user?.id) {

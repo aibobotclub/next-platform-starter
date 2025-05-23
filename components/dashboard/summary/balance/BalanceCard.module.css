@@ -1,26 +1,48 @@
 .balanceCard {
   background: var(--card-background);
-  border-radius: 1rem;
-  box-shadow: var(--shadow-sm);
-  padding: 1.2rem 1.5rem;
-  margin-bottom: 1.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.label {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-}
-.value {
-  font-size: 1.2rem;
+
+.header {
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
-  font-family: monospace;
+  margin-bottom: 1.5rem;
 }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.unit {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-left: 0.25rem;
+}
+
 .actionBtn {
   background: linear-gradient(90deg, #6a8dff 0%, #a084ee 100%);
   color: #fff;
@@ -33,6 +55,12 @@
 }
 .actionBtn:hover {
   background: linear-gradient(90deg, #a084ee 0%, #6a8dff 100%);
+}
+
+@media (max-width: 640px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {

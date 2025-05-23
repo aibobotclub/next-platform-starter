@@ -10,7 +10,7 @@ export async function fetchTaskGroupsWithStats(walletAddress: string) {
   }
 
   // 确保钱包地址格式正确
-  const normalizedAddress = walletAddress.toLowerCase().trim();
+  const normalizedAddress = walletAddress.trim();
 
   // 1. 先查 users 表，拿到 user_id
   const { data: userRows, error: userError } = await supabase
@@ -65,7 +65,7 @@ export async function fetchUserTaskStats(walletAddress: string) {
   }
 
   // 确保钱包地址格式正确
-  const normalizedAddress = walletAddress.toLowerCase().trim();
+  const normalizedAddress = walletAddress.trim();
 
   // 1. 先查 users 表，拿到 user_id
   const { data: userRows, error: userError } = await supabase
