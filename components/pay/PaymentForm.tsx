@@ -6,7 +6,6 @@ import { useAccount } from 'wagmi';
 import { toast } from "sonner";
 import AddRecipient from "@/components/AddRecipient";
 import { Button } from "@/components/ui/button";
-import PaymentDialog from "@/components/pay/PaymentDialog";
 import { useAppkitPay } from '@/hooks/useAppkitPay';
 import { supabase } from '@/lib/supabase';
 
@@ -154,17 +153,6 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
           </div>
         </div>
       )}
-
-      {/* 支付弹窗 */}
-      <PaymentDialog
-        open={activeDialog === 'pay'}
-        onClose={() => setActiveDialog('form')}
-        onSuccess={handlePaySuccess}
-        productName={productName}
-        productDescription={productDescription}
-        product={product}
-        zIndex={1200}
-      />
 
       {/* 支付成功后填写收件人弹窗 */}
       <AddRecipient

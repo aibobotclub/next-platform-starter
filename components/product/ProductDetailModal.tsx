@@ -147,6 +147,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
         onSuccess={handlePaySuccess}
         productName={product.name}
         productDescription={product.price}
+        product={product}
         zIndex={9999}
       />
     </>
