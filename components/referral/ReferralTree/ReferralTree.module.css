@@ -15,17 +15,22 @@
 }
 
 .treeNode {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.08);
-  padding: 18px 24px;
-  margin: 0 24px;
-  min-width: 180px;
-  text-align: center;
-  position: relative;
-  transition: box-shadow 0.2s, border 0.2s;
-  border: 2px solid #a78bfa;
-  z-index: 1;
+  background: #232946;
+  color: #fff;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  font-weight: 600;
+  border: 1.5px solid #6366f1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  transition: background 0.2s, color 0.2s;
+}
+.treeNode:hover {
+  background: #6366f1;
+  color: #fff;
 }
 .treeNode.activated {
   border-color: #7c3aed;
@@ -37,19 +42,18 @@
   margin-left: 6px;
 }
 .treeNode .address {
-  font-size: 0.95em;
-  color: #6d28d9;
-  font-weight: 600;
-  margin-bottom: 4px;
+  color: #a5b4fc;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 .treeNode .zone {
   font-size: 0.85em;
   color: #a78bfa;
 }
 .treeNode .volume {
-  font-size: 0.9em;
-  color: #6366f1;
-  margin-top: 4px;
+  color: #fbbf24;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 .treeLine {
   position: absolute;
@@ -69,5 +73,22 @@
     margin: 16px 0;
     min-width: 140px;
     padding: 12px 10px;
+  }
+}
+@media (prefers-color-scheme: light) {
+  .treeNode {
+    background: #fff;
+    color: #232946;
+    border: 1.5px solid #6366f1;
+  }
+  .treeNode:hover {
+    background: #6366f1;
+    color: #fff;
+  }
+  .treeNode .address {
+    color: #6366f1;
+  }
+  .treeNode .volume {
+    color: #f59e42;
   }
 }

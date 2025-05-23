@@ -52,7 +52,7 @@ export default function ReferralPage() {
           justifyContent: 'center',
           position: 'fixed',
           right: 24,
-          bottom: 24,
+          bottom: 88,
           zIndex: 1200,
           cursor: 'pointer',
           transition: 'background 0.2s, box-shadow 0.2s',

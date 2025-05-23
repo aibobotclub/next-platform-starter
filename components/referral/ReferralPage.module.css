@@ -69,3 +69,13 @@
     padding: 0.6rem 1rem;
   }
 }
+
+.fab {
+  bottom: 88px;
+}
+
+@media (max-width: 640px) {
+  .fab {
+    bottom: 72px;
+  }
+}
