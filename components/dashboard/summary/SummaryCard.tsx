@@ -2,10 +2,6 @@ import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import RewardStats from "./rewards/RewardStats";
-import DetailDrawer from "./DetailDrawer/DetailDrawer";
-import TaskHistoryDrawer from "@/components/tasks/TaskHistoryDrawer";
-import ReferralLink from "@/components/referral/ReferralLink/ReferralLink";
 import { useAccount } from "wagmi";
 import { supabase } from '@/lib/supabase';
 
@@ -21,8 +17,6 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
   const [rewardBalance, setRewardBalance] = useState(0);
   const [totalReward, setTotalReward] = useState(0);
   const [referralCount, setReferralCount] = useState(0);
-  const [showTaskDrawer, setShowTaskDrawer] = useState(false);
-  const [showReferralDrawer, setShowReferralDrawer] = useState(false);
 
   // 数据库查询
   useEffect(() => {
@@ -50,13 +44,12 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
   }, [address]);
 
   return (
-    <>
     <div className={styles.summaryCard}>
       <SummaryItem
         icon={<FiCheckCircle />}
         label="Tasks Completed"
         value={`${tasksCompleted} / ${tasksTotal}`}
-        onDetail={() => setShowTaskDrawer(true)}
+        onDetail={() => onDetail && onDetail('tasks')}
       />
       <div className={styles.sectionDivider} />
       <SummaryItem
@@ -77,18 +70,9 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
         icon={<FiUsers />}
         label="Referral"
         value={referralCount}
-        onDetail={() => setShowReferralDrawer(true)}
+        onDetail={() => onDetail && onDetail('referral')}
         buttonType="share"
       />
     </div>
-    {/* 任务统计抽屉 */}
-    <DetailDrawer open={showTaskDrawer} onClose={() => setShowTaskDrawer(false)} title="Task History & Stats">
-      <TaskHistoryDrawer />
-    </DetailDrawer>
-    {/* 推荐分享抽屉 */}
-    <DetailDrawer open={showReferralDrawer} onClose={() => setShowReferralDrawer(false)} title="My Referral Link">
-      {address && <ReferralLink address={address} />}
-    </DetailDrawer>
-    </>
   );
 }

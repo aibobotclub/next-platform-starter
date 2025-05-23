@@ -143,16 +143,19 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: var(--primary);
-  color: white;
+  background: linear-gradient(90deg, #6366f1 0%, #4338ca 100%);
+  color: #fff;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.12);
+  letter-spacing: 0.02em;
 }
 
 .payButton:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+  box-shadow: 0 8px 32px rgba(67,56,202,0.18);
 }
 
 .payButton:disabled {
@@ -240,6 +243,18 @@
   .errorButton:hover {
     background: var(--background-dark);
     border-color: var(--text-primary);
+  }
+
+  .payButton {
+    background: linear-gradient(90deg, #a5b4fc 0%, #6366f1 100%);
+    color: #fff;
+    box-shadow: 0 4px 24px rgba(99,102,241,0.22);
+  }
+
+  .payButton:hover:not(:disabled) {
+    background: linear-gradient(90deg, #818cf8 0%, #a5b4fc 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(129,140,248,0.22);
   }
 }
 

@@ -213,9 +213,9 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
           {/* 复购金余额展示 */}
           <div className={styles.balanceBar}>
-            <span className={styles.balanceLabel}>复购金余额：</span>
+            <span className={styles.balanceLabel}>Credit Cash Balance：</span>
             <span className={reinvestAmount > 0 ? styles.balanceAmount : styles.balanceAmountZero}>
-              {checkingReinvest ? '加载中...' : `${reinvestAmount} USDT`}
+              {checkingReinvest ? 'Loading...' : `${reinvestAmount} USDT`}
             </span>
           </div>
 
@@ -240,7 +240,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
             {!checkingReinvest && reinvestAmount > 0 && (
               <div className={styles.reinvestSection}>
                 <div className={styles.reinvestHeader}>
-                  <h3 className={styles.reinvestTitle}>可用复购金</h3>
+                  <h3 className={styles.reinvestTitle}>Available Credit Cash</h3>
                   <div className={styles.reinvestAmount}>{reinvestAmount} USDT</div>
                 </div>
                 <div className={styles.reinvestOptions}>
@@ -250,7 +250,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
                       checked={!useReinvest}
                       onChange={() => setUseReinvest(false)}
                     />
-                    <span>全额支付（{originalAmount} USDT）</span>
+                    <span>Pay Full Amount ({originalAmount} USDT)</span>
                   </label>
                   <label className={styles.reinvestOption}>
                     <input
@@ -258,7 +258,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
                       checked={useReinvest}
                       onChange={() => setUseReinvest(true)}
                     />
-                    <span>使用复购金（需支付 {finalAmount} USDT）</span>
+                    <span>Use Credit Cash (Pay {finalAmount} USDT)</span>
                   </label>
                 </div>
               </div>
@@ -274,17 +274,17 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  正在处理...
+                  Processing...
                 </>
               ) : isPending ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  等待确认...
+                  Waiting for confirmation...
                 </>
               ) : isConnected ? (
-                `支付 ${finalAmount} USDT`
+                `Pay ${finalAmount} USDT`
               ) : (
-                '连接钱包后支付'
+                'Connect wallet to pay'
               )}
             </Button>
 

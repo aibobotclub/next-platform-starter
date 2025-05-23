@@ -1,0 +1,129 @@
+/* 奖励中心主卡片 */
+.rewardCard {
+  background: var(--card-background, #fff);
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin: 0 auto;
+  max-width: 600px;
+  width: 100%;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  transition: background 0.3s;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary, #232946);
+  text-align: center;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+}
+
+.statItem {
+  flex: 1 1 0;
+  background: var(--bg-tertiary, #f3f4fa);
+  border-radius: 0.7rem;
+  padding: 0.7rem 0.5rem;
+  text-align: center;
+  color: var(--primary-color, #6366f1);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tabs {
+  margin-bottom: 1rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.rewardTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: transparent;
+}
+.rewardTable th, .rewardTable td {
+  padding: 0.6em 0.4em;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  text-align: left;
+}
+.rewardTable th {
+  color: var(--primary-color, #6366f1);
+  font-weight: 700;
+  background: var(--bg-tertiary, #f3f4fa);
+}
+.rewardTable td {
+  color: var(--text-primary, #232946);
+}
+.amountCell {
+  color: #6366f1;
+  font-weight: 700;
+}
+.empty {
+  text-align: center;
+  color: var(--text-secondary, #888);
+  padding: 1.5em 0;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .rewardCard {
+    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+    max-width: 100vw;
+    border-radius: 0.7rem;
+  }
+  .header {
+    font-size: 1.1rem;
+  }
+  .statRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .statItem {
+    font-size: 1rem;
+    padding: 0.5rem 0.2rem;
+  }
+  .rewardTable th, .rewardTable td {
+    font-size: 0.92rem;
+    padding: 0.4em 0.2em;
+  }
+}
+@media (max-width: 400px) {
+  .header {
+    font-size: 0.98rem;
+  }
+  .statItem {
+    font-size: 0.92rem;
+  }
+  .rewardTable th, .rewardTable td {
+    font-size: 0.85rem;
+    padding: 0.25em 0.1em;
+  }
+}
+[data-theme='dark'] .rewardCard {
+  background: #23243a;
+  border-color: #353657;
+}
+[data-theme='dark'] .statItem {
+  background: #23243a;
+  color: #a5b4fc;
+}
+[data-theme='dark'] .rewardTable th {
+  background: #23243a;
+  color: #a5b4fc;
+}
+[data-theme='dark'] .rewardTable td {
+  color: #fff;
+}
+[data-theme='dark'] .empty {
+  color: #888;
+} 
