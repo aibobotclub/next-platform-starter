@@ -4,6 +4,7 @@ import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { supabase } from '@/lib/supabase';
+import { Card } from "@/components/ui/card";
 
 interface SummaryCardProps {
   onDetail?: (type: 'tasks' | 'balance' | 'rewards' | 'referral') => void;
@@ -44,35 +45,38 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
   }, [address]);
 
   return (
-    <div className={styles.summaryCard}>
-      <SummaryItem
-        icon={<FiCheckCircle />}
-        label="Tasks Completed"
-        value={`${tasksCompleted} / ${tasksTotal}`}
-        onDetail={() => onDetail && onDetail('tasks')}
-      />
-      <div className={styles.sectionDivider} />
-      <SummaryItem
-        icon={<FiDollarSign />}
-        label="Reward Balance"
-        value={<span>{rewardBalance} <span className={styles.usdt}>USDT</span></span>}
-        onDetail={() => onDetail && onDetail('balance')}
-      />
-      <div className={styles.sectionDivider} />
-      <SummaryItem
-        icon={<FiAward />}
-        label="Total Reward"
-        value={<span>{totalReward} <span className={styles.usdt}>USDT</span></span>}
-        onDetail={() => onDetail && onDetail('rewards')}
-      />
-      <div className={styles.sectionDivider} />
-      <SummaryItem
-        icon={<FiUsers />}
-        label="Referral"
-        value={referralCount}
-        onDetail={() => onDetail && onDetail('referral')}
-        buttonType="share"
-      />
-    </div>
+    <Card className={styles.summaryCard}>
+      <div className={styles.summaryHeader}>Overview</div>
+      <div className={styles.summaryStats}>
+        <SummaryItem
+          icon={<FiCheckCircle />}
+          label="Tasks Completed"
+          value={`${tasksCompleted} / ${tasksTotal}`}
+          onDetail={() => onDetail && onDetail('tasks')}
+        />
+        <div className={styles.sectionDivider} />
+        <SummaryItem
+          icon={<FiDollarSign />}
+          label="Reward Balance"
+          value={<span>{rewardBalance} <span className={styles.usdt}>USDT</span></span>}
+          onDetail={() => onDetail && onDetail('balance')}
+        />
+        <div className={styles.sectionDivider} />
+        <SummaryItem
+          icon={<FiAward />}
+          label="Total Reward"
+          value={<span>{totalReward} <span className={styles.usdt}>USDT</span></span>}
+          onDetail={() => onDetail && onDetail('rewards')}
+        />
+        <div className={styles.sectionDivider} />
+        <SummaryItem
+          icon={<FiUsers />}
+          label="Referral"
+          value={referralCount}
+          onDetail={() => onDetail && onDetail('referral')}
+          buttonType="share"
+        />
+      </div>
+    </Card>
   );
 }

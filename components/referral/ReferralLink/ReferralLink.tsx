@@ -16,7 +16,7 @@ export function ReferralLink({ address, onClose }: ReferralLinkProps) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
-  const getReferralLink = () => `${window.location.origin}?REF=${address}`;
+  const getReferralLink = () => `${window.location.origin}?referral=${address}`;
 
   const handleCopy = async () => {
     try {
@@ -50,7 +50,7 @@ export function ReferralLink({ address, onClose }: ReferralLinkProps) {
     <div className={styles.referralModal}>
       <button onClick={onClose} style={{position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 24, color: '#6366f1', cursor: 'pointer'}}>×</button>
       <div className={styles.title}>My Referral Link</div>
-      <div className={styles.desc}>Share this link to invite others. When they register using your link, you will earn rewards!</div>
+      <div className={styles.desc}>Share this link to invite your friends. When they register using your link, you will receive rewards!</div>
       <div className={styles.linkBox}>
         <input value={getReferralLink()} readOnly style={{border: 'none', background: 'transparent', color: '#4f46e5', fontWeight: 700, width: '70%'}} />
         <button className={styles.copyBtn} onClick={handleCopy}>Copy</button>

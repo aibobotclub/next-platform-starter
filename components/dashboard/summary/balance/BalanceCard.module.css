@@ -1,46 +1,118 @@
 .balanceCard {
   background: var(--card-background);
   border: 1px solid var(--card-border);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: 1.2rem;
   box-shadow: var(--shadow-md);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+  animation: fadeInUp 0.7s cubic-bezier(.22,1,.36,1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px);}
+  to   { opacity: 1; transform: translateY(0);}
 }
 
 .header {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.01em;
 }
 
 .stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 1.5rem;
+  justify-content: space-between;
 }
 
 .statItem {
+  flex: 1 1 180px;
+  min-width: 140px;
+  background: var(--background-secondary);
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+  transition: box-shadow 0.22s, transform 0.18s, background 0.22s;
+  cursor: pointer;
+  animation: fadeInUp 0.8s cubic-bezier(.22,1,.36,1);
+}
+.statItem:hover {
+  box-shadow: 0 8px 32px rgba(99,102,241,0.18);
+  background: var(--hover-background);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .value {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 2.1rem;
+  font-weight: 800;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(99,102,241,0.08);
 }
-
 .unit {
-  font-size: 0.875rem;
+  font-size: 0.98rem;
   color: var(--text-secondary);
   margin-left: 0.25rem;
+}
+@media (max-width: 900px) {
+  .stats {
+    gap: 1.2rem 0.7rem;
+  }
+  .balanceCard {
+    padding: 1.2rem 0.7rem;
+  }
+}
+@media (max-width: 600px) {
+  .stats {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .statItem {
+    min-width: 0;
+    padding: 0.9rem 0.7rem;
+    font-size: 0.98rem;
+  }
+  .header {
+    font-size: 1.08rem;
+  }
+  .value {
+    font-size: 1.4rem;
+  }
+  .label {
+    font-size: 0.92rem;
+  }
+}
+[data-theme='dark'] .balanceCard {
+  background: var(--card-background);
+  border: 1.5px solid var(--card-border);
+  color: var(--text-primary);
+}
+[data-theme='dark'] .statItem {
+  background: #23243a;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.18);
+}
+[data-theme='dark'] .label {
+  color: #bfc6d1;
+}
+[data-theme='dark'] .value {
+  color: #fff;
+  text-shadow: 0 2px 8px #6366f133;
 }
 
 .actionBtn {

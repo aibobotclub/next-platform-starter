@@ -38,7 +38,7 @@ export default function Footer() {
               <Linkedin className={styles.footerSocialIcon} />
             </a>
             <a
-              href="mailto:contact@aida.com"
+              href="mailto:contact@aidabot.club"
               aria-label="Email"
             >
               <Mail className={styles.footerSocialIcon} />

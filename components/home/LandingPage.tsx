@@ -14,6 +14,7 @@ import Footer from "./footer/Footer";
 import styles from "./HomePage.module.css";
 import RegisterForm from "@/components/register/RegisterForm";
 import { useUserStatus } from "@/hooks/useUserStatus";
+import { supabase } from '@/lib/supabase';
 
 
 // 动态导入 Hero 组件
@@ -38,18 +39,27 @@ export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [referrerAddress, setReferrerAddress] = useState<string | null>(null);
+  const [referrerInfo, setReferrerInfo] = useState<{address: string, username?: string} | null>(null);
 
   // Debug log for connection and registration status
   useEffect(() => {
     console.log('[LandingPage] isConnected:', isConnected, 'address:', address, 'isRegistered:', isRegistered, 'isLoading:', isUserStatusLoading);
   }, [isConnected, address, isRegistered, isUserStatusLoading]);
 
-  // 初始化
+  // 初始化，检查推荐关系
   useEffect(() => {
     setMounted(true);
     const referrer = searchParams?.get('referral');
-    if (referrer) {
+    if (referrer && /^0x[a-fA-F0-9]{40}$/.test(referrer)) {
       setReferrerAddress(referrer);
+      // 查询 supabase 用户名
+      supabase.from('users').select('username').eq('wallet_address', referrer).single().then(res => {
+        setReferrerInfo({ address: referrer, username: res.data?.username ?? undefined });
+        console.log('[LandingPage] 推荐人地址:', referrer, '用户名:', res.data?.username);
+      });
+    } else {
+      setReferrerAddress(null);
+      setReferrerInfo(null);
     }
     return () => setMounted(false);
   }, [searchParams]);
@@ -65,9 +75,13 @@ export default function LandingPage() {
   useEffect(() => {
     if (!isUserStatusLoading && isConnected && !isRegistered) {
       console.log('[LandingPage] Wallet connected but not registered, redirecting to /register');
-      router.replace('/register');
+      if (referrerAddress) {
+        router.replace(`/register?referral=${referrerAddress}`);
+      } else {
+        router.replace('/register');
+      }
     }
-  }, [isConnected, isRegistered, isUserStatusLoading, router]);
+  }, [isConnected, isRegistered, isUserStatusLoading, router, referrerAddress]);
 
   // 断开连接后刷新页面，确保按钮状态及时更新
   useEffect(() => {
@@ -84,7 +98,8 @@ export default function LandingPage() {
     }
     // 优先用 URL 的 referral，没有就用公司地址
     const refAddress = referrerAddress || COMPANY_ADDRESS;
-    router.push(`/register?referral=${refAddress}`);
+    setShowRegisterForm(true);
+    // 这里直接传递推荐人信息给RegisterForm
   };
 
   if (isUserStatusLoading) {

@@ -20,6 +20,7 @@ import { useUserStatus } from '@/hooks/useUserStatus';
 import { useReferral } from '@/hooks/useReferral';
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
+import { supabase } from '@/lib/supabase';
 
 interface RegisterFormProps {
   onClose?: () => void;
@@ -36,6 +37,22 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const { register: registerOnChain, isLoading: isChainLoading } = useReferral();
 
   const COMPANY_ADDRESS = "0xfAaac7bcd4f371A4f13f61E63e7e2B7d669427b1";
+  const [refInfo, setRefInfo] = useState<{address: string, username?: string} | null>(null);
+
+  // 解析推荐人地址
+  useEffect(() => {
+    let refWallet = referrerAddress || searchParams?.get("referral") || COMPANY_ADDRESS;
+    if (refWallet && /^0x[a-fA-F0-9]{40}$/.test(refWallet) && refWallet.toLowerCase() !== COMPANY_ADDRESS.toLowerCase()) {
+      // 查询 supabase 用户名
+      supabase.from('users').select('username').eq('wallet_address', refWallet).single().then(res => {
+        setRefInfo({ address: refWallet, username: res.data?.username ?? undefined });
+        console.log('[RegisterForm] 推荐人地址:', refWallet, '用户名:', res.data?.username);
+      });
+    } else {
+      setRefInfo(null);
+      console.log('[RegisterForm] 未检测到推荐人，将默认绑定公司账户');
+    }
+  }, [referrerAddress, searchParams]);
 
   useEffect(() => { 
     setMounted(true); 
@@ -59,7 +76,7 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
     }
 
     // 优先级：props > url > 公司地址
-    const refWallet = referrerAddress || searchParams?.get("ref") || searchParams?.get("referral") || COMPANY_ADDRESS;
+    const refWallet = referrerAddress || searchParams?.get("referral") || COMPANY_ADDRESS;
     if (refWallet && !/^0x[a-fA-F0-9]{40}$/.test(refWallet)) {
       toast.error("Invalid referral address");
       return;
@@ -138,6 +155,19 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const formContent = (
     <div className={styles.modalOverlay}>
       <div className={styles.formContainer}>
+        {/* 推荐人信息展示 */}
+        <div style={{marginBottom: 16, textAlign: 'center'}}>
+          {refInfo ? (
+            <>
+              <div style={{fontWeight: 600, color: '#6366f1', fontSize: 15}}>
+                Referrer: {refInfo.address.slice(0,6)}...{refInfo.address.slice(-4)}
+              </div>
+              {refInfo.username && <div style={{color:'#64748b', fontSize:13}}>Username: {refInfo.username}</div>}
+            </>
+          ) : (
+            <div style={{color:'#a0aec0', fontSize:14, fontWeight:500, padding:'4px 0'}}>Referrer not detected.</div>
+          )}
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleRegisterAndBind)} className={styles.form}>
             <h2 className={styles.title}>Create Account</h2>

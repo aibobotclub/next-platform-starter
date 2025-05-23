@@ -1,44 +1,58 @@
 /* 奖励中心主卡片 */
 .rewardCard {
-  background: var(--card-background, #fff);
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
   border-radius: 1.2rem;
-  box-shadow: var(--shadow-md, 0 8px 32px 0 rgba(80,80,180,0.12));
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-  margin: 0 auto;
-  max-width: 600px;
-  width: 100%;
-  border: 1.5px solid var(--border-color, #e5e7eb);
-  transition: background 0.3s;
+  box-shadow: var(--shadow-md);
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+  animation: fadeInUp 0.7s cubic-bezier(.22,1,.36,1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px);}
+  to   { opacity: 1; transform: translateY(0);}
 }
 
 .header {
+  font-size: 1.25rem;
   font-weight: 700;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: var(--text-primary, #232946);
-  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.01em;
 }
 
 .statRow {
   display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 1.5rem;
   justify-content: space-between;
-  gap: 8px;
   margin-bottom: 1.2rem;
 }
 
 .statItem {
-  flex: 1 1 0;
-  background: var(--bg-tertiary, #f3f4fa);
-  border-radius: 0.7rem;
-  padding: 0.7rem 0.5rem;
-  text-align: center;
-  color: var(--primary-color, #6366f1);
-  font-weight: 700;
-  font-size: 1.1rem;
+  flex: 1 1 180px;
+  min-width: 140px;
+  background: var(--background-secondary);
+  border-radius: 1rem;
+  padding: 1.2rem 1rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.22s, transform 0.18s, background 0.22s;
+  cursor: pointer;
+  animation: fadeInUp 0.8s cubic-bezier(.22,1,.36,1);
+}
+.statItem:hover {
+  box-shadow: 0 8px 32px rgba(99,102,241,0.18);
+  background: var(--hover-background);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .tabs {
-  margin-bottom: 1rem;
+  margin-top: 1.2rem;
 }
 
 .tableWrap {
@@ -75,26 +89,26 @@
   font-size: 1rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .statRow {
+    gap: 1.2rem 0.7rem;
+  }
   .rewardCard {
-    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
-    max-width: 100vw;
-    border-radius: 0.7rem;
+    padding: 1.2rem 0.7rem;
   }
-  .header {
-    font-size: 1.1rem;
-  }
+}
+@media (max-width: 600px) {
   .statRow {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.7rem;
   }
   .statItem {
-    font-size: 1rem;
-    padding: 0.5rem 0.2rem;
+    min-width: 0;
+    padding: 0.9rem 0.7rem;
+    font-size: 0.98rem;
   }
-  .rewardTable th, .rewardTable td {
-    font-size: 0.92rem;
-    padding: 0.4em 0.2em;
+  .header {
+    font-size: 1.08rem;
   }
 }
 @media (max-width: 400px) {
@@ -110,12 +124,17 @@
   }
 }
 [data-theme='dark'] .rewardCard {
-  background: #23243a;
-  border-color: #353657;
+  background: var(--card-background);
+  border: 1.5px solid var(--card-border);
+  color: var(--text-primary);
 }
 [data-theme='dark'] .statItem {
   background: #23243a;
-  color: #a5b4fc;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.18);
+}
+[data-theme='dark'] .header {
+  color: #fff;
 }
 [data-theme='dark'] .rewardTable th {
   background: #23243a;
