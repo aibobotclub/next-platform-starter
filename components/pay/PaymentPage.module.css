@@ -1,0 +1,341 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--background);
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 480px;
+}
+
+.card {
+  background: var(--card-background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.backButton:hover {
+  color: var(--text-primary);
+}
+
+.content {
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.description {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 0.5rem;
+}
+
+.descriptionText {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 复购金部分样式 */
+.reinvestSection {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+}
+
+.reinvestHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.reinvestTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.reinvestAmount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.reinvestOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reinvestOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reinvestOption:hover {
+  border-color: var(--primary);
+  background: var(--background);
+}
+
+.reinvestOption input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--primary);
+}
+
+.reinvestOption span {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.payButton {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payButton:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.payButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.errorContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--background);
+}
+
+.errorCard {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.errorIcon {
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+.errorTitle {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.errorButton {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.errorButton:hover {
+  background: var(--background);
+  border-color: var(--text-primary);
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: var(--card-background-dark);
+  }
+
+  .description {
+    background: var(--background-dark);
+  }
+
+  .reinvestSection {
+    background: var(--background-dark);
+    border-color: var(--border-dark);
+  }
+
+  .reinvestOption {
+    background: var(--card-background-dark);
+    border-color: var(--border-dark);
+  }
+
+  .reinvestOption:hover {
+    background: var(--background-dark);
+    border-color: var(--primary);
+  }
+
+  .errorCard {
+    background: var(--card-background-dark);
+  }
+
+  .errorButton {
+    border-color: var(--border-dark);
+  }
+
+  .errorButton:hover {
+    background: var(--background-dark);
+    border-color: var(--text-primary);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .content {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .price {
+    font-size: 1.75rem;
+  }
+
+  .reinvestHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .reinvestAmount {
+    font-size: 1.125rem;
+  }
+}
+
+.balanceBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem 0.25rem 2rem;
+}
+
+.balanceLabel {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.balanceAmount {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.balanceAmountZero {
+  color: #bdbdbd;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.fabBackButton {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: box-shadow 0.2s, background 0.2s;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.fabBackButton:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.fabBackIcon {
+  color: #fff;
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 640px) {
+  .balanceBar {
+    padding: 0.75rem 1.2rem 0.25rem 1.2rem;
+  }
+  .fabBackButton {
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 36px;
+    height: 36px;
+  }
+  .fabBackIcon {
+    width: 18px;
+    height: 18px;
+  }
+} 

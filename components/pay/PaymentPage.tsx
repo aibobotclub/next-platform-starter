@@ -8,91 +8,183 @@ import { Button } from '@/components/ui/button';
 import { useAppkitPay } from '@/hooks/useAppkitPay';
 import { supabase } from '@/lib/supabase';
 import { Loader2, ArrowLeft, AlertCircle } from 'lucide-react';
+import styles from './PaymentPage.module.css';
 
+// 类型定义
 interface PaymentPageProps {
   productName: string;
   productPrice: string;
   productDesc: string;
 }
 
+interface OrderData {
+  user_address: string;
+  product_name: string;
+  product_description: string;
+  amount: number;
+  status: 'success' | 'failed';
+  tx_hash: string;
+  use_reinvest?: boolean;
+}
+
+// 常量
+const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
+
 export default function PaymentPage({ productName, productPrice, productDesc }: PaymentPageProps) {
+  // Hooks
   const router = useRouter();
   const { isConnected, address } = useAccount();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reinvestAmount, setReinvestAmount] = useState<number>(0);
+  const [useReinvest, setUseReinvest] = useState(false);
+  const [checkingReinvest, setCheckingReinvest] = useState(true);
 
-  // 验证必要参数
+  // 验证产品信息
   useEffect(() => {
     if (!productName || !productPrice) {
       setError('Invalid product information');
     }
   }, [productName, productPrice]);
 
-  const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
-
-  const { pay, isPending, error: payError } = useAppkitPay({
-    amount: parseFloat(productPrice),
-    recipient: RECIPIENT,
-    onSuccess: async (data) => {
-      setLoading(true);
+  // 检查复购金余额
+  useEffect(() => {
+    async function checkReinvestBalance() {
+      if (!address) return;
+      
       try {
-        if (address) {
-          const { error: dbError } = await supabase
-            .from('orders')
-            .insert([
-              {
-                user_address: address,
-                product_name: productName,
-                product_description: productDesc,
-                amount: parseFloat(productPrice),
-                status: 'success',
-                tx_hash: data?.txHash || 'unknown',
-              },
-            ]);
-          if (dbError) throw dbError;
+        const { data: user, error: userError } = await supabase
+          .from('users')
+          .select('id')
+          .eq('wallet_address', address)
+          .single();
+
+        if (userError || !user) {
+          setReinvestAmount(0);
+          return;
         }
-        toast.success('Payment successful!');
-        router.push('/dashboard');
+
+        const { data, error } = await supabase
+          .from('user_balance')
+          .select('credit_balance')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error) throw error;
+        setReinvestAmount(data?.credit_balance || 0);
       } catch (err) {
-        console.error('Failed to record payment:', err);
-        toast.error('Payment recorded but failed to save details');
-        router.push('/dashboard');
+        console.error('Failed to fetch reinvest amount:', err);
+        setReinvestAmount(0);
       } finally {
-        setLoading(false);
+        setCheckingReinvest(false);
       }
-    },
-    onError: (err) => {
-      setError(err);
-      toast.error(err);
-    },
+    }
+
+    checkReinvestBalance();
+  }, [address]);
+
+  // 计算实际支付金额
+  const originalAmount = parseFloat(productPrice);
+  const finalAmount = useReinvest 
+    ? Math.max(0, originalAmount - reinvestAmount)
+    : originalAmount;
+
+  // 支付处理
+  const { pay, isPending, error: payError } = useAppkitPay({
+    amount: finalAmount,
+    recipient: RECIPIENT,
+    onSuccess: handlePaymentSuccess,
+    onError: handlePaymentError,
   });
 
-  const handlePay = () => {
+  // 处理支付成功
+  async function handlePaymentSuccess(data: { txHash?: string }) {
+    setLoading(true);
+    try {
+      if (!address) throw new Error('No wallet address found');
+
+      const orderData: OrderData = {
+        user_address: address,
+        product_name: productName,
+        product_description: productDesc,
+        amount: originalAmount,
+        status: 'success',
+        tx_hash: data?.txHash || 'unknown',
+        use_reinvest: useReinvest
+      };
+
+      const { error: dbError } = await supabase
+        .from('orders')
+        .insert([orderData]);
+
+      if (dbError) throw dbError;
+
+      // 如果使用了复购金，更新用户余额
+      if (useReinvest && reinvestAmount > 0) {
+        const { data: user } = await supabase
+          .from('users')
+          .select('id')
+          .eq('wallet_address', address)
+          .single();
+
+        if (user) {
+          const { error: balanceError } = await supabase
+            .from('user_balance')
+            .update({ 
+              credit_balance: 0 
+            })
+            .eq('user_id', user.id);
+
+          if (balanceError) throw balanceError;
+        }
+      }
+
+      toast.success('Payment successful!');
+      router.push('/dashboard');
+    } catch (err) {
+      console.error('Failed to record payment:', err);
+      toast.error('Payment recorded but failed to save details');
+      router.push('/dashboard');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // 处理支付错误
+  function handlePaymentError(err: string) {
+    setError(err);
+    toast.error(err);
+  }
+
+  // 处理支付按钮点击
+  function handlePay() {
     if (!isConnected) {
       toast.error("Please connect your wallet first");
       return;
     }
     setError(null);
     pay();
-  };
+  }
 
-  const handleBack = () => {
+  // 处理返回按钮点击
+  function handleBack() {
     router.back();
-  };
+  }
 
+  // 渲染错误状态
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-24">
-        <div className="max-w-md mx-auto px-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-center text-red-500 mb-4">
+      <div className={styles.errorContainer}>
+        <div className={styles.wrapper}>
+          <div className={styles.errorCard}>
+            <div className={styles.errorIcon}>
               <AlertCircle className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-semibold text-center text-gray-900 dark:text-white mb-2">
+            <h2 className={styles.errorTitle}>
               {error}
             </h2>
             <Button
-              className="w-full mt-4"
+              className={styles.errorButton}
               variant="outline"
               onClick={handleBack}
             >
@@ -104,62 +196,101 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
     );
   }
 
+  // 渲染主界面
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-24">
-      <div className="max-w-md mx-auto px-4">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-          {/* 返回按钮 */}
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <div className={styles.card}>
+          {/* 美化后的返回按钮 */}
           <button
             onClick={handleBack}
-            className="flex items-center text-gray-600 dark:text-gray-300 mb-6 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className={styles.fabBackButton}
+            aria-label="Go back"
+            type="button"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
+            <ArrowLeft className={styles.fabBackIcon} />
           </button>
 
+          {/* 复购金余额展示 */}
+          <div className={styles.balanceBar}>
+            <span className={styles.balanceLabel}>复购金余额：</span>
+            <span className={reinvestAmount > 0 ? styles.balanceAmount : styles.balanceAmountZero}>
+              {checkingReinvest ? '加载中...' : `${reinvestAmount} USDT`}
+            </span>
+          </div>
+
           {/* 产品信息 */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.title}>
                 {productName}
               </h1>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              <div className={styles.price}>
                 {productPrice}
               </div>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-              <p className="text-gray-600 dark:text-gray-300">
+            <div className={styles.description}>
+              <p className={styles.descriptionText}>
                 {productDesc}
               </p>
             </div>
 
+            {/* 复购金选项 */}
+            {!checkingReinvest && reinvestAmount > 0 && (
+              <div className={styles.reinvestSection}>
+                <div className={styles.reinvestHeader}>
+                  <h3 className={styles.reinvestTitle}>可用复购金</h3>
+                  <div className={styles.reinvestAmount}>{reinvestAmount} USDT</div>
+                </div>
+                <div className={styles.reinvestOptions}>
+                  <label className={styles.reinvestOption}>
+                    <input
+                      type="radio"
+                      checked={!useReinvest}
+                      onChange={() => setUseReinvest(false)}
+                    />
+                    <span>全额支付（{originalAmount} USDT）</span>
+                  </label>
+                  <label className={styles.reinvestOption}>
+                    <input
+                      type="radio"
+                      checked={useReinvest}
+                      onChange={() => setUseReinvest(true)}
+                    />
+                    <span>使用复购金（需支付 {finalAmount} USDT）</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
             {/* 支付按钮 */}
             <Button
-              className="w-full h-12 text-lg font-semibold relative"
+              className={styles.payButton}
               onClick={handlePay}
               disabled={!isConnected || isPending || loading}
+              aria-busy={isPending || loading}
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Processing...
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  正在处理...
                 </>
               ) : isPending ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Confirming...
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  等待确认...
                 </>
               ) : isConnected ? (
-                'Pay with Wallet'
+                `支付 ${finalAmount} USDT`
               ) : (
-                'Connect Wallet to Pay'
+                '连接钱包后支付'
               )}
             </Button>
 
             {/* 错误提示 */}
             {payError && (
-              <div className="text-red-500 text-sm text-center mt-2">
+              <div className="text-red-500 text-sm text-center mt-2" role="alert">
                 {payError}
               </div>
             )}
