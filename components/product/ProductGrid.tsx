@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './ProductGrid.module.css';
-import ProductDetailModal from './ProductDetailModal';
 
 interface Product {
   name: string;
@@ -29,28 +28,43 @@ const products: Product[] = [
 ];
 
 export default function ProductGrid() {
-  const [selected, setSelected] = useState<Product | null>(null);
+  const router = useRouter();
+
+  const handleBuyClick = (product: Product) => {
+    if (product.comingSoon) return;
+    
+    const params = new URLSearchParams({
+      name: product.name,
+      price: product.price,
+      desc: product.desc,
+      type: product.type
+    });
+    
+    router.push(`/payment?${params.toString()}`);
+  };
+
   return (
-    <>
-      <div className={styles.productGrid}>
-        {products.map((p) => (
-          <div
-            className={styles.productCard}
-            key={p.type}
-            onClick={() => !p.comingSoon && setSelected(p)}
-          >
-            <div className={styles.productName}>{p.name}</div>
-            <div className={styles.productPrice}>{p.price}</div>
-            <div className={styles.productDesc}>{p.desc}</div>
-            {p.comingSoon ? (
-              <button className={styles.comingSoonBtn} disabled>Coming Soon</button>
-            ) : (
-              <button className={styles.buyBtn}>Buy Now</button>
-            )}
-          </div>
-        ))}
-      </div>
-      {selected && <ProductDetailModal product={selected} onClose={() => setSelected(null)} />}
-    </>
+    <div className={styles.productGrid}>
+      {products.map((p) => (
+        <div
+          className={styles.productCard}
+          key={p.type}
+        >
+          <div className={styles.productName}>{p.name}</div>
+          <div className={styles.productPrice}>{p.price}</div>
+          <div className={styles.productDesc}>{p.desc}</div>
+          {p.comingSoon ? (
+            <button className={styles.comingSoonBtn} disabled>Coming Soon</button>
+          ) : (
+            <button 
+              className={styles.buyBtn}
+              onClick={() => handleBuyClick(p)}
+            >
+              Buy Now
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }

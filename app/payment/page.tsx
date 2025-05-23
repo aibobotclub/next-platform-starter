@@ -1,17 +1,20 @@
 'use client';
-import PaymentForm from '@/components/pay/PaymentForm';
 
-export default function PaymentPage() {
-  const product = {
-    name: 'AIDA ',
-    price: '50',
-    desc: 'Test Description',
-    type: 'Test Type',
-  };
+import { useSearchParams } from 'next/navigation';
+import PaymentPage from '@/components/pay/PaymentPage';
 
-  const handleClose = () => {
-    // 处理关闭逻辑
-  };
+export default function Page() {
+  const searchParams = useSearchParams();
+  
+  const productName = searchParams.get('name') || '';
+  const productPrice = searchParams.get('price') || '';
+  const productDesc = searchParams.get('desc') || '';
 
-  return <PaymentForm product={product} onClose={handleClose} productName={''} productDescription={''} />;
+  return (
+    <PaymentPage
+      productName={productName}
+      productPrice={productPrice}
+      productDesc={productDesc}
+    />
+  );
 } 

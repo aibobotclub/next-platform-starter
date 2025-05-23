@@ -17,11 +17,11 @@
 }
 
 .tabs :global(.ant-tabs-tab) {
-  font-size: 1rem;
-  font-weight: 600;
+  background: transparent;
   color: var(--text-secondary);
-  padding: 0.8rem 1.2rem;
-  transition: all 0.3s ease;
+  border-radius: 1.2rem 1.2rem 0 0;
+  margin-right: 8px;
+  transition: all 0.3s;
 }
 
 .tabs :global(.ant-tabs-tab:hover) {
@@ -29,8 +29,10 @@
 }
 
 .tabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
-  color: var(--primary);
-  font-weight: 700;
+  background: #fff;
+  color: #232946;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.10);
+  border-radius: 1.2rem 1.2rem 0 0;
 }
 
 .tabs :global(.ant-tabs-ink-bar) {
@@ -38,6 +40,17 @@
   height: 3px;
   border-radius: 2px;
   transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .tabs :global(.ant-tabs-tab) {
+  background: transparent;
+  color: #a8a8a8;
+}
+
+[data-theme='dark'] .tabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  background: #232946;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.18);
 }
 
 /* Responsive */
