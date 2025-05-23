@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <>
+    <div className="dashboard-layout">
       <Header />
       <main
         style={{
@@ -36,11 +36,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           paddingTop: '72px', // Header高度
           paddingBottom: '72px', // TabBar高度
           boxSizing: 'border-box',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         {children}
       </main>
       <TabBar />
-    </>
+    </div>
   );
 }
