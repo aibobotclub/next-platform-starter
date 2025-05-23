@@ -249,7 +249,7 @@
   outline: none;
 }
 .buttonGroup button + button:hover, .buttonGroup button + button:focus {
-  background: linear-gradient(90deg, #15d981 0%, #20c7e4 100%);
+  background: linear-gradient(90deg, #089f86 0%, #8024f8 100%);
 }
 [data-theme='light'] .buttonGroup button:hover, [data-theme='light'] .buttonGroup button:focus {
   background: linear-gradient(90deg, #1e293b 0%, #3336d4 100%);
@@ -422,8 +422,8 @@
     max-width: 90vw;
     margin-bottom: 1.2rem;
     background: none;
-    box-shadow: 0 8px 25px #220486aa;
-    border-radius: 1.5rem;
+    box-shadow: 0 8px 18px #8c69ffaa;
+    border-radius: 1.2rem;
     padding: 0;
   }
 }
@@ -441,7 +441,7 @@
   .heroTitle,
   [data-theme='dark'] .heroTitle,
   [data-theme='light'] .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 1.1rem;
     line-height: 1.13;
   }
