@@ -25,7 +25,15 @@
 }
 
 .walletAddressButton {
-  /* 复用 registerButton 样式 */
-  composes: registerButton from './RegisterButton.module.css';
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 2rem;
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(79,140,255,0.12);
+  border: none;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
   margin-bottom: 1.2rem;
 }

@@ -32,7 +32,7 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const headersData = headers();
+  const headersData = await headers();
   const cookies = headersData.get('cookie');
 
   return (
