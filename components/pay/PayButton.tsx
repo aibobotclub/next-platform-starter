@@ -71,15 +71,15 @@ export function PayButton({ amount, onSuccess, onError, onClose }: PayButtonProp
     <div className={styles.container}>
       <div className={styles.buttonGroup}>
         {!address ? (
-          <Button onClick={() => open()} className={styles.connectButton}>
+          <Button onClick={() => open()} className="unifiedButton">
             Connect Wallet
           </Button>
         ) : (
           <>
-            <Button onClick={handlePay} className={styles.payButton} disabled={isPaymentInProgress}>
+            <Button onClick={handlePay} className="unifiedButton" disabled={isPaymentInProgress}>
               {isPaymentInProgress ? "Processing..." : "Pay Now"}
             </Button>
-            <Button onClick={handleDisconnect} className={styles.disconnectButton}>
+            <Button onClick={handleDisconnect} className="unifiedButton">
               Disconnect
             </Button>
           </>

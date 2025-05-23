@@ -9,7 +9,7 @@ interface RegisterButtonProps {
 export default function RegisterButton({ isLoading, onClick }: RegisterButtonProps) {
   return (
     <Button
-      className={styles.registerButton}
+      className={styles.unifiedButton}
       disabled={isLoading}
       type="button"
       onClick={onClick}

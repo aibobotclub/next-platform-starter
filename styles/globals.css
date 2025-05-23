@@ -154,4 +154,25 @@
             pointer-events: none;
         }
     }
+
+    /* 统一按钮样式 */
+    .unifiedButton {
+        min-width: 120px;
+        min-height: 44px;
+        padding: 0.5rem 1.2rem;
+        font-size: 1.08rem;
+        font-weight: 600;
+        border-radius: 0.8rem;
+        background: linear-gradient(90deg, #6366f1 0%, #232946 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+        margin: 0.2rem 0;
+    }
+    .unifiedButton:hover {
+        background: linear-gradient(90deg, #232946 0%, #6366f1 100%);
+        color: #fff;
+    }
 }

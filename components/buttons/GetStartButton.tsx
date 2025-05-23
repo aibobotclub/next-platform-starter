@@ -25,7 +25,7 @@ export default function GetStartButton({ onClick }: GetStartButtonProps) {
       <div className={styles.buttonContainer}>
         <ConnectWalletButton 
           buttonText="Connect Wallet"
-          className={styles.connectButton}
+          className={styles.getStartedButton}
         />
       </div>
     );

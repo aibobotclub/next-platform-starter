@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LayoutDashboard } from "lucide-react";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
-import './DashboardButton.css';
-import { cn } from "@/lib/utils";
+import styles from "@/components/register/RegisterButton.module.css";
 
 interface DashboardButtonProps {
   variant?: "default" | "outline" | "ghost";
@@ -55,10 +54,7 @@ export default function DashboardButton({
     <Button
       variant={variant}
       onClick={handleClick}
-      className={cn(
-        "dashboard-btn flex items-center gap-2 px-7 py-3 text-lg font-bold rounded-2xl border-2 border-blue-400 shadow-xl transition-all duration-200 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white hover:from-blue-600 hover:via-indigo-600 hover:to-purple-600 hover:border-indigo-400 hover:scale-105 active:scale-95 group",
-        className
-      )}
+      className={`${styles.unifiedButton} ${className || ''}`}
       style={{ boxShadow: "0 6px 32px 0 rgba(80, 112, 255, 0.18)" }}
     >
       {showIcon && <LayoutDashboard className="w-6 h-6 transition-transform duration-200 group-hover:rotate-12 group-hover:scale-110 group-active:scale-95 group-hover:text-yellow-300" />}

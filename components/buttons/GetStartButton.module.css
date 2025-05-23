@@ -4,7 +4,11 @@
   align-items: center;
 }
 
-.getStartButtonContainer {
+.getStartedButton {
+  composes: unifiedButton from '../register/RegisterButton.module.css';
+}
+
+.buttonContainer {
   display: flex;
   justify-content: center;
   align-items: center;
