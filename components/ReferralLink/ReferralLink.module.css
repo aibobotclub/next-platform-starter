@@ -1,0 +1,106 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 72px; /* 预留tabbar */
+}
+.modal {
+  background: var(--card-background, #232946);
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+  padding: 2.2rem 1.2rem 2.5rem 1.2rem;
+  max-width: 420px;
+  width: 95vw;
+  margin-bottom: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+.closeBtn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #bfc9ff;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.closeBtn:hover {
+  background: #353b5b;
+  color: #fff;
+}
+.linkBox {
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+  color: #fff;
+  border-radius: 1rem;
+  padding: 1.1rem 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  word-break: break-all;
+  text-align: center;
+  box-shadow: 0 2px 12px #6366f122;
+}
+.copyBtn {
+  min-width: 120px;
+  min-height: 44px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border-radius: 0.8rem;
+  background: linear-gradient(90deg, #6366f1 0%, #232946 100%);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+  margin: 0.2rem 0;
+}
+.copyBtn:hover {
+  background: linear-gradient(90deg, #232946 0%, #6366f1 100%);
+  color: #fff;
+}
+@media (max-width: 600px) {
+  .modal {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 1rem;
+    min-width: 0;
+    margin-bottom: 72px;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  .linkBox {
+    font-size: 1rem;
+    padding: 0.8rem 0.5rem;
+  }
+  .copyBtn {
+    min-width: 90px;
+    font-size: 0.98rem;
+    border-radius: 0.7rem;
+  }
+}

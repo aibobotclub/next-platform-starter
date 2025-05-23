@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from 'wagmi';
 import { toast } from "sonner";
@@ -86,6 +86,13 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
     if (onClose) onClose();
   };
 
+  // 当appkit支付弹窗打开时，自动关闭其他弹窗
+  useEffect(() => {
+    if (showPay) {
+      setShowRecipient(false);
+    }
+  }, [showPay]);
+
   return (
     <>
       <div style={{
@@ -97,9 +104,10 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
         backgroundColor: 'rgba(0,0,0,0.5)',
         backdropFilter: 'blur(4px)',
         zIndex: 1000,
-        display: 'flex',
+        display: showPay ? 'none' : 'flex', // appkit弹窗时隐藏本弹窗
         justifyContent: 'center',
         alignItems: 'center',
+        paddingBottom: 72, // 预留tabbar高度
       }}>
         <div style={{
           position: 'relative',
@@ -109,6 +117,7 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
           maxWidth: '480px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
           padding: '24px',
+          marginBottom: 72, // 预留tabbar高度
         }}>
           <button
             onClick={onClose}
@@ -166,6 +175,7 @@ export default function PaymentForm({ onClose, onSuccess, productName, productDe
         productName={productName}
         productDescription={productDescription}
         product={product}
+        zIndex={9999}
       />
     </>
   );

@@ -1,0 +1,77 @@
+.treeContainer {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.tree :global(.ant-tree) {
+  background: transparent !important;
+}
+
+.tree :global(.ant-tree-treenode) {
+  transition: all 0.2s ease;
+  padding: 0.4rem 0.25rem;
+}
+
+.tree :global(.ant-tree-node-content-wrapper) {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tree :global(.ant-tree-node-content-wrapper:hover) {
+  background: var(--hover-background);
+  color: var(--primary);
+}
+
+.nodeLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.levelTag {
+  background: var(--primary-gradient);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .treeContainer {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .tree :global(.ant-tree-node-content-wrapper) {
+    font-size: 0.9rem;
+  }
+
+  .levelTag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+}

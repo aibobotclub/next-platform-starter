@@ -5,9 +5,10 @@ interface DetailDrawerProps {
   open: boolean;
   onClose: () => void;
   children?: ReactNode;
+  title?: string;
 }
 
-export default function DetailDrawer({ open, onClose, children }: DetailDrawerProps) {
+export default function DetailDrawer({ open, onClose, children, title = "Details" }: DetailDrawerProps) {
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
@@ -26,8 +27,8 @@ export default function DetailDrawer({ open, onClose, children }: DetailDrawerPr
     <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.drawer + (closing ? ' ' + styles.drawerClosing : '')} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
-          <span>Details</span>
-          <button className={styles.closeBtn} onClick={handleClose} aria-label="Close">×</button>
+          <span>{title}</span>
+          <button className={styles.closeBtn} style={{fontSize:'2.2rem',width:48,height:48}} onClick={handleClose} aria-label="Close">×</button>
         </div>
         <div className={styles.content}>
           {children}

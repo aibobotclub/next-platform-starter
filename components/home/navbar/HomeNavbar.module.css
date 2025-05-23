@@ -10,8 +10,9 @@
   padding: 0 2rem;
   background: var(--background);
   backdrop-filter: blur(10px);
-  z-index: 1000;
+  z-index: 1100;
   border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10);
 }
 
 .logo {

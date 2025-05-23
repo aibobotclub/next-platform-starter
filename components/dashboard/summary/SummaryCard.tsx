@@ -1,6 +1,10 @@
 import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
+import ReferralLink from "@/components/ReferralLink/ReferralLink";
+import { useState } from "react";
+import RewardStats from "./rewards/RewardStats";
+import DetailDrawer from "./DetailDrawer/DetailDrawer";
 
 interface SummaryCardProps {
   onDetail?: (type: 'tasks' | 'balance' | 'rewards' | 'referral') => void;
@@ -13,6 +17,8 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
   const rewardBalance = 25;
   const totalReward = 5200;
   const referralCount = 12;
+  const [showReferral, setShowReferral] = useState(false);
+  const [showRewardDrawer, setShowRewardDrawer] = useState(false);
 
   const handleTaskDetail = () => {
     onDetail && onDetail('tasks');
@@ -39,16 +45,19 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
         icon={<FiAward />}
         label="Total Reward"
         value={<span>{totalReward} <span className={styles.usdt}>USDT</span></span>}
-          onDetail={() => onDetail && onDetail('rewards')}
+        onDetail={() => onDetail && onDetail('rewards')}
       />
       <div className={styles.sectionDivider} />
       <SummaryItem
         icon={<FiUsers />}
         label="Referral"
         value={referralCount}
-          onDetail={() => onDetail && onDetail('referral')}
+        onDetail={() => setShowReferral(true)}
       />
     </div>
+    {showReferral && (
+      <ReferralLink open={showReferral} onClose={() => setShowReferral(false)} />
+    )}
     </>
   );
 }

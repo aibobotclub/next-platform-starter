@@ -13,6 +13,8 @@ import DetailDrawer from './summary/DetailDrawer/DetailDrawer';
 import BalanceCard from "./summary/balance/BalanceCard";
 import TaskProgressCardContainer from './summary/tasks/TastStatsDetails';
 import ProductGrid from '../product/ProductGrid';
+import RewardStats from "./summary/rewards/RewardStats";
+import ReferralLink from "@/components/ReferralLink/ReferralLink";
 
 function ReferralStats() {
   // 示例推荐统计分析
@@ -69,12 +71,32 @@ export default function DashboardHome() {
           </Card>
         </div>
       </div>
-      <DetailDrawer open={showDetail} onClose={() => setShowDetail(false)}>
-        {detailType === 'balance' && <Card className={styles.cardSection}><BalanceCard /></Card>}
-        {detailType === 'tasks' && <TaskProgressCardContainer />}
-        {detailType === 'rewards' && null}
-        {detailType === 'referral' && <ReferralStats />}
-      </DetailDrawer>
+      {/* 其他详情用右侧抽屉，referral用全局居中弹窗 */}
+      {detailType === 'referral' && showDetail ? (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          zIndex: 1200,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingBottom: 72,
+        }}>
+          <div style={{maxWidth: 420, width: '95vw', marginBottom: 72}}>
+            <ReferralLink open={true} onClose={() => setShowDetail(false)} />
+          </div>
+        </div>
+      ) : (
+        <DetailDrawer open={showDetail && detailType !== 'referral'} onClose={() => setShowDetail(false)} title={detailType === 'rewards' ? 'Reward Details' : undefined}>
+          {detailType === 'balance' && <Card className={styles.cardSection}><BalanceCard /></Card>}
+          {detailType === 'tasks' && <TaskProgressCardContainer />}
+          {detailType === 'rewards' && <RewardStats />}
+        </DetailDrawer>
+      )}
     </div>
   );
 } 

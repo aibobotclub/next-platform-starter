@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from 'wagmi';
 import { toast } from "sonner";
@@ -27,6 +25,12 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   const { isConnected, address } = useAccount();
   const router = useRouter();
 
+  useEffect(() => {
+    if (showPay) {
+      setShowRecipient(false);
+    }
+  }, [showPay]);
+
   const handlePayClick = () => {
     if (!isConnected) {
       toast.error("Please connect your wallet first");
@@ -47,53 +51,58 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
 
   return (
     <>
-      <div className={styles.overlay}>
-        <div className={styles.modal}>
-          <button className={styles.closeButton} onClick={onClose}>
-            ×
-          </button>
-          <div className={styles.content}>
-            <div className={styles.productInfo}>
-              <div className={styles.productName}>{product.name}</div>
-              <div className={styles.productPrice}>{product.price}</div>
-              <div className={styles.productDesc}>{product.desc}</div>
-            </div>
-
-            <div className={styles.actionButtons}>
-              <Button
-                className={styles.payButton}
-                onClick={handlePayClick}
-                disabled={!isConnected}
-              >
-                {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
-              </Button>
-              {!isConnected && (
+      {!showPay && (
+        <div className={styles.overlay} style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingBottom: 72,
+        }}>
+          <div className={styles.modal} style={{marginBottom: 72}}>
+            <button className={styles.closeButton} onClick={onClose}>
+              ×
+            </button>
+            <div className={styles.content}>
+              <div className={styles.productInfo}>
+                <div className={styles.productName}>{product.name}</div>
+                <div className={styles.productPrice}>{product.price}</div>
+                <div className={styles.productDesc}>{product.desc}</div>
+              </div>
+              <div className={styles.actionButtons}>
                 <Button
-                  variant="outline"
-                  className={styles.connectButton}
-                  onClick={() => router.push('/register')}
+                  className={styles.payButton}
+                  onClick={handlePayClick}
+                  disabled={!isConnected}
                 >
-                  Register First
+                  {isConnected ? 'Pay with Wallet' : 'Connect Wallet to Pay'}
                 </Button>
-              )}
+                {!isConnected && (
+                  <Button
+                    variant="outline"
+                    className={styles.connectButton}
+                    onClick={() => router.push('/register')}
+                  >
+                    Register First
+                  </Button>
+                )}
+              </div>
             </div>
+            {showRecipient && (
+              <AddRecipient
+                open={showRecipient}
+                onOpenChange={setShowRecipient}
+              />
+            )}
           </div>
-
-          {showRecipient && (
-            <AddRecipient
-              open={showRecipient}
-              onOpenChange={setShowRecipient}
-            />
-          )}
         </div>
-      </div>
-
+      )}
       <PaymentDialog
         open={showPay}
         onClose={() => setShowPay(false)}
         onSuccess={handlePaySuccess}
         productName={product.name}
         productDescription={product.desc}
+        zIndex={9999}
       />
     </>
   );

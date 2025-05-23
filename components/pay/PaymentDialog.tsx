@@ -8,6 +8,7 @@ interface PaymentDialogProps {
   productName: string;
   productDescription: string;
   product?: any;
+  zIndex?: number;
 }
 
 
@@ -18,12 +19,24 @@ export default function PaymentDialog({
   productName,
   productDescription,
   product,
+  zIndex = 1102,
 }: PaymentDialogProps) {
   if (!open) return null;
 
   return createPortal(
-    <div className="overlay">
-      <div className="modal">
+    <div className="overlay" style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex,
+      paddingBottom: 72, // 预留tabbar高度
+    }}>
+      <div className="modal" style={{marginBottom: 72}}>
         <PaymentForm
           onClose={onClose}
           onSuccess={onSuccess}

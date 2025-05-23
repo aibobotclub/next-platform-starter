@@ -1,0 +1,58 @@
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--background-primary);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.tabs :global(.ant-tabs-tab) {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0.8rem 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.tabs :global(.ant-tabs-tab:hover) {
+  color: var(--primary);
+}
+
+.tabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.tabs :global(.ant-tabs-ink-bar) {
+  background: var(--primary);
+  height: 3px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.2rem;
+    border-radius: 1rem;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .tabs :global(.ant-tabs-tab) {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}

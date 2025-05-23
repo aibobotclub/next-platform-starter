@@ -98,7 +98,7 @@ export default function LandingPage() {
   return (
     <div className={styles.root}>
       <HomeNavbar />
-      <main>
+      <main style={{paddingTop: 80, paddingBottom: 72}}>
         <Hero 
           onGetStarted={handleGetStarted}
           isRegistered={isRegistered}
