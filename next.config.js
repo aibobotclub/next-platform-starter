@@ -22,6 +22,12 @@ const nextConfig = {
         }
         return config;
     },
+    experimental: {
+        css: {
+            // 禁用 lightningcss，回退到 postcss
+            implementation: require('postcss'),
+        },
+    },
 };
 
 module.exports = nextConfig;
