@@ -1,11 +1,23 @@
 'use client';
 
 import { usePay } from '@reown/appkit-pay/react';
-import { baseUSDC } from '@reown/appkit-pay';
 import { useState } from 'react';
 
+// 完整定义 bscUSDT asset，兼容 appkit pay PaymentAsset 类型
+const bscUSDT = {
+  chainId: 56,
+  network: `eip155:56` as const,
+  address: '0x55d398326f99059fF775485246999027B3197955',
+  asset: 'usdt',
+  symbol: 'USDT',
+  decimals: 18,
+  name: 'Tether USD',
+  logoURI: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+  metadata: {},
+};
+
 export interface UseAppkitPayOptions {
-  amount: number; // 单位：USDC
+  amount: number; // 单位：USDT
   recipient: string;
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
@@ -39,7 +51,7 @@ export function useAppkitPay({
     setIsPending(true);
     try {
       await openPay({
-        paymentAsset: baseUSDC,
+        paymentAsset: bscUSDT,
         recipient,
         amount,
       });
