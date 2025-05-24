@@ -58,6 +58,8 @@ export function useAppkitPay({
         paymentAsset: bscUSDT,
         recipient,
         amount,
+        // @ts-ignore
+        container: document.body,
       });
     } catch (err: any) {
       setError(typeof err === 'string' ? err : err?.message || 'Payment failed');
