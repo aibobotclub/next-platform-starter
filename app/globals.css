@@ -260,22 +260,24 @@ body, .text-primary {
 */
 
 html, body, #__next, #root {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  max-width: 100vw;
+  touch-action: pan-y;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body {
   overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dashboard-layout {
@@ -292,4 +294,23 @@ body {
 
 .dashboard-layout .ant-modal-mask {
   z-index: 999;
+}
+
+/* 禁用缩放 */
+@media screen and (max-width: 768px) {
+  html {
+    touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
