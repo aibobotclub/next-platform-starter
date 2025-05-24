@@ -13,7 +13,11 @@ const bscUSDT = {
   decimals: 18,
   name: 'Tether USD',
   logoURI: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
-  metadata: {},
+  metadata: {
+    name: 'Tether USD',
+    symbol: 'USDT',
+    decimals: 18,
+  },
 };
 
 export interface UseAppkitPayOptions {
