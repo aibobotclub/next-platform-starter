@@ -54,13 +54,13 @@ export function usePayController(options: PaymentOptions) {
   const [paymentId, setPaymentId] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | null>(null);
 
-  // Default to OP chain USDT
+  // Default to BSC USDT
   const defaultAsset: AppkitPaymentAsset = {
-    network: 'eip155:10' as `eip155:${string}`,
-    asset: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
+    network: 'eip155:56' as `eip155:${string}`,
+    asset: '0x55d398326f99059fF775485246999027B3197955',
     metadata: {
       symbol: 'USDT',
-      decimals: 6,
+      decimals: 18,
       name: 'Tether USD',
     },
   };
