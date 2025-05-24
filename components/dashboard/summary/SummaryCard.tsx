@@ -37,9 +37,14 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
           if (balRes.data) setRewardBalance(balRes.data.reward_balance || 0);
         });
         // 查询推荐人数
-        supabase.from('user_referral_tree_view').select('*').eq('parent_id', userRes.data.id).then(refRes => {
-          setReferralCount(refRes.data ? refRes.data.length : 0);
-        });
+        supabase
+          .from('referral_list_view')
+          .select('referred_id')
+          .eq('root_user_id', userRes.data.id)
+          .eq('level', 1)
+          .then(refRes => {
+            setReferralCount(refRes.data ? refRes.data.length : 0);
+          });
       }
     });
   }, [address]);
