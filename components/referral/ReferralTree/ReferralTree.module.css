@@ -8,10 +8,11 @@
 
 .treeLevel {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   margin-bottom: 32px;
   position: relative;
+  transition: margin-left 0.2s;
 }
 
 .treeNode {
@@ -27,6 +28,7 @@
   flex-direction: column;
   gap: 0.2rem;
   transition: background 0.2s, color 0.2s;
+  min-width: 120px;
 }
 .treeNode:hover {
   background: #6366f1;
@@ -65,14 +67,20 @@
   z-index: 0;
 }
 @media (max-width: 600px) {
+  .treeContainer {
+    padding: 16px 2px;
+  }
   .treeLevel {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    margin-left: 0 !important;
   }
   .treeNode {
-    margin: 16px 0;
-    min-width: 140px;
-    padding: 12px 10px;
+    margin: 12px 0;
+    min-width: 110px;
+    padding: 10px 8px;
+    font-size: 0.98rem;
   }
 }
 @media (prefers-color-scheme: light) {

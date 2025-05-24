@@ -1,12 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Tree, Select } from 'antd';
-import type { DataNode } from 'antd/es/tree';
+import styles from './ReferralTree.module.css';
 import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
-import styles from './ReferralTree.module.css';
-import { FaStar, FaUser } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
@@ -45,17 +42,20 @@ export default function ReferralTree() {
       allNodesData.forEach(item => {
         if (item.referrer_id && !idToChildren[item.referrer_id]) idToChildren[item.referrer_id] = [];
         if (item.referrer_id) idToChildren[item.referrer_id].push({ 
-          ...item, 
-          referred_id: item.referred_id ?? '', 
+          referred_id: item.referred_id ?? '',
+          username: item.username ?? '',
           level: item.level ?? 0,
           children: [] 
         });
       });
-      // 递归构建树
-      function buildTree(userId: string, level = 0): TreeNode | null {
+      // 递归构建树，增加 path 检查防止环路
+      function buildTree(userId: string, level = 0, path: string[] = []): TreeNode | null {
         if (!allNodesData) return null;
+        if (path.includes(userId)) return null; // 防止环
         const node = allNodesData.find((n: any) => n.referred_id === userId);
-        const children = (idToChildren[userId] || []).map(child => buildTree(child.referred_id, level + 1));
+        const children = (idToChildren[userId] || []).map(child =>
+          buildTree(child.referred_id, level + 1, [...path, userId])
+        );
         return {
           referred_id: userId,
           username: node?.username || 'Root',
@@ -67,17 +67,18 @@ export default function ReferralTree() {
     })();
   }, [address]);
 
-  const renderTree = (node: TreeNode | null) => {
+  const renderTree = (node: TreeNode | null, depth = 0) => {
     if (!node) return null;
     const isExpanded = expandedNodes.has(node.referred_id);
     const hasChildren = node.children.length > 0;
     return (
-      <div className={styles.treeLevel}>
+      <div className={styles.treeLevel} style={{ marginLeft: depth * 16 }}>
         <div style={{ position: 'relative' }}>
           <div
             className={styles.treeNode}
             onClick={() => hasChildren && toggleNode(node.referred_id)}
             style={{ cursor: hasChildren ? 'pointer' : 'default' }}
+            key={node.referred_id || node.username || Math.random()}
           >
             <div className={styles.address}>{node.username}</div>
             <div className={styles.volume}>{t('Level')}. {node.level}</div>
@@ -90,7 +91,7 @@ export default function ReferralTree() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
               >
-                {node.children.map(child => renderTree(child))}
+                {node.children.map(child => renderTree(child, depth + 1))}
               </motion.div>
             )}
           </AnimatePresence>

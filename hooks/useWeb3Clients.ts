@@ -1,5 +1,5 @@
 import { useWalletClient } from "wagmi";
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { createPublicClient, http } from "viem";
 
 // BSC 主网配置
@@ -45,7 +45,36 @@ const useWeb3Clients = () => {
     []
   );
 
-  return { publicClient, walletClient };
+  // 自动切换/添加 BSC 主网
+  const ensureBscNetwork = useCallback(async () => {
+    if (typeof window === 'undefined' || !window.ethereum) return;
+    try {
+      await (window.ethereum as any).request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x38' }],
+      });
+    } catch (switchError: any) {
+      // 如果未添加则自动添加
+      if (switchError.code === 4902) {
+        await (window.ethereum as any).request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x38',
+            chainName: 'Binance Smart Chain',
+            nativeCurrency: {
+              name: 'BNB',
+              symbol: 'BNB',
+              decimals: 18
+            },
+            rpcUrls: ['https://bsc-dataseed.binance.org'],
+            blockExplorerUrls: ['https://bscscan.com']
+          }],
+        });
+      }
+    }
+  }, []);
+
+  return { publicClient, walletClient, ensureBscNetwork };
 };
 
 export default useWeb3Clients;

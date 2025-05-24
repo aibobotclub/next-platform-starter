@@ -169,3 +169,111 @@
   color: #fff;
   border: 1.5px solid #6366f1;
 }
+
+/* 推荐列表主容器 */
+.listContainer {
+  padding: 12px 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 搜索栏吸顶 */
+.searchBar {
+  position: sticky;
+  top: 0;
+  background: var(--background-primary, #fff);
+  z-index: 2;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 用户卡片 */
+.userCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--background-secondary, #f9fafe);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+
+/* 层级标签 */
+.levelTag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #6a8dff;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 0 0 8px 0;
+  padding: 2px 10px;
+}
+
+/* 用户名 */
+.username {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary, #23263a);
+  margin-bottom: 4px;
+}
+
+/* 推荐人 */
+.referrer {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+/* 钱包地址 */
+.wallet {
+  font-size: 0.9rem;
+  color: #b3b8c5;
+  word-break: break-all;
+}
+
+/* 层级缩进（动态） */
+.cardIndent {
+  border-left: 3px solid #6a8dff;
+  padding-left: 12px;
+  margin-left: 0;
+}
+
+@media (max-width: 600px) {
+  .listContainer {
+    padding: 4px 0;
+  }
+  .userCard {
+    padding: 10px 8px;
+    margin-bottom: 8px;
+  }
+  .username {
+    font-size: 1rem;
+  }
+  .wallet {
+    font-size: 0.85rem;
+  }
+  .levelTag {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+  }
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .userCard {
+  background: #23263a;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+[data-theme='dark'] .levelTag {
+  background: #4f8cff;
+}
+[data-theme='dark'] .referrer {
+  color: #b3b8c5;
+}
+[data-theme='dark'] .wallet {
+  color: #7ec7ff;
+}
