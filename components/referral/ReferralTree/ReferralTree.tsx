@@ -23,19 +23,19 @@ export default function ReferralTree() {
   useEffect(() => {
     if (!address) return;
     (async () => {
-      // 查找当前用户id
       const { data: user, error: userErr } = await supabase
         .from('users')
         .select('id, username, wallet_address')
         .eq('wallet_address', address)
         .single();
+      console.log('user', user, userErr);
       if (userErr || !user || typeof user.id !== 'string') return;
       const userId = user.id;
-      // 拉取团队所有成员
       const { data: allNodesData, error: allErr } = await supabase
         .from('referral_list_view')
         .select('referred_id, username, level, referrer_id')
         .eq('root_user_id', userId);
+      console.log('allNodesData', allNodesData, allErr);
       if (allErr || !Array.isArray(allNodesData) || allNodesData.length === 0) return;
       // 构建 id->children 映射
       const idToChildren: Record<string, TreeNode[]> = {};
