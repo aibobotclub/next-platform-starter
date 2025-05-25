@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAccount } from "wagmi";
 import { useAppKit } from "@/hooks/useAppKit";
 import RegisterPage from "@/components/register/RegisterPage";
 import { toast } from "sonner";
@@ -10,8 +9,7 @@ import { useUserStatus } from '@/hooks/useUserStatus';
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isConnected, address } = useAccount();
-  const { openModal } = useAppKit();
+  const { isConnected, address, openModal } = useAppKit();
   const [isChecking, setIsChecking] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
   const referrer = searchParams.get("ref");

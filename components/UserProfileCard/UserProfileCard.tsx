@@ -1,4 +1,4 @@
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import styles from "./UserProfileCard.module.css";
 import { useEffect, useState } from "react";
 import { supabase } from '@/lib/supabase';
@@ -9,7 +9,7 @@ interface UserRow {
 }
 
 export default function UserProfileCard() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [username, setUsername] = useState<string | null>(null);
   const [rank, setRank] = useState<number | null>(null);
 

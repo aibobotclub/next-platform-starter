@@ -7,11 +7,11 @@ import ReferralTree from './ReferralTree/ReferralTree';
 import ReferralList from './ReferralList/ReferralList';
 import styles from './ReferralPage.module.css';
 import { IoShareSocialOutline } from 'react-icons/io5';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 
 export default function ReferralPage() {
   const [showLink, setShowLink] = useState(false);
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const tabItems = [
     {
       key: 'tree',

@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { useSearchParams, useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useRegisterForm, RegisterFormValues } from '@/hooks/useRegisterForm';
@@ -29,7 +29,7 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ onClose, referrerAddress }: RegisterFormProps) {
   const [mounted, setMounted] = useState(false);
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { form, isLoading: isFormLoading, setIsLoading, error, setError, resetForm } = useRegisterForm();

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAccount } from 'wagmi';
 import styles from './ReferralLink.module.css';
 import { useTranslation } from 'react-i18next';
 import { FaFacebook, FaWhatsapp, FaTelegram, FaTwitter } from 'react-icons/fa';

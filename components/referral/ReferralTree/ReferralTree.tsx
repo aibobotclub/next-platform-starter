@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './ReferralTree.module.css';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ interface TreeNode {
 }
 
 export default function ReferralTree() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [treeData, setTreeData] = useState<TreeNode | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const { t } = useTranslation();

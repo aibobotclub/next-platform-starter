@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { HomeNavbar } from '@/components/home/navbar/HomeNavbar';
 import dynamic from 'next/dynamic';
@@ -16,7 +16,7 @@ interface RegisterPageProps {
 }
 
 export default function RegisterPage({ referrer }: RegisterPageProps) {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useAppKit();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isRegistered, isLoading } = useUserStatus();

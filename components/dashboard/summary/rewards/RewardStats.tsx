@@ -2,7 +2,7 @@
 import styles from "./RewardStats.module.css";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 
 interface RewardStatsData {
   task_reward: number;
@@ -12,7 +12,7 @@ interface RewardStatsData {
 }
 
 export default function RewardStats() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [stats, setStats] = useState<RewardStatsData | null>(null);
   const [loading, setLoading] = useState(false);
 

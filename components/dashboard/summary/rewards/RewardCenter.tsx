@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Tabs, Spin, Statistic, Card } from 'antd';
 import styles from './RewardCenter.module.css';
@@ -16,7 +16,7 @@ const rewardTypes = [
 ];
 
 export default function RewardCenter() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [loading, setLoading] = useState(true);
   const [rewardData, setRewardData] = useState<Record<string, any[]>>({});
   const [total, setTotal] = useState<Record<string, number>>({});

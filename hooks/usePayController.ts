@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { usePay } from '@reown/appkit-pay/react';
-import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
 import type { PaymentAsset as AppkitPaymentAsset } from '@reown/appkit-pay';
 import { useAppKit } from '@/hooks/useAppKit';
@@ -46,7 +45,7 @@ interface PaymentOptions {
 }
 
 export function usePayController(options: PaymentOptions) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, openModal } = useAppKit();
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPaymentInProgress, setIsPaymentInProgress] = useState(false);
@@ -54,7 +53,7 @@ export function usePayController(options: PaymentOptions) {
   const [error, setError] = useState<string | null>(null);
   const [paymentId, setPaymentId] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | null>(null);
-  const { isConnected: appkitConnected, openModal } = useAppKit();
+  const appkitConnected = isConnected;
 
   // Default to BSC USDT
   const defaultAsset: AppkitPaymentAsset = {

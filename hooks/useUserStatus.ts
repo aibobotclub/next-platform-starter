@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useAccount } from 'wagmi'
+import { useAppKit } from '@/hooks/useAppKit'
 import { supabase } from '@/lib/supabase'
 import { useUserStore } from '@/stores/useUserStore'
 
 export function useUserStatus() {
-  const { address } = useAccount()
+  const { address } = useAppKit()
   const [status, setStatus] = useState<{
     isRegistered: boolean;
     isLoading: boolean;

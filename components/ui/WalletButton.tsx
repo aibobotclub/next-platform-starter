@@ -1,12 +1,10 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import { Button } from "./button";
 import { useAppKit } from '@/hooks/useAppKit';
 
 export default function WalletButton() {
-  const { address } = useAccount();
-  const { openModal } = useAppKit();
+  const { address, openModal } = useAppKit();
 
   return (
     <Button onClick={openModal}>

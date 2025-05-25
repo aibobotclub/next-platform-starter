@@ -2,7 +2,7 @@ import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Card } from "@/components/ui/card";
 
@@ -12,7 +12,7 @@ interface SummaryCardProps {
 
 export default function SummaryCard({ onDetail }: SummaryCardProps) {
   // 真实数据state
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [tasksCompleted, setTasksCompleted] = useState(0);
   const [tasksTotal, setTasksTotal] = useState(0);
   const [rewardBalance, setRewardBalance] = useState(0);

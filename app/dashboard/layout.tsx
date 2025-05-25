@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/header/Header";
@@ -9,7 +9,7 @@ import TabBar from '@/components/dashboard/tabbar/TabBar';
 // Home page uses its own HomeNavbar in components/home/navbar/HomeNavbar.tsx
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isConnected } = useAccount();
+  const { isConnected } = useAppKit();
   const { isRegistered, isLoading } = useUserStatus();
   const router = useRouter();
 

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './ReferralList.module.css';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 
@@ -17,7 +17,7 @@ interface Referral {
 }
 
 export default function ReferralList() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [userId, setUserId] = useState<string>('');
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);

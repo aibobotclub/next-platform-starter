@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import styles from './OrderCenter.module.css';
 import OrderList from './OrderList';
 
 export default function OrderCenter() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

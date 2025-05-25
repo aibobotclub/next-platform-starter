@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard } from "lucide-react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { toast } from "sonner";
 import styles from "@/components/register/RegisterButton.module.css";
 
@@ -19,7 +19,7 @@ export default function DashboardButton({
   showIcon = true
 }: DashboardButtonProps) {
   const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useAppKit();
 
   const handleClick = async () => {
     if (!isConnected || !address) {

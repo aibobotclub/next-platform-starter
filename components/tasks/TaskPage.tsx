@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Typography, Tabs, Drawer, Spin, Button } from 'antd';
 import { HistoryOutlined } from '@ant-design/icons';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import TaskStat from './TaskStat/TaskStat';
 import TaskGroupCard from './TaskGroupCard/TaskGroupCard';
 import TaskDetails from './TaskDetails';
@@ -25,7 +25,7 @@ interface TaskGroupWithTasks extends TaskGroup {
 }
 
 export default function TaskPage() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [groups, setGroups] = useState<TaskGroupWithTasks[]>([]);
