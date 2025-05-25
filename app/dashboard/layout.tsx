@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppKit } from '@/hooks/useAppKit';
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { useRouter } from "next/navigation";
@@ -12,14 +12,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { isConnected } = useAppKit();
   const { isRegistered, isLoading } = useUserStatus();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     if (!isLoading && (!isConnected || !isRegistered)) {
       router.replace("/");
     }
-  }, [isConnected, isRegistered, isLoading, router]);
+  }, [mounted, isConnected, isRegistered, isLoading, router]);
 
-  if (!isConnected || isLoading || !isRegistered) {
+  if (!mounted || !isConnected || isLoading || !isRegistered) {
     return <div className="h-screen flex items-center justify-center text-xl">Checking...</div>;
   }
 
