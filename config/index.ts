@@ -1,10 +1,10 @@
 'use client'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
-import { AppKitNetwork, base } from '@reown/appkit/networks'
+import { AppKitNetwork,bsc } from '@reown/appkit/networks'
 import { createAppKit } from '@reown/appkit/react'
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || 'b56e18d47c72ab683b10814fe9495694'
-const networks = [base] as [AppKitNetwork, ...AppKitNetwork[]]
+const networks = [bsc] as [AppKitNetwork, ...AppKitNetwork[]]
 
 const wagmiAdapter = new WagmiAdapter({
   projectId,

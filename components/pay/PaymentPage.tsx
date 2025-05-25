@@ -2,13 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useAppkitPay } from '@/hooks/useAppkitPay';
 import { supabase } from '@/lib/supabase';
 import { Loader2, ArrowLeft, AlertCircle } from 'lucide-react';
 import styles from './PaymentPage.module.css';
+import { useAppKit } from '@/hooks/useAppKit';
 
 // 类型定义
 interface PaymentPageProps {
@@ -33,7 +33,7 @@ const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
 export default function PaymentPage({ productName, productPrice, productDesc }: PaymentPageProps) {
   // Hooks
   const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, openModal } = useAppKit();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reinvestAmount, setReinvestAmount] = useState<number>(0);
@@ -113,6 +113,22 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
         use_reinvest: useReinvest
       };
 
+      // 调用 handle-order-events 函数
+      const response = await fetch('/api/functions/handle-order-events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          txHash: data?.txHash,
+          orderData
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to trigger order events');
+      }
+
       const { error: dbError } = await supabase
         .from('orders')
         .insert([orderData]);
@@ -158,6 +174,10 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
   // 处理支付按钮点击
   function handlePay() {
+    if (!isConnected) {
+      openModal();
+      return;
+    }
     setError(null);
     pay();
   }

@@ -1,4 +1,5 @@
-import { useAccount, useContractRead } from 'wagmi';
+import { useContractRead } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { useState } from 'react';
 import { AIDA_REFERRAL_ABI } from '@/constants/abis';
 import { AIDA_REFERRAL_ADDRESS } from '@/constants/addresses';
@@ -17,7 +18,7 @@ interface ReferralData {
 }
 
 export function useReferral() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [error, setError] = useState<Error | null>(null);
   const [referralData, setReferralData] = useState<ReferralData | null>(null);
   const [isLoading, setIsLoading] = useState(false);

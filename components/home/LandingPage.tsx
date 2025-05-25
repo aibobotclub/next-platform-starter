@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useAccount, useConnect } from "wagmi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { HomeNavbar } from "./navbar/HomeNavbar";
@@ -15,7 +14,7 @@ import styles from "./HomePage.module.css";
 import RegisterForm from "@/components/register/RegisterForm";
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { supabase } from '@/lib/supabase';
-
+import { useAppKit } from '@/hooks/useAppKit';
 
 // 动态导入 Hero 组件
 const Hero = dynamic(() => import("./sections/Hero"), { 
@@ -32,7 +31,7 @@ const formatAddress = (address: string) => {
 };
 
 export default function LandingPage() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useAppKit();
   const { isRegistered, isLoading: isUserStatusLoading } = useUserStatus();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,13 +40,17 @@ export default function LandingPage() {
   const [referrerAddress, setReferrerAddress] = useState<string | null>(null);
   const [referrerInfo, setReferrerInfo] = useState<{address: string, username?: string} | null>(null);
 
+  useEffect(() => { setMounted(true); }, []);
+
   // Debug log for connection and registration status
   useEffect(() => {
+    if (!mounted) return;
     console.log('[LandingPage] isConnected:', isConnected, 'address:', address, 'isRegistered:', isRegistered, 'isLoading:', isUserStatusLoading);
-  }, [isConnected, address, isRegistered, isUserStatusLoading]);
+  }, [mounted, isConnected, address, isRegistered, isUserStatusLoading]);
 
   // 初始化，检查推荐关系
   useEffect(() => {
+    if (!mounted) return;
     setMounted(true);
     const referrer = searchParams?.get('referral');
     if (referrer && /^0x[a-fA-F0-9]{40}$/.test(referrer)) {
@@ -62,17 +65,19 @@ export default function LandingPage() {
       setReferrerInfo(null);
     }
     return () => setMounted(false);
-  }, [searchParams]);
+  }, [mounted, searchParams]);
 
   // 路由变化处理
   useEffect(() => {
+    if (!mounted) return;
     const handleRouteChange = () => setShowRegisterForm(false);
     window.addEventListener('popstate', handleRouteChange);
     return () => window.removeEventListener('popstate', handleRouteChange);
-  }, []);
+  }, [mounted]);
 
   // 检查用户状态并自动跳转
   useEffect(() => {
+    if (!mounted) return;
     if (!isUserStatusLoading && isConnected && !isRegistered) {
       console.log('[LandingPage] Wallet connected but not registered, redirecting to /register');
       if (referrerAddress) {
@@ -81,14 +86,15 @@ export default function LandingPage() {
         router.replace('/register');
       }
     }
-  }, [isConnected, isRegistered, isUserStatusLoading, router, referrerAddress]);
+  }, [mounted, isConnected, isRegistered, isUserStatusLoading, router, referrerAddress]);
 
   // 断开连接后刷新页面，确保按钮状态及时更新
   useEffect(() => {
+    if (!mounted) return;
     if (!isConnected && mounted) {
       router.refresh();
     }
-  }, [isConnected, mounted, router]);
+  }, [mounted, isConnected, router]);
 
   // 处理开始按钮点击
   const handleGetStarted = () => {
@@ -102,7 +108,7 @@ export default function LandingPage() {
     // 这里直接传递推荐人信息给RegisterForm
   };
 
-  if (isUserStatusLoading) {
+  if (!mounted || isUserStatusLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>

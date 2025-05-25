@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TaskProgressCard from "./TaskProgressCard";
 import { fetchTaskGroupsWithStats, fetchUserTaskStats } from "./fetchTaskGroups";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 
 export interface Task {
   id: string;
@@ -25,7 +25,7 @@ export interface TaskStats {
 }
 
 export default function TaskProgressCardContainer() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [groups, setGroups] = useState<TaskGroup[]>([]);
   const [stats, setStats] = useState<TaskStats | null>(null);
   const [loading, setLoading] = useState(true);

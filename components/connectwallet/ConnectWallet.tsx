@@ -1,21 +1,21 @@
 'use client'
 
-import { useDisconnect, useAppKit } from '@reown/appkit/react'
-import { useAccount } from 'wagmi';
+import { useDisconnect } from '@reown/appkit/react'
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import styles from "@/components/register/RegisterButton.module.css";
+import { useAppKit } from '@/hooks/useAppKit';
 
 interface ConnectWalletButtonProps {
   buttonText?: string;
   className?: string;
+  onConnected?: () => void;
 }
 
-export const ConnectWallet = ({ buttonText = "Connect Wallet", className }: ConnectWalletButtonProps) => {
+export const ConnectWallet = ({ buttonText = "Connect Wallet", className, onConnected }: ConnectWalletButtonProps) => {
     const { disconnect } = useDisconnect();
-    const { open } = useAppKit();
-    const { isConnected, address } = useAccount();
+    const { isConnected, openModal } = useAppKit();
     const router = useRouter();
 
     const handleDisconnect = async () => {
@@ -27,28 +27,22 @@ export const ConnectWallet = ({ buttonText = "Connect Wallet", className }: Conn
       }
     }
 
-    if (isConnected && address) {
+    if (isConnected) {
       return (
         <Button
-          className={cn(
-            styles.unifiedButton,
-            className
-          )}
-          onClick={() => open()}
+          className={cn(styles.unifiedButton, className)}
+          onClick={onConnected || openModal}
         >
           <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-300 animate-pulse mr-2"></span>
-           {address.slice(0, 6)}...{address.slice(-4)}
+          Connected
         </Button>
       )
     }
 
     return (
       <Button
-        className={cn(
-          styles.unifiedButton,
-          className
-        )}
-        onClick={() => open()}
+        className={cn(styles.unifiedButton, className)}
+        onClick={openModal}
       >
         <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-300 mr-2"></span>
         {buttonText}

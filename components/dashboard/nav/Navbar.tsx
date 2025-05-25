@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAppKit } from '@/hooks/useAppKit';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useDisconnect } from 'wagmi';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import styles from './NavBar.module.css';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -16,11 +16,9 @@ const navLinks = [
   { href: '/order', label: 'Orders' },
   { href: '/reward', label: 'Rewards' },
 ];
-
 const Navbar = () => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, openModal } = useAppKit();
   const { disconnect } = useDisconnect();
-  const { openModal } = useAppKit();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Format address for display

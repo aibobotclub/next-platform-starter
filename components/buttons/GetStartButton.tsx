@@ -1,8 +1,8 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { useUserStatus } from "@/hooks/useUserStatus";
-import ConnectWalletButton from "@/components/connectwallet/ConnectWallet";
+import ConnectWallet from "@/components/connectwallet/ConnectWallet";
 import DashboardButton from "@/components/buttons/DashboardButton";
 import styles from './GetStartButton.module.css'
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ interface GetStartButtonProps {
 }
 
 export default function GetStartButton({ onClick }: GetStartButtonProps) {
-  const { isConnected } = useAccount();
+  const { isConnected } = useAppKit();
   const { isRegistered, isLoading } = useUserStatus();
   const router = useRouter();
 
@@ -23,7 +23,7 @@ export default function GetStartButton({ onClick }: GetStartButtonProps) {
   if (!isConnected) {
     return (
       <div className={styles.buttonContainer}>
-        <ConnectWalletButton 
+        <ConnectWallet 
           buttonText="Connect Wallet"
           className={styles.getStartedButton}
         />
@@ -44,7 +44,7 @@ export default function GetStartButton({ onClick }: GetStartButtonProps) {
     );
   }
 
-  // 已连接且已注册
+  // 已连接且已注册，直接进入 Dashboard
   return (
     <div className={styles.buttonContainer}>
       <DashboardButton className={styles.getStartedButton} />

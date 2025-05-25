@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, Descriptions, Typography, Tag, Spin, Alert, Button, message } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import styles from './TaskDetails.module.css';
 
 const { Title } = Typography;
@@ -35,7 +35,7 @@ interface TaskDetailsProps {
 export default function TaskDetails({ taskId: propTaskId }: TaskDetailsProps) {
   const params = useParams();
   const router = useRouter();
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const taskId = propTaskId || (params?.taskId as string);
   const [taskGroup, setTaskGroup] = useState<TaskGroup | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);

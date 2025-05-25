@@ -2,7 +2,7 @@ import styles from "./SummaryCard.module.css";
 import SummaryItem from "./SummaryItem";
 import { FiCheckCircle, FiDollarSign, FiAward, FiUsers } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Card } from "@/components/ui/card";
 
@@ -12,7 +12,7 @@ interface SummaryCardProps {
 
 export default function SummaryCard({ onDetail }: SummaryCardProps) {
   // 真实数据state
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [tasksCompleted, setTasksCompleted] = useState(0);
   const [tasksTotal, setTasksTotal] = useState(0);
   const [rewardBalance, setRewardBalance] = useState(0);
@@ -37,9 +37,14 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
           if (balRes.data) setRewardBalance(balRes.data.reward_balance || 0);
         });
         // 查询推荐人数
-        supabase.from('user_referral_tree_view').select('*').eq('parent_id', userRes.data.id).then(refRes => {
-          setReferralCount(refRes.data ? refRes.data.length : 0);
-        });
+        supabase
+          .from('referral_list_view')
+          .select('referred_id')
+          .eq('root_user_id', userRes.data.id)
+          .eq('level', 1)
+          .then(refRes => {
+            setReferralCount(refRes.data ? refRes.data.length : 0);
+          });
       }
     });
   }, [address]);

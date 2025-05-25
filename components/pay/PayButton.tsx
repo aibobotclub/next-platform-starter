@@ -1,4 +1,5 @@
-import { useDisconnect, useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { useDisconnect } from '@reown/appkit/react';
+import { useAppKit } from '@/hooks/useAppKit';
 import { usePayController } from '@/hooks/usePayController';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -25,22 +26,12 @@ interface PayButtonProps {
 
 export function PayButton({ amount, onSuccess, onError, onClose }: PayButtonProps) {
   const { disconnect } = useDisconnect();
-  const { open } = useAppKit();
-  const { address } = useAppKitAccount();
+  const { openModal, address } = useAppKit();
   
   const { handlePayWithWallet, isPaymentInProgress } = usePayController({
     amount,
-    useRebuyFund: false,
-    onSuccess: (data) => {
-      console.log("Payment successful:", data);
-      toast.success("Payment successful");
-      onSuccess?.(data);
-    },
-    onError: (error) => {
-      console.error("Payment error:", error);
-      toast.error("Payment failed");
-      onError?.(error);
-    },
+    onSuccess,
+    onError
   });
 
   const handleDisconnect = async () => {
@@ -53,37 +44,27 @@ export function PayButton({ amount, onSuccess, onError, onClose }: PayButtonProp
     }
   };
 
-  const handlePay = async () => {
-    if (!address) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    try {
-      await handlePayWithWallet();
-    } catch (error) {
-      console.error("Failed to open payment:", error);
-      toast.error("Failed to open payment");
-    }
-  };
+  if (!address) {
+    return (
+      <Button onClick={openModal} className={styles.payButton}>
+        Connect Wallet
+      </Button>
+    );
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.buttonGroup}>
-        {!address ? (
-          <Button onClick={() => open()} className="unifiedButton">
-            Connect Wallet
-          </Button>
-        ) : (
-          <>
-            <Button onClick={handlePay} className="unifiedButton" disabled={isPaymentInProgress}>
-              {isPaymentInProgress ? "Processing..." : "Pay Now"}
-            </Button>
-            <Button onClick={handleDisconnect} className="unifiedButton">
-              Disconnect
-            </Button>
-          </>
-        )}
+        <Button 
+          onClick={handlePayWithWallet}
+          disabled={isPaymentInProgress}
+          className={styles.payButton}
+        >
+          {isPaymentInProgress ? 'Processing...' : 'Pay Now'}
+        </Button>
+        <Button onClick={handleDisconnect} className="unifiedButton">
+          Disconnect
+        </Button>
       </div>
     </div>
   );

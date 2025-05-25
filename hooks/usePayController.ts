@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { usePay } from '@reown/appkit-pay/react';
-import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
 import type { PaymentAsset as AppkitPaymentAsset } from '@reown/appkit-pay';
+import { useAppKit } from '@/hooks/useAppKit';
 
 interface PaymentAsset {
   network: `eip155:${string}` | `eip155:${number}`;
@@ -45,7 +45,7 @@ interface PaymentOptions {
 }
 
 export function usePayController(options: PaymentOptions) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, openModal } = useAppKit();
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPaymentInProgress, setIsPaymentInProgress] = useState(false);
@@ -53,14 +53,15 @@ export function usePayController(options: PaymentOptions) {
   const [error, setError] = useState<string | null>(null);
   const [paymentId, setPaymentId] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | null>(null);
+  const appkitConnected = isConnected;
 
-  // Default to OP chain USDT
+  // Default to BSC USDT
   const defaultAsset: AppkitPaymentAsset = {
-    network: 'eip155:10' as `eip155:${string}`,
-    asset: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
+    network: 'eip155:56' as `eip155:${string}`,
+    asset: '0x55d398326f99059fF775485246999027B3197955',
     metadata: {
       symbol: 'USDT',
-      decimals: 6,
+      decimals: 18,
       name: 'Tether USD',
     },
   };
@@ -122,8 +123,9 @@ export function usePayController(options: PaymentOptions) {
   }, [address]);
 
   const handlePayWithWallet = useCallback(async () => {
-    if (!isConnected || !address) {
+    if (!appkitConnected || !address) {
       setError('Please connect your wallet first');
+      await openModal();
       return;
     }
 
@@ -161,7 +163,7 @@ export function usePayController(options: PaymentOptions) {
     } finally {
       setIsPaymentInProgress(false);
     }
-  }, [isConnected, address, options.useRebuyFund, payWithRebuyFund, openPay]);
+  }, [appkitConnected, address, options.useRebuyFund, payWithRebuyFund, openPay, openModal]);
 
   const handlePayWithExchange = useCallback(async (exchangeId: string): Promise<PaymentResult | null> => {
     try {
@@ -174,10 +176,17 @@ export function usePayController(options: PaymentOptions) {
       });
       setPaymentId(crypto.randomUUID());
 
-      // Implement exchange payment logic here
-      console.log('Paying with exchange:', exchangeId);
+      // 调用 Appkit 的 openPay，传递 exchangeId
+      const payParams: any = {
+        paymentAsset: defaultAsset,
+        recipient,
+        amount: options.amount,
+      };
+      if (exchangeId) payParams.exchangeId = exchangeId;
+      await openPay(payParams);
+      // openPay会自动处理跳转或弹窗，这里无需返回url
       return {
-        url: 'https://example.com/pay',
+        url: '',
         openInNewTab: true
       };
     } catch (err: any) {
@@ -186,7 +195,7 @@ export function usePayController(options: PaymentOptions) {
       setCurrentPayment(prev => prev ? { ...prev, status: 'FAILED' } : null);
       return null;
     }
-  }, []);
+  }, [openPay, options.amount, recipient, defaultAsset]);
 
   const updateBuyStatus = useCallback(async (exchangeId: string, sessionId: string) => {
     try {

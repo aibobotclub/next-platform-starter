@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Card, Spin } from 'antd';
 import styles from './BalanceCard.module.css';
 
 export default function BalanceCard() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState<Record<string, number>>({
     total: 0,

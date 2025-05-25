@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { fetchTaskGroupsWithStats, fetchUserTaskStats } from "@/components/dashboard/summary/tasks/fetchTaskGroups";
 import TaskProgressCard, { TaskGroup, TaskStats } from "@/components/tasks/TaskProgressCard/TaskProgressCard";
 
 export default function TaskHistoryDrawer() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const [groups, setGroups] = useState<TaskGroup[]>([]);
   const [stats, setStats] = useState<TaskStats | null>(null);
   const [loading, setLoading] = useState(true);

@@ -99,6 +99,13 @@ export type Database = {
             foreignKeyName: "activation_codes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "activation_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -219,6 +226,13 @@ export type Database = {
             foreignKeyName: "fk_divstat_user"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_divstat_user"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -307,6 +321,13 @@ export type Database = {
             foreignKeyName: "fk_div_user"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -368,6 +389,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -463,6 +491,13 @@ export type Database = {
             foreignKeyName: "orders_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -542,6 +577,13 @@ export type Database = {
             foreignKeyName: "pending_task_rewards_referred_id_fkey"
             columns: ["referred_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "pending_task_rewards_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -578,6 +620,13 @@ export type Database = {
             columns: ["referrer_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "pending_task_rewards_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -660,6 +709,13 @@ export type Database = {
             foreignKeyName: "referrals_referred_id_fkey"
             columns: ["referred_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "referrals_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -696,6 +752,13 @@ export type Database = {
             columns: ["referrer_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -782,6 +845,13 @@ export type Database = {
             foreignKeyName: "reward_details_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "reward_details_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -856,6 +926,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "task_groups_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -950,6 +1027,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tasks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -1062,6 +1146,13 @@ export type Database = {
             foreignKeyName: "transactions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1129,6 +1220,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "user_balance_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -1234,6 +1332,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_task_stats"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "fk_div_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_total_rewards"
             referencedColumns: ["user_id"]
           },
           {
@@ -1373,6 +1478,13 @@ export type Database = {
             foreignKeyName: "pending_task_rewards_referred_id_fkey"
             columns: ["referred_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "pending_task_rewards_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1415,10 +1527,33 @@ export type Database = {
             foreignKeyName: "pending_task_rewards_referrer_id_fkey"
             columns: ["referrer_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "pending_task_rewards_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
+      }
+      referral_list_view: {
+        Row: {
+          created_at: string | null
+          level: number | null
+          path: string[] | null
+          rank: number | null
+          referred_id: string | null
+          referred_wallet: string | null
+          referrer_id: string | null
+          referrer_wallet: string | null
+          root_user_id: string | null
+          root_wallet: string | null
+          username: string | null
+        }
+        Relationships: []
       }
       task_status_summary: {
         Row: {
@@ -1469,22 +1604,17 @@ export type Database = {
             foreignKeyName: "tasks_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tasks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
-      }
-      user_referral_tree_view: {
-        Row: {
-          full_path: string | null
-          level: number | null
-          parent_id: string | null
-          parent_name: string | null
-          user_id: string | null
-          user_name: string | null
-          user_rank: number | null
-        }
-        Relationships: []
       }
       user_task_groups_with_stats: {
         Row: {
@@ -1538,6 +1668,13 @@ export type Database = {
             foreignKeyName: "task_groups_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_total_rewards"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "task_groups_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1579,6 +1716,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_total_rewards: {
+        Row: {
+          global_dividend_reward: number | null
+          task_reward: number | null
+          team_bonus_reward: number | null
+          total_reward: number | null
+          user_id: string | null
+          username: string | null
+          wallet_address: string | null
+        }
+        Insert: {
+          global_dividend_reward?: never
+          task_reward?: never
+          team_bonus_reward?: never
+          total_reward?: never
+          user_id?: string | null
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Update: {
+          global_dividend_reward?: never
+          task_reward?: never
+          team_bonus_reward?: never
+          total_reward?: never
+          user_id?: string | null
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_and_trigger_global_dividend: {
@@ -1604,6 +1771,24 @@ export type Database = {
       fix_user_missing_taskgroups: {
         Args: { user_id: string }
         Returns: undefined
+      }
+      get_global_dividend_sum: {
+        Args: { user_id: string }
+        Returns: {
+          total_global_dividend: number
+        }[]
+      }
+      get_task_reward_sum: {
+        Args: { user_id: string }
+        Returns: {
+          total_task_reward: number
+        }[]
+      }
+      get_team_bonus_sum: {
+        Args: { user_id: string }
+        Returns: {
+          total_team_bonus: number
+        }[]
       }
       process_global_dividend_reward: {
         Args: Record<PropertyKey, never>

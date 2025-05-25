@@ -1,15 +1,13 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import { Button } from "./button";
-import { useAppKit } from "@reown/appkit/react";
+import { useAppKit } from '@/hooks/useAppKit';
 
 export default function WalletButton() {
-  const { address } = useAccount();
-  const { open } = useAppKit();
+  const { address, openModal } = useAppKit();
 
   return (
-    <Button onClick={() => open({ view: address ? "Account" : "Connect" })}>
+    <Button onClick={openModal}>
       {address
         ? `${address.slice(0, 6)}...${address.slice(-4)}`
         : "Connect Wallet"}

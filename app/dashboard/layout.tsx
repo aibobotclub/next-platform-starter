@@ -1,6 +1,6 @@
 'use client';
-import React, { useEffect } from "react";
-import { useAccount } from "wagmi";
+import React, { useEffect, useState } from "react";
+import { useAppKit } from '@/hooks/useAppKit';
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/header/Header";
@@ -9,17 +9,21 @@ import TabBar from '@/components/dashboard/tabbar/TabBar';
 // Home page uses its own HomeNavbar in components/home/navbar/HomeNavbar.tsx
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isConnected } = useAccount();
+  const { isConnected } = useAppKit();
   const { isRegistered, isLoading } = useUserStatus();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     if (!isLoading && (!isConnected || !isRegistered)) {
       router.replace("/");
     }
-  }, [isConnected, isRegistered, isLoading, router]);
+  }, [mounted, isConnected, isRegistered, isLoading, router]);
 
-  if (!isConnected || isLoading || !isRegistered) {
+  if (!mounted || !isConnected || isLoading || !isRegistered) {
     return <div className="h-screen flex items-center justify-center text-xl">Checking...</div>;
   }
 

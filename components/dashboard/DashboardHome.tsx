@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { toast } from "sonner";
 import styles from "./DashboardHome.module.css";
@@ -30,7 +30,7 @@ function ReferralStats() {
 }
 
 export default function DashboardHome() {
-  const { address } = useAccount();
+  const { address } = useAppKit();
   const { isRegistered } = useUserStore();
   const [showDetail, setShowDetail] = useState(false);
   const [detailType, setDetailType] = useState<'tasks'|'balance'|'rewards'|'referral'|null>(null);

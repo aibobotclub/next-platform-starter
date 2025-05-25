@@ -7,15 +7,10 @@ interface CaipNetwork {
 
 export function useChainController() {
   const getAllRequestedCaipNetworks = useCallback((): CaipNetwork[] => {
-    // 这里实现获取所有支持的链的逻辑
     return [
       {
-        caipNetworkId: 'eip155:10',
-        name: 'Optimism'
-      },
-      {
-        caipNetworkId: 'eip155:1',
-        name: 'Ethereum'
+        caipNetworkId: 'eip155:56',
+        name: 'BSC'
       }
     ];
   }, []);
