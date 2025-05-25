@@ -45,12 +45,14 @@ export default function LandingPage() {
   // Debug log for connection and registration status
   useEffect(() => {
     if (!mounted) return;
+    console.log('[LandingPage] useEffect-1', { mounted, isConnected, address, isRegistered, isUserStatusLoading, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     console.log('[LandingPage] isConnected:', isConnected, 'address:', address, 'isRegistered:', isRegistered, 'isLoading:', isUserStatusLoading);
   }, [mounted, isConnected, address, isRegistered, isUserStatusLoading]);
 
   // 初始化，检查推荐关系
   useEffect(() => {
     if (!mounted) return;
+    console.log('[LandingPage] useEffect-2', { mounted, searchParams: searchParams?.toString(), pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     setMounted(true);
     const referrer = searchParams?.get('referral');
     if (referrer && /^0x[a-fA-F0-9]{40}$/.test(referrer)) {
@@ -70,6 +72,7 @@ export default function LandingPage() {
   // 路由变化处理
   useEffect(() => {
     if (!mounted) return;
+    console.log('[LandingPage] useEffect-3', { mounted, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     const handleRouteChange = () => setShowRegisterForm(false);
     window.addEventListener('popstate', handleRouteChange);
     return () => window.removeEventListener('popstate', handleRouteChange);
@@ -78,6 +81,7 @@ export default function LandingPage() {
   // 检查用户状态并自动跳转
   useEffect(() => {
     if (!mounted) return;
+    console.log('[LandingPage] useEffect-4', { mounted, isConnected, isRegistered, isUserStatusLoading, referrerAddress, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     if (!isUserStatusLoading && isConnected && !isRegistered) {
       console.log('[LandingPage] Wallet connected but not registered, redirecting to /register');
       if (referrerAddress) {
@@ -91,6 +95,7 @@ export default function LandingPage() {
   // 断开连接后刷新页面，确保按钮状态及时更新
   useEffect(() => {
     if (!mounted) return;
+    console.log('[LandingPage] useEffect-5', { mounted, isConnected, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     if (!isConnected && mounted) {
       router.refresh();
     }

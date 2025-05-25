@@ -17,6 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
+    console.log('[dashboard/layout] useEffect', { mounted, isConnected, isRegistered, isLoading, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     if (!mounted) return;
     if (!isLoading && (!isConnected || !isRegistered)) {
       router.replace("/");

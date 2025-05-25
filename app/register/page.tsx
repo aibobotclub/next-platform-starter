@@ -20,6 +20,7 @@ export default function Page() {
 
   // 自动弹出钱包连接
   useEffect(() => {
+    console.log('[register/page] useEffect-1', { mounted, isConnected, address, retryCount, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     if (!mounted) return;
     let timeoutId: NodeJS.Timeout;
     if (!isConnected || !address) {
@@ -38,6 +39,7 @@ export default function Page() {
 
   // 钱包连接后自动检查注册状态并跳转
   useEffect(() => {
+    console.log('[register/page] useEffect-2', { mounted, isConnected, isRegistered, isLoading, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
     if (!mounted) return;
     if (isConnected && !isLoading) {
       if (isRegistered) {

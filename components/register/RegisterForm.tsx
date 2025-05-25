@@ -114,7 +114,9 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
 
       toast.success("Registration successful! Please login");
       resetForm();
+      console.log('[RegisterForm] 注册成功，准备 refresh 注册状态');
       await refresh();
+      console.log('[RegisterForm] refresh 后，跳转 dashboard');
       router.replace("/dashboard");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
