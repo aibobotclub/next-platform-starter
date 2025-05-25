@@ -40,9 +40,20 @@ export function useAppkitPay({
   const { isConnected } = useAccount();
 
   const { open: openPay, isPending: payPending } = usePay({
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       setTxHash(data?.txHash || '');
       setIsPending(false);
+      // 支付成功后调用handle-order-events
+      try {
+        await fetch('/api/functions/handle-order-events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ txHash: data?.txHash }),
+        });
+      } catch (e) {
+        // 可选：处理调用失败
+        console.error('handle-order-events调用失败', e);
+      }
       if (onSuccess) onSuccess(data);
     },
     onError: (err: any) => {
