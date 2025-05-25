@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { usePay } from '@reown/appkit-pay/react';
 import { supabase } from '@/lib/supabase';
 import type { PaymentAsset as AppkitPaymentAsset } from '@reown/appkit-pay';
@@ -55,16 +55,15 @@ export function usePayController(options: PaymentOptions) {
   const [txHash, setTxHash] = useState<string | null>(null);
   const appkitConnected = isConnected;
 
-  // Default to BSC USDT
-  const defaultAsset: AppkitPaymentAsset = {
+  const defaultAsset = useMemo<AppkitPaymentAsset>(() => ({
     network: 'eip155:56' as `eip155:${string}`,
     asset: '0x55d398326f99059fF775485246999027B3197955',
     metadata: {
       symbol: 'USDT',
-      decimals: 18,
+      decimals: 6,
       name: 'Tether USD',
     },
-  };
+  }), []);
 
   // 使用固定的收款地址
   const recipient = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
@@ -159,7 +158,7 @@ export function usePayController(options: PaymentOptions) {
     } finally {
       setIsPaymentInProgress(false);
     }
-  }, [appkitConnected, address, options.useRebuyFund, payWithRebuyFund, openPay, openModal]);
+  }, [appkitConnected, address, payWithRebuyFund, openPay, openModal, defaultAsset, options]);
 
   const handlePayWithExchange = useCallback(async (exchangeId: string): Promise<PaymentResult | null> => {
     try {
@@ -191,7 +190,7 @@ export function usePayController(options: PaymentOptions) {
       setCurrentPayment(prev => prev ? { ...prev, status: 'FAILED' } : null);
       return null;
     }
-  }, [openPay, options.amount, recipient, defaultAsset]);
+  }, [openPay, options.amount, recipient, defaultAsset, options]);
 
   const updateBuyStatus = useCallback(async (exchangeId: string, sessionId: string) => {
     try {
