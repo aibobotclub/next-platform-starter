@@ -45,28 +45,28 @@ export default function SummaryCard() {
       <div className={styles.summaryStats}>
         <SummaryItem
           icon="task"
-          title="任务完成"
+          title="Tasks Completed"
           value={tasksCompleted}
           total={tasksTotal}
           href="/dashboard/tasks"
         />
         <SummaryItem
           icon="wallet"
-          title="奖励余额"
+          title="Reward Balance"
           value={rewardBalance}
           unit="USDT"
           href="/dashboard/balance"
         />
         <SummaryItem
           icon="reward"
-          title="累计奖励"
+          title="Total Reward"
           value={totalReward}
           unit="USDT"
           href="/dashboard/rewards"
         />
         <SummaryItem
           icon="referral"
-          title="直推人数"
+          title="Referral"
           value={referralCount}
           href="/dashboard/referrals"
         />
