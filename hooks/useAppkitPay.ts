@@ -38,7 +38,7 @@ export function useAppkitPay({
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
-  const { isConnected, openModal } = useAppKit();
+  const { isConnected, openModal, address } = useAppKit();
 
   const { open: openPay, isPending: payPending } = usePay({
     onSuccess: async (data: any) => {
@@ -67,13 +67,7 @@ export function useAppkitPay({
   const pay = async () => {
     setError(null);
     await openModal?.(); // 强制刷新连接
-    if (!isConnected) {
-      setError('Please connect your wallet');
-      setIsPending(false);
-      if (onError) onError('Please connect your wallet');
-      return;
-    }
-    setIsPending(true);
+    console.log('[useAppkitPay/pay] isConnected:', isConnected, 'address:', address);
     try {
       await openPay({
         paymentAsset: bscUSDT,
@@ -98,6 +92,7 @@ export function useAppkitPay({
       setError(typeof err === 'string' ? err : err?.message || 'Payment failed');
       setIsPending(false);
       if (onError) onError(err);
+      console.error('[useAppkitPay/pay] openPay error:', err);
     }
   };
 
