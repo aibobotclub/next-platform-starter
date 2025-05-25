@@ -12,11 +12,15 @@ export default function Page() {
   const { isConnected, address, openModal } = useAppKit();
   const [isChecking, setIsChecking] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const referrer = searchParams.get("ref");
   const { isRegistered, isLoading } = useUserStatus();
 
+  useEffect(() => { setMounted(true); }, []);
+
   // 自动弹出钱包连接
   useEffect(() => {
+    if (!mounted) return;
     let timeoutId: NodeJS.Timeout;
     if (!isConnected || !address) {
       if (retryCount < 3) {
@@ -30,10 +34,11 @@ export default function Page() {
       }
       return () => { if (timeoutId) clearTimeout(timeoutId); };
     }
-  }, [isConnected, address, retryCount, openModal, router]);
+  }, [mounted, isConnected, address, retryCount, openModal, router]);
 
   // 钱包连接后自动检查注册状态并跳转
   useEffect(() => {
+    if (!mounted) return;
     if (isConnected && !isLoading) {
       if (isRegistered) {
         router.replace("/dashboard");
@@ -41,9 +46,9 @@ export default function Page() {
         setIsChecking(false);
       }
     }
-  }, [isConnected, isRegistered, isLoading, router]);
+  }, [mounted, isConnected, isRegistered, isLoading, router]);
 
-  if (isChecking || isLoading) {
+  if (!mounted || isChecking || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

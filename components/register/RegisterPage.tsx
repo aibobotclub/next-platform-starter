@@ -21,22 +21,27 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
   const searchParams = useSearchParams();
   const { isRegistered, isLoading } = useUserStatus();
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     if (isRegistered) {
       router.replace('/dashboard');
     }
-  }, [isRegistered, router]);
+  }, [mounted, isRegistered, router]);
 
   // 自动弹出注册表单
   useEffect(() => {
+    if (!mounted) return;
     if (isConnected && !isRegistered) {
       setShowRegisterForm(true);
     }
-  }, [isConnected, isRegistered]);
+  }, [mounted, isConnected, isRegistered]);
 
   // 未连接钱包或地址无效时只显示连接钱包按钮
-  if (!isConnected || !address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+  if (!mounted || !isConnected || !address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
     return (
       <div className={styles.container}>
         <HomeNavbar />
