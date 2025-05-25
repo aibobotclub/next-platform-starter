@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Card } from "@/components/ui/card";
+import BalanceCard from "./balance/BalanceCard";
+import RewardStats from "./rewards/RewardStats";
+import TastStatsDetails from "./tasks/TastStatsDetails";
 
-export default function SummaryCard() {
+interface SummaryCardProps {
+  onDetail?: (type: 'tasks' | 'balance' | 'rewards' | 'referral') => void;
+}
+
+export default function SummaryCard({ onDetail }: SummaryCardProps) {
   const { address } = useAppKit();
   const [tasksCompleted, setTasksCompleted] = useState(0);
   const [tasksTotal, setTasksTotal] = useState(0);
@@ -48,28 +55,37 @@ export default function SummaryCard() {
           title="Tasks Completed"
           value={tasksCompleted}
           total={tasksTotal}
-          href="/dashboard/tasks"
+          href="#"
+          onClick={() => onDetail && onDetail('tasks')}
         />
         <SummaryItem
           icon="wallet"
           title="Reward Balance"
           value={rewardBalance}
           unit="USDT"
-          href="/dashboard/balance"
+          href="#"
+          onClick={() => onDetail && onDetail('balance')}
         />
         <SummaryItem
           icon="reward"
           title="Total Reward"
           value={totalReward}
           unit="USDT"
-          href="/dashboard/rewards"
+          href="#"
+          onClick={() => onDetail && onDetail('rewards')}
         />
         <SummaryItem
           icon="referral"
           title="Referral"
           value={referralCount}
-          href="/dashboard/referrals"
+          href="#"
+          onClick={() => onDetail && onDetail('referral')}
         />
+      </div>
+      <div className={styles.summaryExtra}>
+        <BalanceCard />
+        <RewardStats />
+        <TastStatsDetails />
       </div>
     </Card>
   );

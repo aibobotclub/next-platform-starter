@@ -8,18 +8,21 @@ interface SummaryItemProps {
   unit?: string;
   icon: "wallet" | "task" | "reward" | "referral";
   href: string;
+  onClick?: () => void;
 }
 
-export default function SummaryItem({ title, value, total, unit, icon, href }: SummaryItemProps) {
+export default function SummaryItem({ title, value, total, unit, icon, href, onClick }: SummaryItemProps) {
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push(href);
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onClick) onClick();
+    else if (href && href !== "#") router.push(href);
   };
 
   return (
-    <div className={styles.summaryItem} onClick={handleClick}>
-      <div className={styles.itemIcon}>
+    <button className={styles.summaryItem} onClick={handleClick} tabIndex={0} aria-label={title} type="button">
+      <div className={styles.itemIcon} aria-hidden>
         {icon === "wallet" && "💰"}
         {icon === "task" && "✅"}
         {icon === "reward" && "🎁"}
@@ -32,6 +35,6 @@ export default function SummaryItem({ title, value, total, unit, icon, href }: S
           {unit && <span className={styles.itemUnit}>{unit}</span>}
         </div>
       </div>
-    </div>
+    </button>
   );
 }
