@@ -3,6 +3,7 @@ import { usePay } from '@reown/appkit-pay/react';
 import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
 import type { PaymentAsset as AppkitPaymentAsset } from '@reown/appkit-pay';
+import { useAppKit } from '@/hooks/useAppKit';
 
 interface PaymentAsset {
   network: `eip155:${string}` | `eip155:${number}`;
@@ -53,6 +54,7 @@ export function usePayController(options: PaymentOptions) {
   const [error, setError] = useState<string | null>(null);
   const [paymentId, setPaymentId] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | null>(null);
+  const { isConnected: appkitConnected, openModal } = useAppKit();
 
   // Default to BSC USDT
   const defaultAsset: AppkitPaymentAsset = {
@@ -122,8 +124,9 @@ export function usePayController(options: PaymentOptions) {
   }, [address]);
 
   const handlePayWithWallet = useCallback(async () => {
-    if (!isConnected || !address) {
+    if (!appkitConnected || !address) {
       setError('Please connect your wallet first');
+      await openModal();
       return;
     }
 
@@ -161,7 +164,7 @@ export function usePayController(options: PaymentOptions) {
     } finally {
       setIsPaymentInProgress(false);
     }
-  }, [isConnected, address, options.useRebuyFund, payWithRebuyFund, openPay]);
+  }, [appkitConnected, address, options.useRebuyFund, payWithRebuyFund, openPay, openModal]);
 
   const handlePayWithExchange = useCallback(async (exchangeId: string): Promise<PaymentResult | null> => {
     try {

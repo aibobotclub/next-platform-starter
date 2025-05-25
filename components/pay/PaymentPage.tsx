@@ -9,6 +9,7 @@ import { useAppkitPay } from '@/hooks/useAppkitPay';
 import { supabase } from '@/lib/supabase';
 import { Loader2, ArrowLeft, AlertCircle } from 'lucide-react';
 import styles from './PaymentPage.module.css';
+import { useAppKit } from '@/hooks/useAppKit';
 
 // 类型定义
 interface PaymentPageProps {
@@ -39,6 +40,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
   const [reinvestAmount, setReinvestAmount] = useState<number>(0);
   const [useReinvest, setUseReinvest] = useState(false);
   const [checkingReinvest, setCheckingReinvest] = useState(true);
+  const { isConnected: appkitConnected, openModal } = useAppKit();
 
   // 验证产品信息
   useEffect(() => {
@@ -174,8 +176,8 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
   // 处理支付按钮点击
   function handlePay() {
-    if (!isConnected) {
-      toast.error("Please connect your wallet first");
+    if (!appkitConnected) {
+      openModal();
       return;
     }
     setError(null);
@@ -284,7 +286,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
             <Button
               className={styles.payButton}
               onClick={handlePay}
-              disabled={!isConnected || isPending || loading}
+              disabled={!appkitConnected || isPending || loading}
               aria-busy={isPending || loading}
             >
               {loading ? (
@@ -297,7 +299,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
                   <Loader2 className="w-5 h-5 animate-spin" />
                   Waiting for confirmation...
                 </>
-              ) : isConnected ? (
+              ) : appkitConnected ? (
                 `Pay ${finalAmount} USDT`
               ) : (
                 'Connect wallet to pay'
