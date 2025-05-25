@@ -33,7 +33,7 @@ const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
 export default function PaymentPage({ productName, productPrice, productDesc }: PaymentPageProps) {
   // Hooks
   const router = useRouter();
-  const { isConnected, address, openModal } = useAppKit();
+  const { isConnected, address, openModal, chainId, switchNetwork } = useAppKit();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reinvestAmount, setReinvestAmount] = useState<number>(0);
@@ -175,6 +175,11 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
   // 处理支付按钮点击
   async function handlePay() {
     await openModal(); // 强制刷新连接
+    if (chainId !== 56) {
+      toast.error('Please switch to BSC network');
+      await switchNetwork?.(56);
+      return;
+    }
     if (!isConnected) {
       setError('Please connect your wallet');
       return;
