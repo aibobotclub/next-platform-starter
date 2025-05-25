@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useDisconnect } from '@reown/appkit/react';
-import { useAppKit } from '@/hooks/useAppKit';
 import { usePay } from '@reown/appkit-pay/react';
-import { baseSepoliaETH } from '@reown/appkit-pay';
+import { useAppKit } from '@/hooks/useAppKit';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import styles from './PaymentView.module.css';
+import { createPublicClient, http } from 'viem';
+import { bsc } from 'viem/chains';
 
 interface PaymentViewProps {
   amount: number;
@@ -15,15 +15,49 @@ interface PaymentViewProps {
   onClose?: () => void;
 }
 
+// BSC 主网 USDT 资产定义
+const bscUSDT = {
+  chainId: 56,
+  network: `eip155:56` as const,
+  address: '0x55d398326f99059fF775485246999027B3197955',
+  asset: '0x55d398326f99059fF775485246999027B3197955',
+  symbol: 'USDT',
+  decimals: 6,
+  name: 'Tether USD',
+  logoURI: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+  metadata: {
+    name: 'Tether USD',
+    symbol: 'USDT',
+    decimals: 6,
+  },
+};
+
+const client = createPublicClient({
+  chain: bsc,
+  transport: http(),
+});
+
 export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentViewProps) {
-  const { disconnect } = useDisconnect();
-  const { openModal } = useAppKit();
-  const { address } = useAppKit();
+  const { openModal, address } = useAppKit();
+
   const { open: openPay, isPending, isSuccess, data, error } = usePay({
-    onSuccess: (data) => {
-      console.log("Payment successful:", data);
-      toast.success("Payment successful");
-      onSuccess?.(data);
+    onSuccess: async (data) => {
+      const txHash = data?.txHash;
+      toast("Waiting for blockchain confirmation...");
+
+      try {
+        const receipt = await client.waitForTransactionReceipt({ hash: txHash });
+        if (receipt.status === 'success') {
+          toast.success("Payment confirmed!");
+          onSuccess?.(data);
+        } else {
+          toast.error("Transaction failed");
+        }
+      } catch (e) {
+        console.error("Error confirming transaction:", e);
+        toast.error("Failed to confirm payment");
+        onError?.(e);
+      }
     },
     onError: (error) => {
       console.error("Payment error:", error);
@@ -31,16 +65,6 @@ export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentView
       onError?.(error);
     },
   });
-
-  const handleDisconnect = async () => {
-    try {
-      await disconnect();
-      toast.success("Wallet disconnected");
-    } catch (error) {
-      console.error("Failed to disconnect:", error);
-      toast.error("Failed to disconnect wallet");
-    }
-  };
 
   const handlePay = async () => {
     if (!address) {
@@ -50,9 +74,9 @@ export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentView
 
     try {
       await openPay({
-        paymentAsset: baseSepoliaETH,
+        paymentAsset: bscUSDT,
         recipient: address,
-        amount: amount
+        amount: amount,
       });
     } catch (error) {
       console.error("Failed to open payment:", error);
@@ -64,18 +88,13 @@ export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentView
     <div className={styles.container}>
       <div className={styles.buttonGroup}>
         {!address ? (
-          <Button onClick={() => openModal()} className="unifiedButton">
+          <Button onClick={openModal} className="unifiedButton">
             Connect Wallet
           </Button>
         ) : (
-          <>
-            <Button onClick={handlePay} className="unifiedButton" disabled={isPending}>
-              {isPending ? "Processing..." : "Pay Now"}
-            </Button>
-            <Button onClick={handleDisconnect} className="unifiedButton">
-              Disconnect
-            </Button>
-          </>
+          <Button onClick={handlePay} className="unifiedButton" disabled={isPending}>
+            {isPending ? "Processing..." : "Pay Now"}
+          </Button>
         )}
       </div>
 
@@ -83,16 +102,16 @@ export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentView
         <div className={styles.statusSection}>
           <h2>Payment Status</h2>
           {isSuccess && (
-            <p className={styles.successMessage}>Payment successful: {data}</p>
+            <p className={styles.successMessage}>Payment successful: {data?.txHash}</p>
           )}
           {isPending && (
-            <p className={styles.pendingMessage}>Payment pending: {data}</p>
+            <p className={styles.pendingMessage}>Payment pending...</p>
           )}
           {error && (
-            <p className={styles.errorMessage}>Payment error: {error}</p>
+            <p className={styles.errorMessage}>Payment error: {String(error)}</p>
           )}
         </div>
       )}
     </div>
   );
-} 
+}
