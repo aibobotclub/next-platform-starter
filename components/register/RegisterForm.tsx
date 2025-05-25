@@ -16,9 +16,7 @@ import { useAppKit } from '@/hooks/useAppKit';
 import { useSearchParams, useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useRegisterForm, RegisterFormValues } from '@/hooks/useRegisterForm';
-import { useUserStatus } from '@/hooks/useUserStatus';
-import { useReferral } from '@/hooks/useReferral';
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
+import { ControllerRenderProps } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
 import { supabase } from '@/lib/supabase';
 
@@ -33,11 +31,26 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const searchParams = useSearchParams();
   const router = useRouter();
   const { form, isLoading: isFormLoading, setIsLoading, error, setError, resetForm } = useRegisterForm();
-  const { isRegistered, refresh } = useUserStatus();
-  const { register: registerOnChain, isLoading: isChainLoading } = useReferral();
-
+  const [isRegistered, setIsRegistered] = useState(false);
   const COMPANY_ADDRESS = "0xfAaac7bcd4f371A4f13f61E63e7e2B7d669427b1";
   const [refInfo, setRefInfo] = useState<{address: string, username?: string} | null>(null);
+
+  // 检查用户是否已注册
+  useEffect(() => {
+    if (!address) return;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('users')
+          .select('id')
+          .ilike('wallet_address', address)
+          .maybeSingle();
+        setIsRegistered(!!data);
+      } catch {
+        setIsRegistered(false);
+      }
+    })();
+  }, [address]);
 
   // 解析推荐人地址
   useEffect(() => {
@@ -54,9 +67,7 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
     }
   }, [referrerAddress, searchParams]);
 
-  useEffect(() => { 
-    setMounted(true); 
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (isRegistered && onClose) {
@@ -85,12 +96,8 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
     setIsLoading(true);
 
     try {
-      // 1. On-chain registration and referral binding
-      await registerOnChain(refWallet || undefined);
-
-      // 2. Register user info via Edge Function
+      // 只做数据库注册和推荐人绑定
       const REGISTER_USER_URL = `${process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL}/register-user`;
-      
       const response = await fetch(REGISTER_USER_URL, {
         method: "POST",
         headers: { 
@@ -104,36 +111,16 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
           referrer_wallet_address: refWallet
         })
       });
-
       const data = await response.json();
       if (!response.ok) {
         setError(data.error || "Registration failed");
         toast.error(data.error || "Registration failed");
         return;
       }
-
       toast.success("Registration successful!");
       resetForm();
-      
-      // 等待状态同步完成
-      console.log('[RegisterForm] 注册成功，准备 refresh 注册状态');
-      await refresh();
-      
-      // 等待 isRegistered 变为 true
-      let waitCount = 0;
-      while (!isRegistered && waitCount < 20) {
-        console.log('[RegisterForm] 等待注册状态同步...', { waitCount, isRegistered });
-        await new Promise(res => setTimeout(res, 100));
-        waitCount++;
-      }
-      
-      if (!isRegistered) {
-        console.log('[RegisterForm] 注册状态同步超时，但继续跳转');
-      }
-      
-      console.log('[RegisterForm] 准备跳转 dashboard');
       // 等待一小段时间确保状态同步
-      await new Promise(res => setTimeout(res, 100));
+      await new Promise(res => setTimeout(res, 200));
       router.replace("/dashboard");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
@@ -144,7 +131,7 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
     }
   };
 
-  const isLoading = isFormLoading || isChainLoading;
+  const isLoading = isFormLoading;
 
   const renderFormField = (
     name: keyof RegisterFormValues,

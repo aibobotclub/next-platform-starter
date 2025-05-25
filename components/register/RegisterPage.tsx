@@ -9,7 +9,7 @@ const RegisterForm = dynamic(() => import('./RegisterForm'), { ssr: false });
 import ConnectWallet from '@/components/connectwallet/ConnectWallet';
 import RegisterButton from './RegisterButton';
 import styles from './RegisterPage.module.css';
-import { useUserStatus } from '@/hooks/useUserStatus';
+import { supabase } from '@/lib/supabase';
 
 interface RegisterPageProps {
   referrer?: string | null;
@@ -19,11 +19,29 @@ export default function RegisterPage({ referrer }: RegisterPageProps) {
   const { isConnected, address } = useAppKit();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isRegistered, isLoading } = useUserStatus();
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    if (!isConnected || !address) return;
+    setIsLoading(true);
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('users')
+          .select('id')
+          .ilike('wallet_address', address)
+          .maybeSingle();
+        setIsRegistered(!!data);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [isConnected, address]);
 
   useEffect(() => {
     if (!mounted) return;

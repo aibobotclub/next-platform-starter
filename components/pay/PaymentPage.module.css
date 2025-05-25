@@ -1,10 +1,5 @@
 .container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: var(--background);
+  @apply min-h-screen w-full flex items-center justify-center p-4 bg-background;
 }
 
 .wrapper {
@@ -13,6 +8,7 @@
 }
 
 .card {
+  @apply w-full max-w-md mx-auto;
   background: var(--card-background);
   border-radius: 1rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -21,9 +17,7 @@
 }
 
 .backButton {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
+  @apply absolute left-4 top-4 p-2 rounded-full hover:bg-muted transition-colors;
   display: flex;
   align-items: center;
   padding: 0.5rem;
@@ -164,16 +158,11 @@
 }
 
 .errorContainer {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: var(--background);
+  @apply min-h-screen w-full flex items-center justify-center p-4 bg-background;
 }
 
 .errorCard {
-  background: var(--card-background);
+  @apply w-full max-w-md mx-auto bg-card;
   padding: 2rem;
   border-radius: 1rem;
   text-align: center;

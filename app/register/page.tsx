@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAppKit } from "@/hooks/useAppKit";
 import RegisterPage from "@/components/register/RegisterPage";
 import { toast } from "sonner";
-import { useUserStatus } from '@/hooks/useUserStatus';
 
 export default function Page() {
   const router = useRouter();
@@ -13,23 +12,15 @@ export default function Page() {
   const [isChecking, setIsChecking] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const referrer = searchParams.get("ref");
-  const { isRegistered, isLoading } = useUserStatus();
 
   useEffect(() => { setMounted(true); }, []);
 
   // 自动弹出钱包连接
   useEffect(() => {
-    console.log('[register/page] useEffect-1', { 
-      mounted, 
-      isConnected, 
-      address, 
-      retryCount, 
-      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
-    });
-    
     if (!mounted) return;
-    
     let timeoutId: NodeJS.Timeout;
     if (!isConnected || !address) {
       if (retryCount < 3) {
@@ -47,22 +38,28 @@ export default function Page() {
 
   // 钱包连接后自动检查注册状态并跳转
   useEffect(() => {
-    console.log('[register/page] useEffect-2', { 
-      mounted, 
-      isConnected, 
-      isRegistered, 
-      isLoading, 
-      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
-    });
-    
+    if (!mounted || !isConnected || !address) return;
+    const CHECK_USER_URL = process.env.NEXT_PUBLIC_CHECK_USER_URL || '';
+    if (!CHECK_USER_URL) {
+      throw new Error('CHECK_USER_URL is not set');
+    }
+    setIsLoading(true);
+    fetch(CHECK_USER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wallet_address: address })
+    })
+      .then(res => res.json())
+      .then(data => setIsRegistered(data.isRegistered))
+      .finally(() => setIsLoading(false));
+  }, [mounted, isConnected, address]);
+
+  useEffect(() => {
     if (!mounted || isLoading) return;
-    
     if (isConnected) {
       if (isRegistered) {
-        console.log('[register/page] 已注册，准备跳转 dashboard');
         router.replace("/dashboard");
       } else {
-        console.log('[register/page] 未注册，显示注册表单');
         setIsChecking(false);
       }
     }

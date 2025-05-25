@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { useAppKit } from '@/hooks/useAppKit';
-import { useUserStatus } from "@/hooks/useUserStatus";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/header/Header";
 import TabBar from '@/components/dashboard/tabbar/TabBar';
@@ -9,37 +8,41 @@ import TabBar from '@/components/dashboard/tabbar/TabBar';
 // Home page uses its own HomeNavbar in components/home/navbar/HomeNavbar.tsx
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isConnected } = useAppKit();
-  const { isRegistered, isLoading } = useUserStatus();
+  const { isConnected, address } = useAppKit();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    console.log('[dashboard/layout] useEffect', { 
-      mounted, 
-      isConnected, 
-      isRegistered, 
-      isLoading, 
-      isChecking,
-      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
-    });
-    
-    // 只在状态完全就绪后才进行跳转判断
+    if (!mounted || !isConnected || !address) return;
+    const CHECK_USER_URL = process.env.NEXT_PUBLIC_CHECK_USER_URL || '';
+    if (!CHECK_USER_URL) {
+      throw new Error('CHECK_USER_URL is not set');
+    }
+    setIsLoading(true);
+    fetch(CHECK_USER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wallet_address: address })
+    })
+      .then(res => res.json())
+      .then(data => setIsRegistered(data.isRegistered))
+      .finally(() => setIsLoading(false));
+  }, [mounted, isConnected, address]);
+
+  useEffect(() => {
     if (!mounted || isLoading) return;
-    
-    // 等待一小段时间确保状态同步
     if (isChecking) {
       setTimeout(() => {
         setIsChecking(false);
       }, 100);
       return;
     }
-    
     if (!isConnected || !isRegistered) {
-      console.log('[dashboard/layout] 状态未就绪，跳转首页', { isConnected, isRegistered });
       router.replace("/");
     }
   }, [mounted, isConnected, isRegistered, isLoading, router, isChecking]);

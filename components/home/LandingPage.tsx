@@ -12,7 +12,6 @@ import DownloadSection from "./sections/Download";
 import Footer from "./footer/Footer";
 import styles from "./HomePage.module.css";
 import RegisterForm from "@/components/register/RegisterForm";
-import { useUserStatus } from "@/hooks/useUserStatus";
 import { supabase } from '@/lib/supabase';
 import { useAppKit } from '@/hooks/useAppKit';
 
@@ -32,7 +31,8 @@ const formatAddress = (address: string) => {
 
 export default function LandingPage() {
   const { isConnected, address } = useAppKit();
-  const { isRegistered, isLoading: isUserStatusLoading } = useUserStatus();
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isUserStatusLoading, setIsUserStatusLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
@@ -41,6 +41,24 @@ export default function LandingPage() {
   const [referrerInfo, setReferrerInfo] = useState<{address: string, username?: string} | null>(null);
 
   useEffect(() => { setMounted(true); }, []);
+
+  // 检查注册状态
+  useEffect(() => {
+    if (!isConnected || !address) return;
+    const CHECK_USER_URL = process.env.NEXT_PUBLIC_CHECK_USER_URL || '';
+    if (!CHECK_USER_URL) {
+      throw new Error('CHECK_USER_URL is not set');
+    }
+    setIsUserStatusLoading(true);
+    fetch(CHECK_USER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wallet_address: address })
+    })
+      .then(res => res.json())
+      .then(data => setIsRegistered(data.isRegistered))
+      .finally(() => setIsUserStatusLoading(false));
+  }, [isConnected, address]);
 
   // Debug log for connection and registration status
   useEffect(() => {
