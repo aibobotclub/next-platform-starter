@@ -33,7 +33,7 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const searchParams = useSearchParams();
   const router = useRouter();
   const { form, isLoading: isFormLoading, setIsLoading, error, setError, resetForm } = useRegisterForm();
-  const { isRegistered } = useUserStatus();
+  const { isRegistered, refresh } = useUserStatus();
   const { register: registerOnChain, isLoading: isChainLoading } = useReferral();
 
   const COMPANY_ADDRESS = "0xfAaac7bcd4f371A4f13f61E63e7e2B7d669427b1";
@@ -114,7 +114,8 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
 
       toast.success("Registration successful! Please login");
       resetForm();
-      router.push("/");
+      await refresh();
+      router.replace("/dashboard");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
       setError(errorMessage);
