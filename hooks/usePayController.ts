@@ -174,10 +174,17 @@ export function usePayController(options: PaymentOptions) {
       });
       setPaymentId(crypto.randomUUID());
 
-      // Implement exchange payment logic here
-      console.log('Paying with exchange:', exchangeId);
+      // 调用 Appkit 的 openPay，传递 exchangeId
+      const payParams: any = {
+        paymentAsset: defaultAsset,
+        recipient,
+        amount: options.amount,
+      };
+      if (exchangeId) payParams.exchangeId = exchangeId;
+      await openPay(payParams);
+      // openPay会自动处理跳转或弹窗，这里无需返回url
       return {
-        url: 'https://example.com/pay',
+        url: '',
         openInNewTab: true
       };
     } catch (err: any) {
@@ -186,7 +193,7 @@ export function usePayController(options: PaymentOptions) {
       setCurrentPayment(prev => prev ? { ...prev, status: 'FAILED' } : null);
       return null;
     }
-  }, []);
+  }, [openPay, options.amount, recipient, defaultAsset]);
 
   const updateBuyStatus = useCallback(async (exchangeId: string, sessionId: string) => {
     try {
