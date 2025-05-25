@@ -246,7 +246,7 @@ body, .text-primary {
 /* ========== 响应式字体和按钮 ========== */
 @media (max-width: 640px) {
   html {
-    font-size: 15px;
+    font-size: 16px;
   }
   .button-primary {
     font-size: 1rem;
@@ -256,7 +256,7 @@ body, .text-primary {
 }
 @media (max-width: 400px) {
   html {
-    font-size: 14px;
+    font-size: 15px;
   }
   .button-primary {
     font-size: 0.98rem;
