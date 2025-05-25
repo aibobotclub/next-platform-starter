@@ -173,10 +173,10 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
   }
 
   // 处理支付按钮点击
-  function handlePay() {
-    // 支付前强制刷新连接
-    openModal();
+  async function handlePay() {
+    await openModal(); // 强制刷新连接
     if (!isConnected) {
+      setError('Please connect your wallet');
       return;
     }
     setError(null);

@@ -66,11 +66,11 @@ export function useAppkitPay({
 
   const pay = async () => {
     setError(null);
+    await openModal?.(); // 强制刷新连接
     if (!isConnected) {
       setError('Please connect your wallet');
       setIsPending(false);
       if (onError) onError('Please connect your wallet');
-      await openModal?.();
       return;
     }
     setIsPending(true);
