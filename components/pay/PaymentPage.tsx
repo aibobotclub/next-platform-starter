@@ -19,7 +19,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
       toast.success('Payment successful!');
       window.location.href = '/dashboard';
     },
-    onError: (err) => {
+    onError: (err: any) => {
       const msg = typeof err === 'string' ? err : err?.message || 'Payment failed';
       toast.error('Payment failed: ' + msg);
       window.location.href = '/';
@@ -34,9 +34,9 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
     const startPayment = async () => {
       setStarted(true);
-      await openModal();
+      await openModal(); // 强制连接钱包
 
-      await new Promise((res) => setTimeout(res, 300)); // 防止链未同步完
+      await new Promise((res) => setTimeout(res, 300)); // 等待连接状态刷新
 
       if (!isConnected) {
         toast.error('Please connect your wallet');
