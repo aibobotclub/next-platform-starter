@@ -1,8 +1,9 @@
 'use client';
 
 import { usePay } from '@reown/appkit-pay/react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAppKit } from '@/hooks/useAppKit';
+import { toast } from 'sonner';
 
 // 完整定义 bscUSDT asset，兼容 appkit pay PaymentAsset 类型
 const bscUSDT = {
