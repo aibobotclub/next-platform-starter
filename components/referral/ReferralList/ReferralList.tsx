@@ -131,9 +131,9 @@ export default function ReferralList() {
         <div className={styles.empty}>No direct referrals</div>
       ) : (
         <div>
-          {directReferrals.map(ref => (
+          {directReferrals.map((ref, idx) => (
             <div
-              key={ref.referred_id}
+              key={`${ref.id || ref.referred_id || ''}_${ref.referrer_id || ''}_${idx}`}
               className={styles.nodeCard}
               style={{ display: 'flex', alignItems: 'center', borderRadius: 10, boxShadow: '0 2px 8px #eee', padding: 16, marginBottom: 12, cursor: 'pointer', background: '#fff', border: '1px solid #e0e0e0' }}
               onClick={() => ref.referred_id && handleNodeClick(ref.referred_id)}

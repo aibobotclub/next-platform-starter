@@ -2,6 +2,7 @@
 
 import { usePay } from '@reown/appkit-pay/react';
 import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 // 完整定义 bscUSDT asset，兼容 appkit pay PaymentAsset 类型
 const bscUSDT = {
@@ -36,6 +37,7 @@ export function useAppkitPay({
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const { isConnected } = useAccount();
 
   const { open: openPay, isPending: payPending } = usePay({
     onSuccess: (data: any) => {
@@ -52,6 +54,12 @@ export function useAppkitPay({
 
   const pay = async () => {
     setError(null);
+    if (!isConnected) {
+      setError('请先连接钱包');
+      setIsPending(false);
+      if (onError) onError('请先连接钱包');
+      return;
+    }
     setIsPending(true);
     try {
       await openPay({
