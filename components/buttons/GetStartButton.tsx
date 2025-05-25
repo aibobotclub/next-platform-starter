@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppKit } from '@reown/appkit/react';
+import { useAppKit } from '@/hooks/useAppKit';
 import { useUserStatus } from "@/hooks/useUserStatus";
 import ConnectWallet from "@/components/connectwallet/ConnectWallet";
 import DashboardButton from "@/components/buttons/DashboardButton";
