@@ -121,13 +121,19 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
       
       // 等待 isRegistered 变为 true
       let waitCount = 0;
-      while (!isRegistered && waitCount < 10) {
+      while (!isRegistered && waitCount < 20) {
         console.log('[RegisterForm] 等待注册状态同步...', { waitCount, isRegistered });
-        await new Promise(res => setTimeout(res, 200));
+        await new Promise(res => setTimeout(res, 100));
         waitCount++;
       }
       
-      console.log('[RegisterForm] 注册状态已同步，跳转 dashboard');
+      if (!isRegistered) {
+        console.log('[RegisterForm] 注册状态同步超时，但继续跳转');
+      }
+      
+      console.log('[RegisterForm] 准备跳转 dashboard');
+      // 等待一小段时间确保状态同步
+      await new Promise(res => setTimeout(res, 100));
       router.replace("/dashboard");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";

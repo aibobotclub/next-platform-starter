@@ -81,13 +81,33 @@ export default function LandingPage() {
   // 检查用户状态并自动跳转
   useEffect(() => {
     if (!mounted) return;
-    console.log('[LandingPage] useEffect-4', { mounted, isConnected, isRegistered, isUserStatusLoading, referrerAddress, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
-    if (!isUserStatusLoading && isConnected && !isRegistered) {
-      console.log('[LandingPage] Wallet connected but not registered, redirecting to /register');
-      if (referrerAddress) {
-        router.replace(`/register?referral=${referrerAddress}`);
+    console.log('[LandingPage] useEffect-4', { 
+      mounted, 
+      isConnected, 
+      isRegistered, 
+      isUserStatusLoading, 
+      referrerAddress, 
+      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
+    });
+
+    // 只在状态完全就绪后才判断跳转
+    if (isUserStatusLoading) return;
+    
+    if (isConnected) {
+      if (!isRegistered) {
+        console.log('[LandingPage] 已连接但未注册，准备跳转注册页');
+        // 等待一小段时间确保状态同步
+        setTimeout(() => {
+          if (referrerAddress) {
+            router.replace(`/register?referral=${referrerAddress}`);
+          } else {
+            router.replace('/register');
+          }
+        }, 100);
       } else {
-        router.replace('/register');
+        console.log('[LandingPage] 已注册，可以跳转 dashboard');
+        // 已注册用户可以选择跳转到 dashboard
+        // router.replace('/dashboard');
       }
     }
   }, [mounted, isConnected, isRegistered, isUserStatusLoading, router, referrerAddress]);

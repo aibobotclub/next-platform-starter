@@ -13,6 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { isRegistered, isLoading } = useUserStatus();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -22,20 +23,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       isConnected, 
       isRegistered, 
       isLoading, 
+      isChecking,
       pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
     });
     
     // 只在状态完全就绪后才进行跳转判断
     if (!mounted || isLoading) return;
     
+    // 等待一小段时间确保状态同步
+    if (isChecking) {
+      setTimeout(() => {
+        setIsChecking(false);
+      }, 100);
+      return;
+    }
+    
     if (!isConnected || !isRegistered) {
       console.log('[dashboard/layout] 状态未就绪，跳转首页', { isConnected, isRegistered });
       router.replace("/");
     }
-  }, [mounted, isConnected, isRegistered, isLoading, router]);
+  }, [mounted, isConnected, isRegistered, isLoading, router, isChecking]);
 
   // 加载状态
-  if (!mounted || isLoading) {
+  if (!mounted || isLoading || isChecking) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
