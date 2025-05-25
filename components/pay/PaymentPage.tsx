@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useAppkitPay } from '@/hooks/useAppkitPay';
@@ -34,13 +33,12 @@ const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
 export default function PaymentPage({ productName, productPrice, productDesc }: PaymentPageProps) {
   // Hooks
   const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, openModal } = useAppKit();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reinvestAmount, setReinvestAmount] = useState<number>(0);
   const [useReinvest, setUseReinvest] = useState(false);
   const [checkingReinvest, setCheckingReinvest] = useState(true);
-  const { isConnected: appkitConnected, openModal } = useAppKit();
 
   // 验证产品信息
   useEffect(() => {
@@ -176,7 +174,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
   // 处理支付按钮点击
   function handlePay() {
-    if (!appkitConnected) {
+    if (!isConnected) {
       openModal();
       return;
     }
@@ -286,7 +284,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
             <Button
               className={styles.payButton}
               onClick={handlePay}
-              disabled={!appkitConnected || isPending || loading}
+              disabled={!isConnected || isPending || loading}
               aria-busy={isPending || loading}
             >
               {loading ? (
@@ -299,7 +297,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
                   <Loader2 className="w-5 h-5 animate-spin" />
                   Waiting for confirmation...
                 </>
-              ) : appkitConnected ? (
+              ) : isConnected ? (
                 `Pay ${finalAmount} USDT`
               ) : (
                 'Connect wallet to pay'

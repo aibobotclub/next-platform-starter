@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useAccount, useConnect } from "wagmi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { HomeNavbar } from "./navbar/HomeNavbar";
@@ -15,7 +14,7 @@ import styles from "./HomePage.module.css";
 import RegisterForm from "@/components/register/RegisterForm";
 import { useUserStatus } from "@/hooks/useUserStatus";
 import { supabase } from '@/lib/supabase';
-
+import { useAppKit } from '@/hooks/useAppKit';
 
 // 动态导入 Hero 组件
 const Hero = dynamic(() => import("./sections/Hero"), { 
@@ -32,7 +31,7 @@ const formatAddress = (address: string) => {
 };
 
 export default function LandingPage() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useAppKit();
   const { isRegistered, isLoading: isUserStatusLoading } = useUserStatus();
   const router = useRouter();
   const searchParams = useSearchParams();

@@ -1,11 +1,11 @@
 'use client'
-import { useDisconnect, useAppKit, useAppKitNetwork  } from '@reown/appkit/react'
+import { useDisconnect } from '@reown/appkit/react'
+import { useAppKit } from '@/hooks/useAppKit';
 import { networks } from '@/config'
 
 export const ActionButtonList = () => {
     const { disconnect } = useDisconnect();
-    const { open } = useAppKit();
-    const { switchNetwork } = useAppKitNetwork();
+    const { openModal, switchNetwork } = useAppKit();
 
     const handleDisconnect = async () => {
       try {
@@ -16,9 +16,9 @@ export const ActionButtonList = () => {
     }
   return (
     <div>
-        <button onClick={() => open()}>Open</button>
+        <button onClick={openModal}>Open</button>
         <button onClick={handleDisconnect}>Disconnect</button>
-        <button onClick={() => switchNetwork(networks[1]) }>Switch</button>
+        <button onClick={() => switchNetwork()}>Switch</button>
     </div>
   )
 }

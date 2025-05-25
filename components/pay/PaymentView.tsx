@@ -1,6 +1,7 @@
 "use client";
 
-import { useDisconnect, useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { useDisconnect } from '@reown/appkit/react';
+import { useAppKit } from '@/hooks/useAppKit';
 import { usePay } from '@reown/appkit-pay/react';
 import { baseSepoliaETH } from '@reown/appkit-pay';
 import { Button } from '@/components/ui/button';
@@ -16,8 +17,8 @@ interface PaymentViewProps {
 
 export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentViewProps) {
   const { disconnect } = useDisconnect();
-  const { open } = useAppKit();
-  const { address } = useAppKitAccount();
+  const { openModal } = useAppKit();
+  const { address } = useAppKit();
   const { open: openPay, isPending, isSuccess, data, error } = usePay({
     onSuccess: (data) => {
       console.log("Payment successful:", data);
@@ -63,7 +64,7 @@ export function PaymentView({ amount, onSuccess, onError, onClose }: PaymentView
     <div className={styles.container}>
       <div className={styles.buttonGroup}>
         {!address ? (
-          <Button onClick={() => open()} className="unifiedButton">
+          <Button onClick={() => openModal()} className="unifiedButton">
             Connect Wallet
           </Button>
         ) : (
