@@ -12,13 +12,13 @@ const bscUSDT = {
   address: '0x55d398326f99059fF775485246999027B3197955',
   asset: '0x55d398326f99059fF775485246999027B3197955',
   symbol: 'USDT',
-  decimals: 18,
+  decimals: 6,
   name: 'Tether USD',
   logoURI: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
   metadata: {
     name: 'Tether USD',
     symbol: 'USDT',
-    decimals: 18,
+    decimals: 6,
   },
 };
 
@@ -67,9 +67,9 @@ export function useAppkitPay({
   const pay = async () => {
     setError(null);
     if (!isConnected) {
-      setError('请先连接钱包');
+      setError('Please connect your wallet');
       setIsPending(false);
-      if (onError) onError('请先连接钱包');
+      if (onError) onError('Please connect your wallet');
       await openModal?.();
       return;
     }

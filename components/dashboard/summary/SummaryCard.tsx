@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import { useAppKit } from '@/hooks/useAppKit';
 import { supabase } from '@/lib/supabase';
 import { Card } from "@/components/ui/card";
-import BalanceCard from "./balance/BalanceCard";
-import RewardStats from "./rewards/RewardStats";
-import TastStatsDetails from "./tasks/TastStatsDetails";
 
 interface SummaryCardProps {
   onDetail?: (type: 'tasks' | 'balance' | 'rewards' | 'referral') => void;
@@ -81,11 +78,6 @@ export default function SummaryCard({ onDetail }: SummaryCardProps) {
           href="#"
           onClick={() => onDetail && onDetail('referral')}
         />
-      </div>
-      <div className={styles.summaryExtra}>
-        <BalanceCard />
-        <RewardStats />
-        <TastStatsDetails />
       </div>
     </Card>
   );
