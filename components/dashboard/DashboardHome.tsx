@@ -67,7 +67,7 @@ export default function DashboardHome() {
           </Card>
           <ProductGrid />
           <Card className={`${styles.cardSection} ${styles.summaryCardSection}`}>
-            <SummaryCard />
+            <SummaryCard onDetail={handleDetail} />
           </Card>
         </div>
       </div>
@@ -91,7 +91,11 @@ export default function DashboardHome() {
           </div>
         </div>
       ) : (
-        <DetailDrawer open={showDetail && detailType !== 'referral'} onClose={() => setShowDetail(false)} title={detailType === 'rewards' ? 'Reward Details' : undefined}>
+        <DetailDrawer open={showDetail && detailType !== 'referral'} onClose={() => setShowDetail(false)} title={
+          detailType === 'rewards' ? 'Reward Details' :
+          detailType === 'balance' ? 'Balance Details' :
+          detailType === 'tasks' ? 'Task Details' : undefined
+        }>
           {detailType === 'balance' && <Card className={styles.cardSection}><BalanceCard /></Card>}
           {detailType === 'tasks' && <TaskProgressCardContainer />}
           {detailType === 'rewards' && <RewardStats />}
