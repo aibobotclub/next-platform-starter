@@ -67,7 +67,7 @@ export default function DashboardHome() {
           </Card>
           <ProductGrid />
           <Card className={`${styles.cardSection} ${styles.summaryCardSection}`}>
-            <SummaryCard onDetail={handleDetail} />
+            <SummaryCard />
           </Card>
         </div>
       </div>
