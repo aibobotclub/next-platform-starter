@@ -155,24 +155,23 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
   const formContent = (
     <div className={styles.modalOverlay}>
       <div className={styles.formContainer}>
-        {/* 推荐人信息展示 */}
-        <div style={{marginBottom: 16, textAlign: 'center'}}>
-          {refInfo ? (
-            <>
-              <div style={{fontWeight: 600, color: '#6366f1', fontSize: 15}}>
-                Referrer: {refInfo.address.slice(0,6)}...{refInfo.address.slice(-4)}
-              </div>
-              {refInfo.username && <div style={{color:'#64748b', fontSize:13}}>Username: {refInfo.username}</div>}
-            </>
-          ) : (
-            <div style={{color:'#a0aec0', fontSize:14, fontWeight:500, padding:'4px 0'}}>Referrer not detected.</div>
-          )}
-        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleRegisterAndBind)} className={styles.form}>
             <h2 className={styles.title}>Create Account</h2>
             <div className={styles.walletAddressButton}>
               {address && `${address.slice(0, 6)}...${address.slice(-4)}`}
+            </div>
+            <div style={{marginBottom: 10, textAlign: 'center', fontSize: '0.9em'}}>
+              {refInfo ? (
+                <>
+                  <div style={{fontWeight: 600, color: '#6366f1', fontSize: 13}}>
+                    Referrer: {refInfo.address.slice(0,6)}...{refInfo.address.slice(-4)}
+                  </div>
+                  {refInfo.username && <div style={{color:'#64748b', fontSize:12}}>Username: {refInfo.username}</div>}
+                </>
+              ) : (
+                <div style={{color:'#a0aec0', fontSize:12, fontWeight:500, padding:'2px 0'}}>Referrer not detected.</div>
+              )}
             </div>
             {renderFormField("username", "Username", "text", "Enter your username")}
             {renderFormField("email", "Email", "email", "Enter your email")}

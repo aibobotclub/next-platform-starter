@@ -158,10 +158,6 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
   // 处理支付按钮点击
   function handlePay() {
-    if (!isConnected) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
     setError(null);
     pay();
   }
