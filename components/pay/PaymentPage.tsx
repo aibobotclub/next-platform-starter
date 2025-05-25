@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { usePay } from '@reown/appkit-pay/react';
 import { useAppKit } from '@/hooks/useAppKit';
+import { useNetwork } from '@reown/appkit/react'; // AppKit 的网络 Hook
 import { toast } from 'sonner';
-import { useNetwork } from 'wagmi';
 
 const RECIPIENT = '0x915082634caD7872D789005EBFaaEF98f002F9E0';
 
@@ -28,7 +28,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
   });
 
   const { openModal, isConnected } = useAppKit();
-  const { chain } = useNetwork(); // 获取当前链
+  const { chainId } = useNetwork(); // 使用 AppKit 的 chainId
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
@@ -36,15 +36,15 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
 
     const startPayment = async () => {
       setStarted(true);
-      await openModal();
-      await new Promise((res) => setTimeout(res, 300));
+      await openModal(); // 强制连接
+      await new Promise((res) => setTimeout(res, 300)); // 等待链切换完成
 
       if (!isConnected) {
         toast.error('Please connect your wallet');
         return;
       }
 
-      if (chain?.id !== 56) {
+      if (chainId !== 56) {
         toast.error('Please switch to BSC network');
         return;
       }
@@ -65,7 +65,7 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
     };
 
     startPayment();
-  }, [productPrice, open, openModal, isConnected, chain?.id, started]);
+  }, [productPrice, open, openModal, isConnected, chainId, started]);
 
   return null;
 }
