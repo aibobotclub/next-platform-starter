@@ -123,12 +123,12 @@ export function usePayController(options: PaymentOptions) {
   }, [address]);
 
   const handlePayWithWallet = useCallback(async () => {
+    // 支付前强制刷新连接
+    await openModal();
     if (!appkitConnected || !address) {
       setError('Please connect your wallet first');
-      await openModal();
       return;
     }
-
     try {
       setIsPaymentInProgress(true);
       setCurrentPayment({ 
@@ -136,19 +136,15 @@ export function usePayController(options: PaymentOptions) {
         status: 'IN_PROGRESS'
       });
       setPaymentId(crypto.randomUUID());
-
       if (options.useRebuyFund) {
-        // 动态传入复投金金额
         const rebuyAmount = options.rebuyAmount || 25;
         await payWithRebuyFund(rebuyAmount);
-        // 动态传入钱包支付金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
           amount: options.amount - rebuyAmount
         });
       } else {
-        // 动态传入总金额
         await openPay({
           paymentAsset: defaultAsset,
           recipient,
