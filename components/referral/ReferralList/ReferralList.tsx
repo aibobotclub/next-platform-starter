@@ -4,87 +4,108 @@ import React, { useEffect, useState } from 'react';
 import styles from './ReferralList.module.css';
 import { useAccount } from 'wagmi';
 import { supabase } from '@/lib/supabase';
+import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 
 interface Referral {
-  referred_id: string;
-  username: string | null;
-  level: number;
+  id: string;
+  referred_id: string | null;
+  referred_username: string | null;
+  referred_wallet_address: string | null;
+  referrer_id: string | null;
   referrer_username: string | null;
-  referred_wallet: string;
+  referrer_wallet_address: string | null;
 }
 
 export default function ReferralList() {
   const { address } = useAccount();
+  const [userId, setUserId] = useState<string>('');
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentReferrerId, setCurrentReferrerId] = useState<string>('');
+  const [referrerStack, setReferrerStack] = useState<string[]>([]);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!address) return;
     (async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        // 查找当前用户id
-        const { data: user, error: userError } = await supabase
-          .from('users')
-          .select('id')
-          .eq('wallet_address', address)
-          .single();
-        if (userError || !user || typeof user.id !== 'string') {
-          setError('User not found');
-          setLoading(false);
-          return;
-        }
-        // 拉取推荐列表
-        const { data, error: refError } = await supabase
-          .from('referral_list_view')
-          .select('referred_id, username, level, referrer_id, referred_wallet')
-          .eq('root_user_id', user.id);
-        if (refError) {
-          setError('Failed to fetch referrals');
-          setLoading(false);
-          return;
-        }
-        // 批量查推荐人用户名
-        const refIds = Array.from(new Set((data || []).map(item => item.referrer_id).filter((id): id is string => !!id)));
-        let refMap: Record<string, string> = {};
-        if (refIds.length > 0) {
-          const { data: refUsers } = await supabase
-            .from('users')
-            .select('id, username')
-            .in('id', refIds);
-          if (refUsers) {
-            refMap = Object.fromEntries(refUsers.map(u => [u.id, u.username ?? '']));
-          }
-        }
-        setReferrals(
-          (data || []).map(item => ({
-            referred_id: item.referred_id ?? '',
-            username: item.username ?? '',
-            level: item.level ?? 0,
-            referrer_username: refMap[item.referrer_id ?? ''] || '',
-            referred_wallet: item.referred_wallet ?? '',
-          }))
-        );
+      setLoading(true);
+      setError(null);
+      // 查找当前用户id
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('wallet_address', address)
+        .single();
+      console.log('Current user:', user, userError);
+      if (userError || !user || typeof user.id !== 'string') {
+        setError('User not found');
         setLoading(false);
-      } catch (e: any) {
-        setError(e.message || 'Unknown error');
-        setLoading(false);
+        return;
       }
+      setUserId(user.id);
+      setCurrentReferrerId(user.id);
+      // 拉取所有推荐关系
+      const { data, error: refError } = await supabase
+        .from('referral_list_view')
+        .select('*');
+      console.log('Referrals data:', data, refError);
+      if (refError) {
+        setError('Failed to fetch referrals');
+        setLoading(false);
+        return;
+      }
+      // 兼容Referral类型
+      const mapped = (data || []).map((item: any) => ({
+        id: item.referred_id || '',
+        referred_id: item.referred_id,
+        referred_username: item.username,
+        referred_wallet_address: item.referred_wallet,
+        referrer_id: item.referrer_id,
+        referrer_username: '',
+        referrer_wallet_address: item.referrer_wallet,
+      }));
+      setReferrals(mapped);
+      setLoading(false);
     })();
   }, [address]);
 
-  // 搜索过滤
-  const filteredReferrals = referrals.filter(ref => {
-    if (!search) return true;
-    const s = search.toLowerCase();
-    return (
-      (ref.username && ref.username.toLowerCase().includes(s)) ||
-      (ref.referred_wallet && ref.referred_wallet.toLowerCase().includes(s))
-    );
+  // 当前层的直推
+  const directReferrals = referrals.filter(ref =>
+    ref.referrer_id === currentReferrerId &&
+    ((ref.referred_username && ref.referred_username.includes(search)) ||
+      (ref.referred_wallet_address && ref.referred_wallet_address.includes(search)) ||
+      !search)
+  );
+  console.log('Current Referrer:', currentReferrerId, 'Direct Referrals:', directReferrals);
+
+  // 统计每个节点的直推人数
+  const referralCountMap: Record<string, number> = {};
+  referrals.forEach(ref => {
+    if (ref.referrer_id) {
+      referralCountMap[ref.referrer_id] = (referralCountMap[ref.referrer_id] || 0) + 1;
+    }
   });
+
+  // 点击节点进入下一级
+  function handleNodeClick(referredId: string) {
+    setReferrerStack(prev => [...prev, currentReferrerId]);
+    setCurrentReferrerId(referredId);
+    setSearch('');
+    console.log('Go to next level, new currentReferrerId:', referredId);
+  }
+
+  // 返回上一级
+  function handleBack() {
+    setReferrerStack(prev => {
+      const next = [...prev];
+      const last = next.pop();
+      if (last) setCurrentReferrerId(last);
+      console.log('Back to previous level, new currentReferrerId:', last);
+      return next;
+    });
+    setSearch('');
+  }
 
   return (
     <div className={styles.listContainer}>
@@ -97,25 +118,36 @@ export default function ReferralList() {
           style={{ width: '100%', padding: 8, borderRadius: 8, border: '1px solid #eee' }}
         />
       </div>
+      {currentReferrerId !== userId && (
+        <button className={styles.backBtn} onClick={handleBack} style={{ marginBottom: 12 }}>
+          Back
+        </button>
+      )}
       {loading ? (
         <div className={styles.empty}>Loading...</div>
       ) : error ? (
         <div className={styles.empty}>{error}</div>
-      ) : filteredReferrals.length === 0 ? (
-        <div className={styles.empty}>No referrals found</div>
+      ) : directReferrals.length === 0 ? (
+        <div className={styles.empty}>No direct referrals</div>
       ) : (
-        filteredReferrals.map(ref => (
-          <div
-            key={ref.referred_id}
-            className={`${styles.userCard} ${styles.cardIndent}`}
-            style={{ marginLeft: `${ref.level * 12}px` }}
-          >
-            <span className={styles.levelTag}>L{ref.level}</span>
-            <div className={styles.username}>{ref.username || 'Unknown'}</div>
-            <div className={styles.referrer}>Referrer: {ref.referrer_username || 'None'}</div>
-            <div className={styles.wallet}>{ref.referred_wallet}</div>
-          </div>
-        ))
+        <div>
+          {directReferrals.map(ref => (
+            <div
+              key={ref.referred_id}
+              className={styles.nodeCard}
+              style={{ display: 'flex', alignItems: 'center', borderRadius: 10, boxShadow: '0 2px 8px #eee', padding: 16, marginBottom: 12, cursor: 'pointer', background: '#fff', border: '1px solid #e0e0e0' }}
+              onClick={() => ref.referred_id && handleNodeClick(ref.referred_id)}
+            >
+              <div style={{ flex: 1 }}>
+                <div className={styles.username} style={{ fontWeight: 600, fontSize: 16 }}>{ref.referred_username || 'Unknown'}</div>
+                <div className={styles.wallet} style={{ color: '#888', fontSize: 13 }}>{ref.referred_wallet_address}</div>
+              </div>
+              <div style={{ minWidth: 80, textAlign: 'right', color: '#4a90e2', fontWeight: 500 }}>
+                Direct referrals: {referralCountMap[ref.referred_id ?? ''] || 0}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

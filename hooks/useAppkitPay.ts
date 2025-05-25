@@ -60,6 +60,18 @@ export function useAppkitPay({
         amount,
         // @ts-ignore
         container: document.body,
+        style: {
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1000,
+          width: '100%',
+          maxWidth: '500px',
+          height: 'auto',
+          maxHeight: '90vh',
+          overflow: 'auto'
+        }
       });
     } catch (err: any) {
       setError(typeof err === 'string' ? err : err?.message || 'Payment failed');

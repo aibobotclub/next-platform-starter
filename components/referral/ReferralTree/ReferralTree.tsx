@@ -11,6 +11,7 @@ interface TreeNode {
   referred_id: string;
   username: string | null;
   level: number;
+  rank?: number;
   children: TreeNode[];
 }
 
@@ -25,26 +26,40 @@ export default function ReferralTree() {
     (async () => {
       const { data: user, error: userErr } = await supabase
         .from('users')
-        .select('id, username, wallet_address')
+        .select('id, username, wallet_address, rank')
         .eq('wallet_address', address)
         .single();
-      console.log('user', user, userErr);
       if (userErr || !user || typeof user.id !== 'string') return;
       const userId = user.id;
+      // 查询所有下线的level和rank
       const { data: allNodesData, error: allErr } = await supabase
         .from('referral_list_view')
         .select('referred_id, username, level, referrer_id')
         .eq('root_user_id', userId);
-      console.log('allNodesData', allNodesData, allErr);
       if (allErr || !Array.isArray(allNodesData) || allNodesData.length === 0) return;
+      // 查询所有相关用户的rank
+      const allUserIds = Array.from(new Set([
+        userId,
+        ...allNodesData.map((n: any) => n.referred_id)
+      ]));
+      const { data: userRanks } = await supabase
+        .from('users')
+        .select('id, rank')
+        .in('id', allUserIds);
+      const idToRank: Record<string, number> = {};
+      (userRanks || []).forEach((u: any) => {
+        idToRank[u.id] = u.rank ?? 0;
+      });
       // 构建 id->children 映射
       const idToChildren: Record<string, TreeNode[]> = {};
       allNodesData.forEach(item => {
+        if (!item.referred_id) return;
         if (item.referrer_id && !idToChildren[item.referrer_id]) idToChildren[item.referrer_id] = [];
         if (item.referrer_id) idToChildren[item.referrer_id].push({ 
-          referred_id: item.referred_id ?? '',
+          referred_id: item.referred_id,
           username: item.username ?? '',
           level: item.level ?? 0,
+          rank: idToRank[item.referred_id] ?? 0,
           children: [] 
         });
       });
@@ -52,18 +67,39 @@ export default function ReferralTree() {
       function buildTree(userId: string, level = 0, path: string[] = []): TreeNode | null {
         if (!allNodesData) return null;
         if (path.includes(userId)) return null; // 防止环
-        const node = allNodesData.find((n: any) => n.referred_id === userId);
-        const children = (idToChildren[userId] || []).map(child =>
-          buildTree(child.referred_id, level + 1, [...path, userId])
-        );
+        if (level > 10) return null; // 限制最大深度为10层
+        let node = allNodesData.find((n: any) => n.referred_id === userId);
+        if (!node && userId === user?.id) {
+          node = { referred_id: user.id, username: user.username, level: 0, referrer_id: user.id };
+        }
+        if (!node) return null;
+        const children = (idToChildren[userId] || [])
+          .map(child => buildTree(child.referred_id, level + 1, [...path, userId]))
+          .filter(Boolean) as TreeNode[];
         return {
           referred_id: userId,
           username: node?.username || 'Root',
           level: node?.level ?? level,
-          children: children.filter(Boolean) as TreeNode[],
+          rank: userId && idToRank[userId] !== undefined ? idToRank[userId] : 0,
+          children: children,
         };
       }
-      setTreeData(buildTree(userId, 0));
+      // 自动补全根节点
+      let rootNode = allNodesData.find((n: any) => n.level === 0);
+      if (!rootNode && user) {
+        rootNode = {
+          referred_id: user.id,
+          username: user.username || 'Root',
+          level: 0,
+          referrer_id: user.id
+        };
+        allNodesData.unshift(rootNode);
+      }
+      if (rootNode && typeof rootNode.referred_id === 'string') {
+        setTreeData(buildTree(rootNode.referred_id, 0));
+      } else {
+        setTreeData(null);
+      }
     })();
   }, [address]);
 
@@ -72,30 +108,32 @@ export default function ReferralTree() {
     const isExpanded = expandedNodes.has(node.referred_id);
     const hasChildren = node.children.length > 0;
     return (
-      <div className={styles.treeLevel} style={{ marginLeft: depth * 16 }}>
-        <div style={{ position: 'relative' }}>
+      <div
+        className={styles.treeLevel}
+        style={{ ['--tree-depth' as any]: depth } as React.CSSProperties}
+      >
+        <div className={styles.treeNodeWrap}>
           <div
             className={styles.treeNode}
             onClick={() => hasChildren && toggleNode(node.referred_id)}
             style={{ cursor: hasChildren ? 'pointer' : 'default' }}
             key={node.referred_id || node.username || Math.random()}
           >
-            <div className={styles.address}>{node.username}</div>
-            <div className={styles.volume}>{t('Level')}. {node.level}</div>
+            <span className={styles.rankIcon}>{node.level}</span>
+            <span className={styles.address}>{node.username}</span>
+            <span className={styles.rankNum}>rank {node.rank ?? 0}</span>
           </div>
-          {hasChildren && <div className={styles.treeLine}></div>}
-          <AnimatePresence>
-            {isExpanded && hasChildren && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-              >
-                {node.children.map(child => renderTree(child, depth + 1))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {hasChildren && <div className={styles.verticalLine}></div>}
         </div>
+        {isExpanded && hasChildren && (
+          <div className={styles.childrenRow}>
+            {node.children.map(child => (
+              <React.Fragment key={child.referred_id}>
+                {renderTree(child, depth + 1)}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -111,7 +149,7 @@ export default function ReferralTree() {
 
   return (
     <div className={styles.treeContainer}>
-      <h3 className={styles.title}>{t('My Referral Tree')}</h3>
+      {/* <h3 className={styles.title}>{t('My Referral Tree')}</h3> */}
       {treeData ? renderTree(treeData) : <div className="text-center py-8 text-gray-400">{t('No referrals found')}</div>}
     </div>
   );

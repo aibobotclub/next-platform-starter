@@ -27,10 +27,10 @@
   gap: 1rem;
 }
 
-.referralCard {
-  background: #f3f4f6;
-  color: #232946;
-  border: 1px solid var(--border-color);
+.referralCard, .nodeCard {
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 1.5px solid var(--card-border);
   padding: 1rem 1.2rem;
   border-radius: 1rem;
   display: flex;
@@ -39,7 +39,7 @@
   transition: all 0.2s ease;
 }
 
-.referralCard:hover {
+.referralCard:hover, .nodeCard:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   background: var(--hover-background);
@@ -69,25 +69,26 @@
   opacity: 0.85;
 }
 
-.button, .referralBtn {
-  background: linear-gradient(90deg, #fff 0%, #e0e7ff 100%);
-  color: #232946;
+.button, .referralBtn, .backBtn {
+  background: var(--gradient-primary);
+  color: #fff;
   border: none;
   border-radius: 1.2rem;
   padding: 0.7rem 1.5rem;
   font-weight: 700;
   font-size: 1.08rem;
-  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.13);
-  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.18s;
+  cursor: pointer;
 }
-[data-theme='light'] .button, [data-theme='light'] .referralBtn {
-  background: linear-gradient(135deg, #232946 0%, #6366f1 100%);
+.button:hover, .referralBtn:hover, .backBtn:hover {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
   color: #fff;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px) scale(1.03);
 }
-[data-theme='dark'] .button, [data-theme='dark'] .referralBtn {
-  background: linear-gradient(90deg, #fff 0%, #6366f1 100%);
-  color: #232946;
-  box-shadow: 0 2px 8px 0 #6366f1aa;
+.button:active, .referralBtn:active, .backBtn:active {
+  transform: scale(0.97);
 }
 
 /* 列表行 */
@@ -112,7 +113,7 @@
 
 /* 操作按钮 */
 .actionBtn {
-  background: linear-gradient(90deg, #6a8dff 0%, #a084ee 100%);
+  background: var(--gradient-primary);
   color: #fff;
   border: none;
   border-radius: 0.7rem;
@@ -122,13 +123,13 @@
   transition: background 0.2s;
 }
 .actionBtn:hover {
-  background: linear-gradient(90deg, #a084ee 0%, #6a8dff 100%);
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
 }
 
 /* 分割线 */
 .divider {
   height: 1px;
-  background: var(--border, #e5e7eb);
+  background: var(--border-color);
   margin: 0.7rem 0;
   border-radius: 1px;
 }
@@ -158,42 +159,27 @@
   }
 }
 
-[data-theme='dark'] .card {
-  background: #232946;
-  color: #fff;
-  box-shadow: 0 8px 32px rgba(99,102,241,0.18);
-}
-
-[data-theme='dark'] .referralCard {
-  background: #232946;
-  color: #fff;
-  border: 1.5px solid #6366f1;
-}
-
-/* 推荐列表主容器 */
 .listContainer {
   padding: 12px 0;
   max-width: 600px;
   margin: 0 auto;
 }
 
-/* 搜索栏吸顶 */
 .searchBar {
   position: sticky;
   top: 0;
-  background: var(--background-primary, #fff);
+  background: var(--background-primary);
   z-index: 2;
   padding: 8px 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* 用户卡片 */
 .userCard {
   display: flex;
   flex-direction: column;
-  background: var(--background-secondary, #f9fafe);
+  background: var(--background-secondary);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 12px;
   padding: 14px 16px;
   position: relative;
@@ -205,7 +191,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: #6a8dff;
+  background: var(--primary);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
@@ -217,14 +203,14 @@
 .username {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--primary, #23263a);
+  color: var(--primary);
   margin-bottom: 4px;
 }
 
 /* 推荐人 */
 .referrer {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--text-secondary);
   margin-bottom: 2px;
 }
 
@@ -237,7 +223,7 @@
 
 /* 层级缩进（动态） */
 .cardIndent {
-  border-left: 3px solid #6a8dff;
+  border-left: 3px solid var(--primary);
   padding-left: 12px;
   margin-left: 0;
 }
@@ -262,18 +248,8 @@
   }
 }
 
-/* 深色模式适配 */
 [data-theme='dark'] .userCard {
-  background: #23263a;
+  background: var(--card-background);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-[data-theme='dark'] .levelTag {
-  background: #4f8cff;
-}
-[data-theme='dark'] .referrer {
-  color: #b3b8c5;
-}
-[data-theme='dark'] .wallet {
-  color: #7ec7ff;
+  box-shadow: var(--shadow-sm);
 }

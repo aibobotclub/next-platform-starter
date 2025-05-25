@@ -50,6 +50,28 @@
   --gradient-text: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  --tab-dark-bg: linear-gradient(90deg, #0a2540 0%, #144272 100%);
+  --tab-dark-color: #7ecbff;
+  --tab-dark-active: #ffd700;
+  --tab-dark-underline: #ffd700;
+
+  --tab-light-bg: linear-gradient(90deg, #7de2d1 0%, #3a8dde 100%);
+  --tab-light-color: #1a355b;
+  --tab-light-active: #222;
+  --tab-light-underline: #1a355b;
+
+  --referral-link-dark-bg: linear-gradient(135deg, #0a2540 0%, #144272 100%);
+  --referral-link-dark-border: #fff;
+  --referral-link-dark-title: #fff;
+  --referral-link-dark-btn: linear-gradient(90deg, #ffd700 0%, #ffe066 100%);
+  --referral-link-dark-btn-text: #222;
+
+  --referral-link-light-bg: linear-gradient(135deg, #7de2d1 0%, #3a8dde 100%);
+  --referral-link-light-border: #1a355b;
+  --referral-link-light-title: #222;
+  --referral-link-light-btn: linear-gradient(90deg, #1a355b 0%, #3a8dde 100%);
+  --referral-link-light-btn-text: #fff;
 }
 
 [data-theme='dark'] {
@@ -93,6 +115,10 @@
   --gradient-text: linear-gradient(135deg, #ffffff 0%, #bfc6d1 100%);
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.18);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.28), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
+}
+
+[data-theme='light'] {
+  /* ...同上变量... */
 }
 
 @layer base {

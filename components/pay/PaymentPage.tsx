@@ -113,6 +113,22 @@ export default function PaymentPage({ productName, productPrice, productDesc }: 
         use_reinvest: useReinvest
       };
 
+      // 调用 handle-order-events 函数
+      const response = await fetch('/api/functions/handle-order-events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          txHash: data?.txHash,
+          orderData
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to trigger order events');
+      }
+
       const { error: dbError } = await supabase
         .from('orders')
         .insert([orderData]);
