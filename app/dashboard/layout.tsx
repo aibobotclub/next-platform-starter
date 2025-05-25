@@ -17,15 +17,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    console.log('[dashboard/layout] useEffect', { mounted, isConnected, isRegistered, isLoading, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
-    if (!mounted) return;
-    if (!isLoading && (!isConnected || !isRegistered)) {
+    console.log('[dashboard/layout] useEffect', { 
+      mounted, 
+      isConnected, 
+      isRegistered, 
+      isLoading, 
+      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
+    });
+    
+    // 只在状态完全就绪后才进行跳转判断
+    if (!mounted || isLoading) return;
+    
+    if (!isConnected || !isRegistered) {
+      console.log('[dashboard/layout] 状态未就绪，跳转首页', { isConnected, isRegistered });
       router.replace("/");
     }
   }, [mounted, isConnected, isRegistered, isLoading, router]);
 
-  if (!mounted || !isConnected || isLoading || !isRegistered) {
-    return <div className="h-screen flex items-center justify-center text-xl">Checking...</div>;
+  // 加载状态
+  if (!mounted || isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4">Checking...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 未授权状态
+  if (!isConnected || !isRegistered) {
+    return null;
   }
 
   return (

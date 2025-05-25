@@ -112,11 +112,22 @@ export default function RegisterForm({ onClose, referrerAddress }: RegisterFormP
         return;
       }
 
-      toast.success("Registration successful! Please login");
+      toast.success("Registration successful!");
       resetForm();
+      
+      // 等待状态同步完成
       console.log('[RegisterForm] 注册成功，准备 refresh 注册状态');
       await refresh();
-      console.log('[RegisterForm] refresh 后，跳转 dashboard');
+      
+      // 等待 isRegistered 变为 true
+      let waitCount = 0;
+      while (!isRegistered && waitCount < 10) {
+        console.log('[RegisterForm] 等待注册状态同步...', { waitCount, isRegistered });
+        await new Promise(res => setTimeout(res, 200));
+        waitCount++;
+      }
+      
+      console.log('[RegisterForm] 注册状态已同步，跳转 dashboard');
       router.replace("/dashboard");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";

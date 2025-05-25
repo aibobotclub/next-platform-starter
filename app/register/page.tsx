@@ -20,8 +20,16 @@ export default function Page() {
 
   // 自动弹出钱包连接
   useEffect(() => {
-    console.log('[register/page] useEffect-1', { mounted, isConnected, address, retryCount, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
+    console.log('[register/page] useEffect-1', { 
+      mounted, 
+      isConnected, 
+      address, 
+      retryCount, 
+      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
+    });
+    
     if (!mounted) return;
+    
     let timeoutId: NodeJS.Timeout;
     if (!isConnected || !address) {
       if (retryCount < 3) {
@@ -39,12 +47,22 @@ export default function Page() {
 
   // 钱包连接后自动检查注册状态并跳转
   useEffect(() => {
-    console.log('[register/page] useEffect-2', { mounted, isConnected, isRegistered, isLoading, pathname: typeof window !== 'undefined' ? window.location.pathname : '' });
-    if (!mounted) return;
-    if (isConnected && !isLoading) {
+    console.log('[register/page] useEffect-2', { 
+      mounted, 
+      isConnected, 
+      isRegistered, 
+      isLoading, 
+      pathname: typeof window !== 'undefined' ? window.location.pathname : '' 
+    });
+    
+    if (!mounted || isLoading) return;
+    
+    if (isConnected) {
       if (isRegistered) {
+        console.log('[register/page] 已注册，准备跳转 dashboard');
         router.replace("/dashboard");
       } else {
+        console.log('[register/page] 未注册，显示注册表单');
         setIsChecking(false);
       }
     }
@@ -61,6 +79,5 @@ export default function Page() {
     );
   }
 
-  // 传递 referrer 给 RegisterPage
   return <RegisterPage referrer={referrer} />;
 } 
